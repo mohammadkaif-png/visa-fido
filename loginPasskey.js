@@ -29,7 +29,7 @@ router.post('/passkey/login', async (req, res) => {
             state: txnId,
             server_state: req.body?.token,
             // redirect_uri: "https://weak-tova-ungently.ngrok-free.dev/v2/pay/response/azharamin/eulko4VVut9oxbebNnQv", 
-            redirect_uri: "https://weak-tova-ungently.ngrok-free.dev/v2/pay/response",
+            redirect_uri: `${process.env.APPLICATION_URL}/v2/pay/response`,
             client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
             // client_assertion: req.body?.token,
             prompt: "login",

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohammad Kaif - Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.35;
+            color: #333;
+            background: white;
+            padding: 18px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 8px;
+            padding-bottom: 9px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        .header h1 {
+            font-size: 27px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .header .title {
+            font-size: 13.5px;
+            color: #555;
+            margin-bottom: 7px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 13px;
+            font-size: 10.5px;
+            color: #666;
+        }
+
+        .contact-info a {
+            color: #2c3e50;
+            text-decoration: none;
+            target: _blank;
+        }
+
+        .section {
+            margin-bottom: 11px;
+        }
+
+        .section-title {
+            font-size: 13.5px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-transform: uppercase;
+            border-bottom: 1.5px solid #2c3e50;
+            padding-bottom: 2.5px;
+            margin-bottom: 6px;
+        }
+
+        .summary {
+            font-size: 10.5px;
+            line-height: 1.45;
+            color: #555;
+        }
+
+        .skills-grid {
+            font-size: 9.5px;
+            line-height: 1.5;
+        }
+
+        .skill-item {
+            margin-bottom: 2px;
+        }
+
+        .skill-label {
+            font-weight: 600;
+            color: #2c3e50;
+            display: inline;
+        }
+
+        .skill-value {
+            color: #555;
+            display: inline;
+        }
+
+        .experience-item,
+        .project-item {
+            margin-bottom: 9px;
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2.5px;
+        }
+
+        .company-role {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .date-location {
+            font-size: 9.5px;
+            color: #666;
+            font-style: italic;
+            font-weight: 500;
+
+        }
+
+        .experience-item ul,
+        .project-item ul {
+            margin-left: 18px;
+            font-size: 10.2px;
+            color: #555;
+        }
+
+        .experience-item li,
+        .project-item li {
+            margin-bottom: 1.5px;
+        }
+
+        .tech-stack {
+            font-size: 9.5px;
+            color: #000;
+            font-style: normal;
+            margin-top: 3.5px;
+            font-weight: 600;
+        }
+
+        .education-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10.5px;
+            margin-bottom: 2.5px;
+        }
+
+        .education-header .school {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .education-details {
+            font-size: 10px;
+            color: #555;
+        }
+
+        .project-header {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 2.5px;
+        }
+
+        .project-links {
+            font-size: 9.5px;
+            color: #2c3e50;
+            margin-bottom: 2.5px;
+            display: inline;
+            margin-left: 5px;
+        }
+
+        .project-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            margin: 0 3px;
+        }
+
+        .achievements-list {
+            font-size: 10px;
+            color: #555;
+            margin-left: 18px;
+        }
+
+        .achievements-list li {
+            margin-bottom: 1.5px;
+        }
+
+        .languages {
+            font-size: 10px;
+            color: #555;
+        }
+
+        .two-column-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .column {
+            min-width: 0;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MOHAMMAD KAIF</h1>
+            <div class="title">Backend Software Engineer</div>
+            <div class="contact-info">
+                <span>+91-9598772474</span>
+                <span>mohammadkaif0211@gmail.com</span>
+                <span><a href="https://linkedin.com/in/mohammad-kaif0211"
+                        target="_blank">linkedin.com/in/mohammad-kaif0211</a></span>
+                <span><a href="https://github.com/mohammadkaif11" target="_blank">github.com/mohammadkaif11</a></span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Professional Summary</div>
+            <div class="summary">
+                Backend Software Engineer with 2 years of experience in fintech and LLM-based SaaS platforms.
+                Specialized in card payments, tokenization, push provisioning, and passkey payments. Built multi-tenant
+                SaaS platforms using LLMs to generate landing pages for businesses. Proficient in RESTful API
+                development and microservices architecture.
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Technical Skills</div>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <span class="skill-label">Programming Languages:</span>
+                    <span class="skill-value">Haskell, Python, JavaScript, TypeScript, SQL</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Backend and Frameworks:</span>
+                    <span class="skill-value">Servant, Node.js, Express.js, Next.js</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Databases:</span>
+                    <span class="skill-value">PostgreSQL, Redis</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Cloud Platforms:</span>
+                    <span class="skill-value">AWS, Google Cloud Platform</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Tools & Platforms:</span>
+                    <span class="skill-value">Claude, ChatGPT, Cline, VS Code, Kibana, OpenSearch, Git</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Specialization:</span>
+                    <span class="skill-value">Card Payments and Tokenization, Push Provisioning, Payment Gateway, Microservices, RESTful APIs, LLM, OpenAI APIs, Cryptography</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Professional Experience</div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="company-role"><strong>JUSPAY</strong> | Product Engineer</div>
+                    <div class="date-location">August 2024 – Present | Bengaluru, India</div>
+                </div>
+                <ul>
+                    <li>Integrated push provisioning for RuPay, Mastercard payment network and HDFC Issuer, onboarding
+                        100+ merchants
+                        while ensuring RBI-compliant and end-to-end transaction processing.</li>
+                    <li>Developed Python-based Bank Identification Number (BIN) synchronization system for all card
+                        networks, maintaining 99.9% data
+                        integrity across tenant environments.</li>
+                    <li>Optimized merchant onboarding APIs for Card-on-File Tokenization (COFT) and ALT ID transactions,
+                        reducing issue resolution
+                        time by 90%.</li>
+                    <li>Implemented temporary token payment flow for tokenized cards, supporting 1+ million daily
+                        transactions for high-volume merchants.</li>
+                    <li>Integrated Secure Card on File (SCOF) solution, migrating merchants from legacy Mastercard M4M
+                        to SCOF platform with
+                        0% downtime and enabling passkey payments.</li>
+                </ul>
+                <div class="tech-stack">Tech Stack: Haskell, Servant, Nix, Python, SQL, PostgreSQL, Redis, Jenkins,
+                    Kibana, OpenSearch</div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="company-role"><strong>Mercor</strong> | Software Engineer</div>
+                    <div class="date-location">August 2023 – January 2024 | San Francisco, CA (Remote)</div>
+                </div>
+                <ul>
+                    <li>Implemented multi-tenancy for landing page deployments based on user prompts, reducing page load
+                        time by 65%.</li>
+                    <li>Built landing page templates with inline editor for easy content editing.</li>
+                    <li>Designed in-house analytics system tracking click rates, conversions, and user behavior across
+                        landing pages, processing 100K+ events daily.</li>
+                    <li>Integrated Stripe for payment processing and Google Ads API to enable ad campaigns for landing
+                        pages.</li>
+                    <li>Implemented semantic search using embeddings with 95% accuracy and ~400ms query response times.
+                    </li>
+                    <li>Optimized API pipelines by converting synchronous to asynchronous execution, reducing AI content
+                        generation latency from 5s to 3s.</li>
+                </ul>
+                <div class="tech-stack">Tech Stack: Next.js, TypeScript, OpenAI, LangChain, SQL, PostgreSQL, Prisma,
+                    Google Cloud Platform</div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="company-role"><strong>Techdome Solutions Pvt. Ltd.</strong> | Backend Developer Intern
+                    </div>
+                    <div class="date-location">May 2022 – September 2022 | Hyderabad, India (Remote)</div>
+                </div>
+                <ul>
+                    <li>Developed backend APIs for manufacturing operations and optimized SQL queries for database
+                        management.</li>
+                    <li>Resolved software bugs to improve application stability and reduce API response times.</li>
+                    <li>Implemented unit tests using xUnit to ensure API reliability and performance.</li>
+                </ul>
+                <div class="tech-stack">Tech Stack: C#, .NET Core 3.1, Entity Framework Core, SQL, MS SQL Server, xUnit
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Education</div>
+            <div class="education-header">
+                <span class="school">Shri Shankaracharya Institute of Professional Management and Technology</span>
+                <div class="date-location">August 2020 – July 2024</div>
+
+            </div>
+            <div class="education-details">B.Tech in Computer Science and Engineering | CGPA: 9.2/10 | Raipur, India
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Academic Projects</div>
+
+            <div class="project-item">
+                <div class="project-header">
+                    DiabPredict | Python, Django, Bootstrap, scikit-learn, Joblib
+                    <!-- <span class="project-links"><a href="#">Code</a></span> -->
+                </div>
+                <ul>
+                    <li>Built web app to predict diabetes risk using Random Forest model, achieving 77.9% accuracy</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="project-header">
+                    LanguageFriend | Next.js, Node.js, PostgreSQL, OpenAI API
+                    <!-- <span class="project-links"><a href="#">Code</a> · <a href="#">Demo</a></span> -->
+                </div>
+                <ul>
+                    <li>Developed LLM-powered chatbot to help users learn and practice languages through interactive
+                        conversations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Achievements & Certifications</div>
+            <ul class="achievements-list">
+                <li>Published research paper on Diabetes Detection using Deep Learning</li>
+                <li>Winner, Startup Gateway Hackathon 2023 (Mercor)</li>
+                <li>3rd rank in 5th semester college examinations</li>
+                <li>Qualified Round 2 – CodeChef SnackDown 2021</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Languages</div>
+            <div class="languages">English · Hindi · Urdu · Arabic</div>
+        </div>
+    </div>
+</body>
+
+</html>

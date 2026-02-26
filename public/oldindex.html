@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Visa Payment Passkey – Initialization Test</title>
+</head>
+
+<body>
+  <h2>Visa Payment Passkey – Initialization (Sandbox)</h2>
+
+  <!-- Hidden iframe required for Initialization -->
+  <iframe id="vpp-iframe" style="visibility:hidden" width="0" height="0"
+    allow="payment *; publickey-credentials-get *; publickey-credentials-create *"
+    referrerpolicy="strict-origin-when-cross-origin" sandbox="
+      allow-scripts
+      allow-same-origin
+      allow-forms
+      allow-popups
+      allow-popups-to-escape-sandbox
+      allow-top-navigation
+      allow-top-navigation-by-user-activation
+      allow-modals
+    "></iframe>
+
+  <script>
+    /*********************************************************
+     * CONFIG
+     *********************************************************/
+    const ORIGIN = "https://weak-tova-ungently.ngrok-free.dev";
+    const VPP_BASE_URL = "https://sandbox.auth.visa.com";
+    const VPP_INIT_URL = `${VPP_BASE_URL}/oauth2/authorization/request/hub#msg=`;
+
+    /*********************************************************
+     * INITIALIZATION COMMAND
+     *********************************************************/
+    const INIT_COMMAND = {
+      type: "COMMAND",
+      ref: crypto.randomUUID(),         // correlation id
+      ts: Date.now(),                   // timestamp (ms)
+      command: {
+        type: "INITIALIZATION",
+        data: {
+          response_mode: "com_visa_web_message",
+          redirect_uri: ORIGIN,
+          session_context: {
+            apn: "vdp-web",              // PROVIDED BY VISA
+            client_software: {
+              top_origin: ORIGIN,        // must match page origin
+              integrator_origin: ORIGIN, // postMessage target
+              uebas: [
+                {
+                  source: "VDI",
+                  ref: crypto.randomUUID()// DFP_SESSION_ID (optional must be 32 and 36)
+                }
+              ],
+              id: "VDPW",                // PROVIDED BY VISA
+              version: "24.07",          // PROVIDED BY VISA
+              oauth2_version: "1.0",
+              tenancy: {
+                product_code: "VDP"      // PROVIDED BY VISA
+              }
+            }
+          }
+        },
+        response_type: "urn:ext:oauth:response-type:server_state"
+      }
+    };
+
+    /*********************************************************
+     * MESSAGE HANDLER
+     *********************************************************/
+    window.addEventListener("message", (event) => {
+      let message;
+
+      try {
+        message = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+      } catch (e) {
+        console.warn("⚠️ Non-JSON message:", event.data);
+        return;
+      }
+
+      console.log("📩 Message origin:", event.origin);
+      console.log("📩 Message payload:", message);
+
+      if (message.type === "RESULT" && message.result?.command_type === "INITIALIZATION") {
+        if (message.result.status === "SUCCESS") {
+          console.log("✅ Initialization SUCCESS");
+          const serverStateToken = message.result.data.tokens?.[0]?.token;
+          console.log("🔐 server_state_token:", serverStateToken);
+        } else {
+          console.log("❌ Initialization FAILED");
+        }
+      }
+
+      if (message.type === "EVENT" && message.event?.type === "DEVICE_DATA_CAPTURED") {
+        console.log("✅ Device profiling SUCCESS");
+      } 
+
+       if (message.type === "EVENT" && message.event?.type === "DEVICE_DATA_CAPTURE_FAILED") {
+        console.log("❌ Device profiling FAILED");
+      } 
+    });
+
+
+    /*********************************************************
+     * LOAD IFRAME
+     *********************************************************/
+    const fragment = encodeURIComponent(JSON.stringify(INIT_COMMAND));
+    document.getElementById("vpp-iframe").src =
+      `${VPP_INIT_URL}${fragment}`;
+  </script>
+
+  
+</body>
+
+</html>

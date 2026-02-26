@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Visa Authentication</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1434CB 0%, #0B2395 100%);
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 48px 40px;
+            border-radius: 16px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1434CB, #0B2395);
+        }
+
+        .visa-logo {
+            width: 100px;
+            height: auto;
+            margin: 0 auto 32px;
+            display: block;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 8px 0;
+        }
+
+        .text {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        #fallbackBtn {
+            display: none;
+            margin-top: 32px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #1434CB 0%, #0B2395 100%);
+            color: #fff;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(20, 52, 203, 0.3);
+        }
+
+        #fallbackBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(20, 52, 203, 0.4);
+        }
+
+        #fallbackBtn:active {
+            transform: translateY(0);
+        }
+
+        #fallbackBtn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .pulse-ring {
+            width: 100%;
+            height: 100%;
+            border: 3px solid #1434CB;
+            border-radius: 50%;
+            position: absolute;
+            animation: pulse 2s ease-out infinite;
+        }
+
+        .pulse-ring:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .pulse-ring:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        .loader-container {
+            margin: 24px 0;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e8e8e8;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .security-badge svg {
+            width: 16px;
+            height: 16px;
+            fill: #4caf50;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 40px 24px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+
+            .text {
+                font-size: 14px;
+            }
+
+            .visa-logo {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <iframe id="vpp-iframe" style="visibility:hidden" width="0" height="0"
+        allow="payment *; publickey-credentials-get *; publickey-credentials-create *"
+        referrerpolicy="strict-origin-when-cross-origin" sandbox="
+    allow-scripts
+    allow-same-origin
+    allow-forms
+    allow-popups
+    allow-popups-to-escape-sandbox
+    allow-top-navigation-by-user-activation
+    allow-modals
+  ">
+    </iframe>
+
+    <div class="card">
+        <!-- Visa Logo -->
+        <svg class="visa-logo" viewBox="0 0 141.732 141.732" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#1434CB">
+                <path d="M62.935 89.571h-9.733l6.083-37.384h9.734z"/>
+                <path d="M45.014 52.187L35.735 77.9l-1.098-5.537.001.002-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s4.691.976 10.181 4.273l8.456 32.479h10.141l15.485-37.385H45.014z"/>
+                <path d="M121.569 89.571h8.937l-7.792-37.385h-7.824c-3.613 0-4.493 2.786-4.493 2.786L95.881 89.571h10.146l2.029-5.553h12.373l1.14 5.553zm-10.71-13.224l5.114-13.99 2.877 13.99h-7.991z"/>
+                <path d="M96.642 61.177l1.389-8.028s-4.286-1.63-8.754-1.63c-4.83 0-16.3 2.111-16.3 12.376 0 9.658 13.462 9.778 13.462 14.851s-12.075 4.164-16.06.965l-1.447 8.394s4.346 2.111 10.986 2.111c6.642 0 16.662-3.439 16.662-12.799 0-9.72-13.583-10.625-13.583-14.851.001-4.227 9.48-3.684 13.645-1.389z"/>
+            </g>
+            <path d="M34.638 72.364l-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s7.373 1.528 14.445 7.253c6.762 5.472 8.967 12.292 8.967 12.292z" fill="#F9B50B"/>
+            <path fill="none" d="M0 0h141.732v141.732H0z"/>
+        </svg>
+
+        <div id="loaderContainer">
+            <div class="loader-container">
+                <div class="status-icon">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                </div>
+            </div>
+            <h1 class="title">Secure Payment</h1>
+            <p id="statusText" class="text">Verifying your payment details securely</p>
+        </div>
+
+        <button id="fallbackBtn">Continue Payment</button>
+
+        <div class="security-badge">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            <span>Secured by Visa</span>
+        </div>
+    </div>
+
+    <script>
+        const API_TOKEN_HOST = "http://localhost:3000";
+        const VISA_BASE = "https://sandbox.auth.visa.com";
+        const VISA_INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
+
+        const RETURN_URL = "https://weak-tova-ungently.ngrok-free.dev/v2/pay/response";
+        const RETURN_URL_HOST = "https://weak-tova-ungently.ngrok-free.dev";
+        const AUTH_TIMEOUT = 600000;
+
+        let popupRef = null;
+        let popupWatcher = null;
+        let timeoutRef = null;
+        let serverStateToken = null;
+        let deviceProfilingDone = false;
+        let flowStarted = false;
+        let hasSubmitted = false;
+        let apiResponseData = null;
+        let isOpenPopup = false;
+        let popupAttemptInProgress = false;
+
+        function startPopupWatchers() {
+            popupWatcher = setInterval(() => {
+                if (popupRef && popupRef.closed && !hasSubmitted) {
+                    cleanup();
+                    submitError("USER_OPTED_OUT", "User closed the webview", "User closed the webview");
+                }
+            }, 500);
+
+            timeoutRef = setTimeout(() => {
+                cleanup();
+                submitError("PASSKEY_USER_TIMED_OUT", "User timed out", "User timed out");
+            }, AUTH_TIMEOUT);
+        }
+
+        function openVisaPopup(data) {
+            if (popupAttemptInProgress) return;
+            popupAttemptInProgress = true;
+            isOpenPopup = true;
+
+            const popupMsg = {
+                type: "COMMAND",
+                ref: crypto.randomUUID(),
+                ts: Date.now(),
+                command: {
+                    type: "AUTHORIZATION_REQUEST",
+                    data: {
+                        request: data.request,
+                        authorization_endpoint: data.authorization_endpoint
+                    }
+                }
+            };
+            const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
+            
+            popupRef = window.open(
+                popupUrl,
+                "visa_passkey",
+                "width=400,height=480,top=120,left=200,resizable=no"
+            );
+
+            if (!popupRef || popupRef.closed) {
+                popupAttemptInProgress = false;
+                isOpenPopup = false;
+                showFallbackButton();
+                return;
+            }
+
+            popupAttemptInProgress = false;
+            startPopupWatchers();
+        }
+
+        async function startVisaPopup() {
+            if (!serverStateToken || !deviceProfilingDone || flowStarted) {
+                return;
+            }
+            
+            flowStarted = true;
+
+            try {
+                const res = await fetch(`${RETURN_URL_HOST}/api/passkey/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ token: serverStateToken })
+                });
+                
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+
+                const loginData = await res.json();
+                
+                if (loginData.data) {
+                    apiResponseData = loginData.data;
+                    openVisaPopup(loginData.data);
+                } else {
+                    cleanup();
+                    submitError(
+                        "PASSKEY_VERIFICATION_FAILURE",
+                        loginData?.error || "Passkey login api failed.",
+                        loginData?.errorMessage || "Passkey login api failed."
+                    );
+                }
+            } catch (error) {
+                cleanup();
+                submitError(
+                    "PASSKEY_VERIFICATION_FAILURE",
+                    "Passkey login api failed.",
+                    error.message || "Passkey login api failed."
+                );
+            }
+        }
+
+        function showFallbackButton() {
+            document.getElementById("loaderContainer").classList.add("hidden");
+            document.getElementById("statusText").textContent = "Please allow popups and click below to continue";
+            document.getElementById("statusText").classList.remove("hidden");
+            
+            const btn = document.getElementById("fallbackBtn");
+            btn.style.display = "block";
+            btn.disabled = false;
+            
+            btn.onclick = null;
+            
+            btn.onclick = () => {
+                if (!apiResponseData) {
+                    console.error("No API response data available");
+                    return;
+                }
+                
+                btn.disabled = true;
+                btn.textContent = "Opening...";
+                
+                if (popupRef && !popupRef.closed) {
+                    popupRef.close();
+                }
+                cleanup();
+                
+                openVisaPopup(apiResponseData);
+                
+                setTimeout(() => {
+                    if (!hasSubmitted && (!popupRef || popupRef.closed)) {
+                        btn.disabled = false;
+                        btn.textContent = "Continue Payment";
+                    }
+                }, 1000);
+            };
+        }
+
+        window.addEventListener("message", (event) => {
+            if (!event.origin.includes("visa.com")) return;
+            
+            let msg;
+            try {
+                msg = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+            } catch {
+                return;
+            }
+
+            if (msg.type === "RESULT" && msg.result?.command_type === "INITIALIZATION") {
+                if (msg.result.status === "SUCCESS") {
+                    serverStateToken = msg.result.data.tokens[0].token;
+                    startVisaPopup();
+                } else {
+                    let error = msg.result?.data?.error_details?.error || msg.result?.data?.error || "Internal server error";
+                    let errorDescription = msg.result?.data?.error_details?.error_description || msg.result?.data?.error_description || "Error while passkey initialization";
+                    submitError("PASSKEY_INITIALIZATION_FAILED", error, errorDescription);
+                }
+            }
+
+            if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURED") {
+                deviceProfilingDone = true;
+                startVisaPopup();
+            }
+
+            if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURE_FAILED") {
+                cleanup();
+                let error = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
+                let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "Error while device capturing.";
+                submitError("PASSKEY_DEVICE_DATA_CAPTURE_FAILED", error, errorDescription);
+            }
+
+            if (msg.type === "EVENT" && msg.event?.type === "POPUP_WINDOW_TERMINATED" && isOpenPopup) {
+                cleanup();
+                let error = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
+                let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "User closed the window or popup.";
+                submitError("USER_OPTED_OUT", error, errorDescription);
+            }
+
+            if (msg.type === "RESULT" && msg.result?.command_type === "AUTHORIZATION_REQUEST") {
+                cleanup();
+                if (msg.result.status === "SUCCESS") {
+                    submit({
+                        passkeyStatus: "PASSKEY_SUCCESS",
+                        passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS",
+                        authZToken: msg.result.data.tokens[0].token,
+                        error: null,
+                        errorMessage: null
+                    });
+                } else {
+                    let error = msg.result?.data?.error_details?.error || msg.result?.data?.error || "Internal server error";
+                    let errorDescription = msg.result?.data?.error_details?.error_description || msg.result?.data?.error_description || "User closed the window or popup.";
+                    
+                    if (error === "USER_ABORTED") {
+                        submitError("USER_OPTED_OUT", error, errorDescription);
+                    } else {
+                        submitError("PASSKEY_VERIFICATION_FAILURE", error, errorDescription);
+                    }
+                }
+            }
+        });
+
+        function cleanup() {
+            clearInterval(popupWatcher);
+            clearTimeout(timeoutRef);
+            popupWatcher = null;
+            timeoutRef = null;
+            
+            if (popupRef && !popupRef.closed) {
+                popupRef.close();
+            }
+            
+            isOpenPopup = false;
+            popupAttemptInProgress = false;
+        }
+
+        function submitError(passkeyResult, error, errorMessage) {
+            cleanup();
+            submit({
+                passkeyStatus: "PASSKEY_FAILURE",
+                passkeyResult: passkeyResult,
+                error: error,
+                errorMessage: errorMessage,
+                authZToken: null
+            });
+        }
+
+        function submit(payload) {
+            if (hasSubmitted) return;
+            hasSubmitted = true;
+            
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = RETURN_URL;
+
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "data";
+            input.value = JSON.stringify(payload);
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        const INIT_COMMAND = {
+            type: "COMMAND",
+            ref: crypto.randomUUID(),
+            ts: Date.now(),
+            command: {
+                type: "INITIALIZATION",
+                data: {
+                    response_mode: "form_post",
+                    redirect_uri: RETURN_URL,
+                    session_context: {
+                        apn: "vdp-web",
+                        client_software: {
+                            top_origin: RETURN_URL_HOST,
+                            integrator_origin: RETURN_URL_HOST,
+                            uebas: [
+                                {
+                                    source: "VDI",
+                                    ref: crypto.randomUUID()
+                                }
+                            ],
+                            id: "VDPW",
+                            version: "24.07",
+                            oauth2_version: "1.0",
+                            tenancy: {
+                                product_code: "VDP"
+                            }
+                        }
+                    }
+                },
+                response_type: "urn:ext:oauth:response-type:server_state"
+            }
+        };
+        
+        document.getElementById("vpp-iframe").src = `${VISA_INIT_URL}${encodeURIComponent(JSON.stringify(INIT_COMMAND))}`;
+    </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Visa Payment Passkey – Full Flow</title>
+</head>
+
+<body>
+  <h2>Visa Payment Passkey – Sandbox Full Flow</h2>
+
+  <button id="create-openPopupBtn" style="display:none">
+    Create Passkey
+  </button>
+
+  <button id="login-openPopupBtn" style="display:none">
+    Login Passkey
+  </button>
+
+
+  <!-- Hidden iframe required by Visa -->
+  <iframe id="vpp-iframe" style="visibility:hidden" width="0" height="0"
+    allow="payment *; publickey-credentials-get *; publickey-credentials-create *"
+    referrerpolicy="strict-origin-when-cross-origin" sandbox="
+      allow-scripts
+      allow-same-origin
+      allow-forms
+      allow-popups
+      allow-popups-to-escape-sandbox
+      allow-top-navigation
+      allow-top-navigation-by-user-activation
+      allow-modals
+    ">
+  </iframe>
+
+  <script>
+    /*********************************************************
+     * CONFIG
+     *********************************************************/
+    const ORIGIN = "https://weak-tova-ungently.ngrok-free.dev";
+    const VISA_BASE = "https://sandbox.auth.visa.com";
+    const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
+
+    /*********************************************************
+     * STATE
+     *********************************************************/
+    let serverStateToken = null;
+    let deviceProfilingDone = false;
+    let flowStarted = false;
+    let pendingVisaAuthDataForCreate = null;
+    let pendingVisaAuthDataForLogin = null;
+    let visaPopup = null;
+
+
+    /*********************************************************
+     * INITIALIZATION COMMAND
+     *********************************************************/
+    const INIT_COMMAND = {
+      type: "COMMAND",
+      ref: crypto.randomUUID(),
+      ts: Date.now(),
+      command: {
+        type: "INITIALIZATION",
+        data: {
+          response_mode: "form_post",
+          redirect_uri: ORIGIN + "/v2/pay/response",
+          session_context: {
+            apn: "vdp-web",
+            client_software: {
+              top_origin: ORIGIN,
+              integrator_origin: ORIGIN,
+              uebas: [
+                {
+                  source: "VDI",
+                  ref: crypto.randomUUID()
+                }
+              ],
+              id: "VDPW",
+              version: "24.07",
+              oauth2_version: "1.0",
+              tenancy: {
+                product_code: "VDP"
+              }
+            }
+          }
+        },
+        response_type: "urn:ext:oauth:response-type:server_state"
+      }
+    };
+
+    /*********************************************************
+     * MESSAGE HANDLER FROM VISA
+     *********************************************************/
+    window.addEventListener("message", async (event) => {
+      let msg;
+
+      try {
+        msg = typeof event.data === "string"
+          ? JSON.parse(event.data)
+          : event.data;
+      } catch {
+        return;
+      }
+
+      console.log("📩 VISA MESSAGE:", JSON.stringify(msg));
+
+      /* ---------- INITIALIZATION SUCCESS ---------- */
+      if (msg.type === "RESULT" && msg.result?.command_type === "INITIALIZATION" && msg.result.status === "SUCCESS") {
+        serverStateToken = msg.result.data.tokens?.[0]?.token;
+        console.log("🔐 server_state_token captured");
+        tryStartFlow();
+      }
+
+      /* ---------- DEVICE PROFILING ---------- */
+      if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURED") {
+        deviceProfilingDone = true;
+        console.log("✅ Device profiling completed");
+        tryStartFlow();
+      }
+
+      if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURE_FAILED") {
+        console.error("❌ Device profiling failed");
+      }
+
+
+      if (msg.type === "RESULT" && msg.result?.command_type === "AUTHORIZATION_REQUEST") {
+        if (msg.result.status === "SUCCESS" && msg.result?.data?.tokens[0]?.token) {
+          let payload = {
+            fida_authentication: "AUTHORIZE_SUCCESS",
+            auth_z_token: msg.result?.data?.tokens[0]?.token
+          }
+        } else {
+          let payload = {
+            fida_authentication: "AUTHORIZE_FAILED",
+            auth_z_token: null
+          }
+        }
+      }
+
+    });
+
+    /*********************************************************
+     * START LOGIN ONLY WHEN READY
+     *********************************************************/
+    async function tryStartFlow() {
+      if (!serverStateToken || !deviceProfilingDone || flowStarted) return;
+      flowStarted = true;
+      await callLogin();
+    }
+
+    /*********************************************************
+     * LOGIN API
+     *********************************************************/
+    async function callLogin() {
+      console.log("➡️ Calling LOGIN API");
+
+      const res = await fetch("/api/passkey/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: serverStateToken })
+      });
+
+      const result = await res.json();
+      console.log("🔁 LOGIN RESPONSE:", result);
+
+      /* ---------- NO PASSKEY → CREATE ---------- */
+      if (result?.error === "notfound_amr_values") {
+        console.log("🆕 No passkey found, calling CREATE");
+        await callCreate();
+        return;
+      }
+
+      /* ---------- LOGIN SUCCESS ---------- */
+      if (result?.data?.request) {
+        pendingVisaAuthDataForLogin = result.data
+        document.getElementById("login-openPopupBtn").style.display = "block";
+      } else {
+        console.error("❌ Unexpected login response", result);
+      }
+    }
+
+    /*********************************************************
+     * CREATE API
+     *********************************************************/
+    async function callCreate() {
+      console.log("➡️ Calling CREATE API");
+
+      const res = await fetch("/api/passkey/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: serverStateToken })
+      });
+
+      const result = await res.json();
+      console.log("🆕 CREATE RESPONSE:", result);
+
+      if (result?.data?.request) {
+        pendingVisaAuthDataForCreate = result.data
+        document.getElementById("create-openPopupBtn").style.display = "block";
+      } else {
+        console.error("❌ Create failed", result);
+      }
+    }
+
+    /*********************************************************
+     * OPEN CREATE VISA POPUP
+     *********************************************************/
+
+    document.getElementById("create-openPopupBtn").addEventListener("click", () => {
+      if (!pendingVisaAuthDataForCreate) {
+        console.error("❌ No Visa auth data available");
+        return;
+      }
+
+      openCreateVisaPopup(pendingVisaAuthDataForCreate);
+    });
+
+    function openCreateVisaPopup(data) {
+      console.log("🪟 Opening Create Visa popup");
+      const popupMsg = {
+        type: "COMMAND",
+        ref: crypto.randomUUID(),
+        ts: Date.now(),
+        command: {
+          type: "AUTHORIZATION_REQUEST",
+          data: {
+            request: data.request,
+            authorization_endpoint: data.authorization_endpoint
+          }
+        }
+      };
+
+      const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
+    
+
+      const width = 500;
+      const height = 600;
+      const left = (screen.width - width) / 2;
+      const top = 120;
+
+      const windowSettings = `width=${width},height=${height},top=${top},left=${left},` + `scrollbars=yes,resizable=no,status=no,location=no`;
+
+      window.open(popupUrl, "passkey", windowSettings);
+      // window.location.href = popupUrl;
+    }
+
+
+    /*********************************************************
+     * OPEN LOGIN VISA POPUP
+     *********************************************************/
+
+    document.getElementById("login-openPopupBtn").addEventListener("click", () => {
+      if (!pendingVisaAuthDataForLogin) {
+        console.error("❌ No Visa auth data available");
+        return;
+      }
+
+      openLoginVisaPopup(pendingVisaAuthDataForLogin);
+    });
+
+    function openLoginVisaPopup(data) {
+      console.log("🪟 Opening Login Visa popup");
+
+
+
+      const popupMsg = {
+        type: "COMMAND",
+        ref: crypto.randomUUID(),
+        ts: Date.now(),
+        command: {
+          type: "AUTHORIZATION_REQUEST",
+          data: {
+            request: data.request,
+            authorization_endpoint: data.authorization_endpoint
+          }
+        }
+      };
+
+
+      console.log("popupMsg-login",popupMsg)
+
+      const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
+
+      console.log("popupUrl-login",popupUrl)
+
+
+      const width = 400;
+      const height = 480;
+      const left = (screen.width - width) / 2;
+      const top = 120;
+
+      const settings = `width=${width},height=${height},top=${top},left=${left},` + `resizable=no,scrollbars=no,status=no,location=no`;
+      window.open(popupUrl, "passkey", settings);
+      // window.location.href = redirectUrl;
+    }
+
+
+
+    /*********************************************************
+     * LOAD VISA IFRAME
+     *********************************************************/
+    const fragment = encodeURIComponent(JSON.stringify(INIT_COMMAND));
+    document.getElementById("vpp-iframe").src = `${INIT_URL}${fragment}`;
+
+
+    function submitResponse(payload) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = `${{ ORIGINv2 }}/pay/response`;
+
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'data';
+      input.value = JSON.stringify(payload);
+
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+  </script>
+
+
+</body>
+
+</html>

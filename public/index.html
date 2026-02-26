@@ -3,324 +3,1721 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Visa Payment Passkey – Full Flow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>VISA PASSKEY PAYMENT DEMO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --blue: #1434CB;
+      --blue-l: #EEF2FF;
+      --gold: #F59E0B;
+      --green: #10B981;
+      --red: #EF4444;
+      --dark: #0F1C3F;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+      --bg: #F9FAFB;
+      --log-bg: #0D1117;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #D4D8E8;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width:600px) {
+      body {
+        background: linear-gradient(145deg, #BEC3D8 0%, #A8AEBE 100%);
+      }
+
+      #shell {
+        width: 390px;
+        height: 844px;
+        border-radius: 52px;
+        overflow: hidden;
+        box-shadow: 0 0 0 10px #141420, 0 0 0 13px #24243A, 0 44px 120px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        flex-shrink: 0;
+      }
+
+      #shell::before {
+        content: '';
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 34px;
+        background: #000;
+        border-radius: 20px;
+        z-index: 500;
+        pointer-events: none;
+      }
+
+      #shell::after {
+        content: '';
+        position: absolute;
+        left: -14px;
+        top: 140px;
+        width: 4px;
+        height: 64px;
+        background: #141420;
+        border-radius: 3px 0 0 3px;
+        box-shadow: 0 84px 0 #141420, 0 154px 0 #141420;
+        pointer-events: none;
+      }
+
+      #app {
+        padding-top: 48px;
+      }
+
+      .status-bar {
+        display: none !important;
+      }
+
+      .drawer {
+        border-radius: 0 52px 52px 0;
+      }
+    }
+
+    #app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .status-bar {
+      flex-shrink: 0;
+      height: 44px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    #clock {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .sb-icons {
+      display: flex;
+      gap: 5px;
+      font-size: 14px;
+    }
+
+    .screen-host {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(100%);
+      will-change: transform, opacity;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateX(0);
+      transition: transform .32s cubic-bezier(.4, 0, .2, 1), opacity .28s ease;
+    }
+
+    .screen.leaving {
+      opacity: 0;
+      transform: translateX(-26%);
+      transition: transform .32s cubic-bezier(.4, 0, .2, 1), opacity .28s ease;
+      pointer-events: none;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .visa-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .visa-logo-svg {
+      height: 22px;
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -.3px;
+    }
+
+    .brand em {
+      color: var(--blue);
+      font-style: normal;
+    }
+
+    .tb-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--dark);
+      transition: background .15s;
+      flex-shrink: 0;
+    }
+
+    .icon-btn:active {
+      background: var(--border);
+    }
+
+    .badge-green {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #ECFDF5;
+      border: 1px solid #6EE7B7;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .sdot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /* ── PAGE HEADER ── */
+    .ph {
+      flex-shrink: 0;
+      padding: 16px 20px 0;
+    }
+
+    .ph-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--blue);
+      margin-bottom: 3px;
+    }
+
+    .ph-title {
+      font-size: clamp(20px, 6vw, 28px);
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.15;
+      letter-spacing: -.5px;
+    }
+
+    .ph-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── SCROLL BODY ── */
+    .scr-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 14px 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scr-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ── FOOTER ── */
+    .foot {
+      flex-shrink: 0;
+      padding: 10px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .visa-secured-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .visa-secured-row svg {
+      height: 13px;
+      width: auto;
+      opacity: 0.55;
+    }
+
+    .visa-secured-txt {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 15px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all .18s;
+    }
+
+    .btn:active {
+      transform: scale(.97);
+      filter: brightness(.93);
+    }
+
+    .btn:disabled {
+      opacity: .38;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: var(--bg);
+      color: var(--dark);
+      border: 1.5px solid var(--border);
+    }
+
+    /* ── CARD LIST ── */
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .card-opt {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      cursor: pointer;
+      background: #fff;
+      transition: all .18s;
+    }
+
+    .card-opt:active {
+      background: var(--bg);
+    }
+
+    .card-opt.sel {
+      border-color: var(--blue);
+      background: var(--blue-l);
+    }
+
+    .card-vis {
+      width: 58px;
+      height: 38px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 4px 5px;
+    }
+
+    .card-vis-logo {
+      height: 10px;
+      width: auto;
+    }
+
+    .ci {
+      flex: 1;
+    }
+
+    .cn {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .cn2 {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .rr {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+    }
+
+    .card-opt.sel .rr {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .card-opt.sel .rr::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    /* ── ORDER CARD ── */
+    .order-card {
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .or {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+    }
+
+    .or+.or {
+      border-top: 1px solid var(--border);
+    }
+
+    .ol {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .o-ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #818CF8, #6366F1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .o-nm {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .o-qty {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .o-pr {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .o-tot {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .o-tl {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    /* ── LOADING ── */
+    .fill-c {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .9s linear infinite;
+      margin-bottom: 18px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .ld-t {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .ld-s {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .visa-loading-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      padding: 8px 18px;
+      background: #EEF2FF;
+      border: 1px solid #C7D2FE;
+      border-radius: 20px;
+    }
+
+    .visa-loading-badge svg {
+      height: 16px;
+      width: auto;
+    }
+
+    .visa-loading-badge span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    /* ── OTP ── */
+    .otp-row {
+      display: flex;
+      gap: 9px;
+      margin: 16px 0 10px;
+    }
+
+    .obox {
+      flex: 1;
+      height: 64px;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: 800;
+      color: var(--dark);
+      transition: border-color .14s, background .14s;
+    }
+
+    .obox.on {
+      border-color: var(--blue);
+      background: var(--blue-l);
+      color: var(--blue);
+      animation: bop .18s;
+    }
+
+    .obox.err {
+      border-color: var(--red);
+      background: #FEF2F2;
+      color: var(--red);
+      animation: shake .35s;
+    }
+
+    @keyframes bop {
+      0% {
+        transform: scale(.8)
+      }
+
+      60% {
+        transform: scale(1.08)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      20% {
+        transform: translateX(-4px)
+      }
+
+      40% {
+        transform: translateX(4px)
+      }
+
+      60% {
+        transform: translateX(-3px)
+      }
+
+      80% {
+        transform: translateX(3px)
+      }
+    }
+
+    .otp-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .otp-hint b {
+      color: var(--blue);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .kb {
+      height: 56px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .12s;
+    }
+
+    .kb:active {
+      background: var(--border);
+      transform: scale(.93);
+    }
+
+    .kb.ghost {
+      background: transparent;
+      border-color: transparent;
+      pointer-events: none;
+    }
+
+    .kb.del {
+      font-size: 16px;
+    }
+
+    /* ── BIOMETRIC ── */
+    .bio-c {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .fp-out {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 2.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      transition: border-color .3s;
+    }
+
+    .fp-out.scanning {
+      border-color: var(--blue);
+      animation: fpulse 1.1s ease infinite;
+    }
+
+    .fp-out.done {
+      border-color: var(--green);
+    }
+
+    @keyframes fpulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(20, 52, 203, .3)
+      }
+
+      70% {
+        box-shadow: 0 0 0 16px rgba(20, 52, 203, 0)
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(20, 52, 203, 0)
+      }
+    }
+
+    .fp-icon {
+      font-size: 46px;
+    }
+
+    .fp-lbl {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .fp-track {
+      width: 150px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .fp-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      transition: width 2s ease;
+    }
+
+    /* ── SUCCESS ── */
+    .succ-c {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      overflow-y: auto;
+    }
+
+    .succ-ring {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10B981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 32px rgba(16, 185, 129, .3);
+      animation: popIn .5s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .s-ttl {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -.4px;
+    }
+
+    .s-amt {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -1px;
+      margin: 3px 0;
+    }
+
+    .s-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .pk-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-l);
+      border: 1px solid #C7D2FE;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+
+    .pk-pill svg {
+      height: 13px;
+      width: auto;
+    }
+
+    .txn-blk {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .txr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+    }
+
+    .txr+.txr {
+      border-top: 1px solid var(--border);
+    }
+
+    .tl {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .tv {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+      max-width: 55%;
+      text-align: right;
+      word-break: break-all;
+    }
+
+    /* ── DRAWER ── */
+    .drawer-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      z-index: 200;
+      pointer-events: none;
+      transition: background .3s;
+    }
+
+    .drawer-overlay.open {
+      background: rgba(0, 0, 0, .5);
+      pointer-events: all;
+    }
+
+    .drawer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(290px, 87%);
+      background: var(--log-bg);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform .32s cubic-bezier(.4, 0, .2, 1);
+      border-left: 1px solid #21262D;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid #21262D;
+      flex-shrink: 0;
+    }
+
+    @media (min-width:600px) {
+      .drawer-head {
+        padding-top: 56px;
+      }
+    }
+
+    .drawer-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #E6EDF3;
+      letter-spacing: .3px;
+    }
+
+    .drawer-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: #21262D;
+      border: none;
+      color: #8B949E;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+
+    .drawer-close:hover {
+      background: #30363D;
+    }
+
+    .drawer-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 8px 16px;
+      border-bottom: 1px solid #21262D;
+      flex-shrink: 0;
+    }
+
+    .dt-chip {
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      border: 1px solid #30363D;
+      color: #8B949E;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .dt-chip.active {
+      background: #161B22;
+      color: #58A6FF;
+      border-color: #1F6FEB;
+    }
+
+    .dt-spacer {
+      flex: 1;
+    }
+
+    .dt-clear {
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      background: transparent;
+      border: 1px solid #30363D;
+      color: #8B949E;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .dt-clear:hover {
+      background: #21262D;
+      color: #E6EDF3;
+    }
+
+    .drawer-logs {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .drawer-logs::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .drawer-logs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .drawer-logs::-webkit-scrollbar-thumb {
+      background: #30363D;
+      border-radius: 3px;
+    }
+
+    .log-entry {
+      padding: 6px 16px;
+      border-bottom: 1px solid #161B22;
+    }
+
+    .log-entry:hover {
+      background: #161B22;
+    }
+
+    .log-time {
+      font-size: 10px;
+      color: #484F58;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 1px;
+    }
+
+    .log-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+
+    .log-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: .3px;
+    }
+
+    .tag-info {
+      background: #0D419D;
+      color: #58A6FF;
+    }
+
+    .tag-ok {
+      background: #033A16;
+      color: #3FB950;
+    }
+
+    .tag-warn {
+      background: #4A2900;
+      color: #E3B341;
+    }
+
+    .tag-err {
+      background: #67060C;
+      color: #F85149;
+    }
+
+    .tag-visa {
+      background: #3D1A78;
+      color: #BC8CFF;
+    }
+
+    .log-msg {
+      font-size: 11px;
+      color: #C9D1D9;
+      font-family: 'Courier New', monospace;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .log-msg b {
+      color: #79C0FF;
+    }
+
+    .log-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      color: #484F58;
+    }
+
+    .log-empty-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .log-empty-txt {
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .drawer-footer {
+      padding: 10px 16px;
+      border-top: 1px solid #21262D;
+      flex-shrink: 0;
+    }
+
+    .log-status-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .lsr-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: #484F58;
+    }
+
+    .lsr-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    /* ── LOG FAB ── */
+    .log-fab {
+      position: absolute;
+      bottom: 28px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      background: var(--dark);
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .35);
+      z-index: 150;
+      transition: transform .2s;
+      color: #fff;
+      font-size: 17px;
+    }
+
+    .log-fab:active {
+      transform: scale(.9);
+    }
+
+    .log-fab-badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      min-width: 18px;
+      height: 18px;
+      background: var(--blue);
+      border-radius: 9px;
+      font-size: 9px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+      padding: 0 3px;
+    }
+  </style>
 </head>
 
 <body>
-  <h2>Visa Payment Passkey – Sandbox Full Flow</h2>
 
-  <button id="create-openPopupBtn" style="display:none">
-    Create Passkey
-  </button>
+  <!-- Hidden SVG symbol defs — reused everywhere via <use> -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Blue Visa wordmark -->
+    <symbol id="v-blue" viewBox="0 0 216 68">
+      <path fill="#1434CB"
+        d="M84.88 1.49 70.07 66.7H51.4L66.22 1.49Zm76.03 42.2 9.44-26.04 5.43 26.04Zm20.97 23h17.12L183.6 1.49h-15.8c-3.56 0-6.55 2.07-7.88 5.25L131.28 66.7h17.9l3.55-9.83h21.87ZM128.9 45.88c.07-17.38-24.03-18.34-23.87-26.1.05-2.36 2.3-4.88 7.22-5.52 2.44-.32 9.16-.57 16.77 2.94l2.99-13.96C128.73 1.97 123.05 0 115.95 0 99.4 0 87.63 8.75 87.53 21.32c-.11 9.29 8.3 14.47 14.63 17.56 6.51 3.16 8.7 5.19 8.67 8.02-.05 4.33-5.19 6.25-9.99 6.32-8.4.13-13.27-2.27-17.14-4.08l-3.02 14.15c3.9 1.79 11.1 3.35 18.56 3.43 17.55.02 29.03-8.67 29.1-22.09Zm-69.2-44.4L34.32 66.71H16.3L3.57 13.93C2.78 10.81 2.1 9.7.91 8.99-1.46 7.58-5.31 6.26-8.66 5.4L-8.28 3.49h28.9c3.67 0 6.97 2.44 7.8 6.67l7.13 37.88 17.62-44.55Z" />
+    </symbol>
+    <!-- White Visa wordmark (for dark card backgrounds) -->
+    <symbol id="v-white" viewBox="0 0 216 68">
+      <path fill="#ffffff"
+        d="M84.88 1.49 70.07 66.7H51.4L66.22 1.49Zm76.03 42.2 9.44-26.04 5.43 26.04Zm20.97 23h17.12L183.6 1.49h-15.8c-3.56 0-6.55 2.07-7.88 5.25L131.28 66.7h17.9l3.55-9.83h21.87ZM128.9 45.88c.07-17.38-24.03-18.34-23.87-26.1.05-2.36 2.3-4.88 7.22-5.52 2.44-.32 9.16-.57 16.77 2.94l2.99-13.96C128.73 1.97 123.05 0 115.95 0 99.4 0 87.63 8.75 87.53 21.32c-.11 9.29 8.3 14.47 14.63 17.56 6.51 3.16 8.7 5.19 8.67 8.02-.05 4.33-5.19 6.25-9.99 6.32-8.4.13-13.27-2.27-17.14-4.08l-3.02 14.15c3.9 1.79 11.1 3.35 18.56 3.43 17.55.02 29.03-8.67 29.1-22.09Zm-69.2-44.4L34.32 66.71H16.3L3.57 13.93C2.78 10.81 2.1 9.7.91 8.99-1.46 7.58-5.31 6.26-8.66 5.4L-8.28 3.49h28.9c3.67 0 6.97 2.44 7.8 6.67l7.13 37.88 17.62-44.55Z" />
+    </symbol>
+  </svg>
 
-  <button id="login-openPopupBtn" style="display:none">
-    Login Passkey
-  </button>
+  <!-- ══ PHONE SHELL ══ -->
+  <div id="shell">
+    <div id="app">
+      <div class="status-bar">
+        <span id="clock">00:00</span>
+        <div class="sb-icons"><span>📶</span><span>🔋</span></div>
+      </div>
 
+      <div class="screen-host">
 
-  <!-- Hidden iframe required by Visa -->
-  <iframe id="vpp-iframe" style="visibility:hidden" width="0" height="0"
+        <!-- ▌S1: SELECT CARD ▌-->
+        <div class="screen active" id="s-select">
+          <div class="topbar">
+            <div class="visa-logo-wrap">
+              <svg class="visa-logo-svg" viewBox="0 0 216 68" aria-label="Visa">
+                <use href="#v-blue" />
+              </svg>
+              <div class="topbar-divider"></div>
+              <div class="brand">PASSKEY PAYMENT</div>
+            </div>
+            <div class="tb-right">
+              <div class="badge-green">
+                <div class="sdot"></div>Secure
+              </div>
+            </div>
+          </div>
+          <div class="ph">
+            <div class="ph-lbl">QuickMart · ₹1.00</div>
+            <div class="ph-title">Choose Card</div>
+            <div class="ph-sub">Select your Visa card to continue</div>
+          </div>
+          <div class="scr-body">
+            <div class="card-list" id="card-grid"></div>
+            <div class="order-card">
+              <div class="or">
+                <div class="ol">
+                  <div class="o-ico">🧃</div>
+                  <div>
+                    <div class="o-nm">Mango Juice</div>
+                    <div class="o-qty">Qty: 1</div>
+                  </div>
+                </div>
+                <div class="o-pr">₹1.00</div>
+              </div>
+              <div class="or">
+                <div class="o-tl">Total</div>
+                <div class="o-tot">₹1.00</div>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn btn-blue" id="pay-btn" onclick="handlePay()">Pay ₹1.00</button>
+            <div class="visa-secured-row">
+              <svg viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <span class="visa-secured-txt">Secured by Visa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ▌S2: LOADING ▌-->
+        <div class="screen" id="s-loading">
+          <div class="topbar">
+            <div class="visa-logo-wrap">
+              <svg class="visa-logo-svg" viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <div class="topbar-divider"></div>
+              <div class="brand">PASSKEY PAYMENT</div>
+            </div>
+          </div>
+          <div class="fill-c">
+            <div class="spinner"></div>
+            <div class="ld-t" id="ld-t">Processing transaction...</div>
+            <div class="ld-s" id="ld-s">Please do not close this window</div>
+            <div class="visa-loading-badge">
+              <svg viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <span>Visa Secure Processing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ▌S3: OTP ▌-->
+        <div class="screen" id="s-otp">
+          <div class="topbar">
+            <div class="visa-logo-wrap">
+              <svg class="visa-logo-svg" viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <div class="topbar-divider"></div>
+              <div class="brand">PASSKEY PAYMENT</div>
+            </div>
+            <div class="tb-right">
+              <div class="icon-btn" onclick="doBack('s-select')">←</div>
+            </div>
+          </div>
+          <div class="ph">
+            <div class="ph-lbl">Bank Verification</div>
+            <div class="ph-title">Enter OTP</div>
+            <div class="ph-sub" id="otp-sub">Sent to +91 ••••••7890</div>
+          </div>
+          <div class="scr-body">
+            <div class="otp-row">
+              <div class="obox" id="ob0"></div>
+              <div class="obox" id="ob1"></div>
+              <div class="obox" id="ob2"></div>
+              <div class="obox" id="ob3"></div>
+            </div>
+            <div class="otp-hint">OTP: <b>1234</b></div>
+            <div class="keypad">
+              <button class="kb" onclick="otpKey(1)">1</button>
+              <button class="kb" onclick="otpKey(2)">2</button>
+              <button class="kb" onclick="otpKey(3)">3</button>
+              <button class="kb" onclick="otpKey(4)">4</button>
+              <button class="kb" onclick="otpKey(5)">5</button>
+              <button class="kb" onclick="otpKey(6)">6</button>
+              <button class="kb" onclick="otpKey(7)">7</button>
+              <button class="kb" onclick="otpKey(8)">8</button>
+              <button class="kb" onclick="otpKey(9)">9</button>
+              <button class="kb ghost"></button>
+              <button class="kb" onclick="otpKey(0)">0</button>
+              <button class="kb del" onclick="otpDel()">⌫</button>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn btn-blue" id="otp-btn" onclick="verifyOTP()" disabled>Confirm OTP</button>
+            <div class="visa-secured-row">
+              <svg viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <span class="visa-secured-txt">Verified by Visa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ▌S4: BIO CREATE ▌-->
+        <div class="screen" id="s-bio-create">
+          <div class="topbar">
+            <div class="visa-logo-wrap">
+              <svg class="visa-logo-svg" viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <div class="topbar-divider"></div>
+              <div class="brand">PASSKEY PAYMENT</div>
+            </div>
+          </div>
+          <div class="ph">
+            <div class="ph-lbl">Passkey Enrollment</div>
+            <div class="ph-title">Register Device for Secure Transactions</div>
+            <div class="ph-sub">Establish a FIDO compliant passkey for secure, phishing-resistant Visa transactions
+            </div>
+          </div>
+          <div class="bio-c">
+            <div class="fp-out" id="fp-create">
+              <div class="fp-icon">👆</div>
+            </div>
+            <div class="fp-lbl" id="fl-create">Use fingerprint, face recognition, or device PIN</div>
+            <div class="fp-track">
+              <div class="fp-fill" id="fb-create"></div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn btn-gold" onclick="startBio('create')">Complete Passkey Enrollment</button>
+            <div class="visa-secured-row">
+              <svg viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <span class="visa-secured-txt">Secured by Visa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ▌S5: BIO AUTH ▌-->
+        <div class="screen" id="s-bio-auth">
+          <div class="topbar">
+            <div class="visa-logo-wrap">
+              <svg class="visa-logo-svg" viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <div class="topbar-divider"></div>
+              <div class="brand">PASSKEY PAYMENT</div>
+            </div>
+          </div>
+          <div class="ph">
+            <div class="ph-lbl">Passkey Detected ✓</div>
+            <div class="ph-title">Authenticate Transaction</div>
+            <div class="ph-sub">Confirm ₹1.00 to QuickMart</div>
+          </div>
+          <div class="bio-c">
+            <div class="fp-out" id="fp-auth">
+              <div class="fp-icon">👆</div>
+            </div>
+            <div class="fp-lbl" id="fl-auth">User Verification Required</div>
+            <div class="fp-track">
+              <div class="fp-fill" id="fb-auth"></div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn btn-blue" onclick="startBio('auth')">Continue</button>
+            <div class="visa-secured-row">
+              <svg viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <span class="visa-secured-txt">Secured by Visa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ▌S6: SUCCESS ▌-->
+        <div class="screen" id="s-success">
+          <div class="topbar">
+            <div class="visa-logo-wrap">
+              <svg class="visa-logo-svg" viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <div class="topbar-divider"></div>
+              <div class="brand">PASSKEY PAYMENT</div>
+            </div>
+          </div>
+          <div class="succ-c">
+            <div class="succ-ring">✓</div>
+            <div class="s-ttl">Payment Done!</div>
+            <div class="s-amt">₹1.00</div>
+            <div class="s-desc" id="s-desc">Paid to QuickMart</div>
+            <div class="pk-pill">
+              🔑 Secured by&nbsp;
+              <svg viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              &nbsp;Passkey
+            </div>
+            <div class="txn-blk">
+              <div class="txr">
+                <div class="tl">Transaction ID</div>
+                <div class="tv" id="t-id">—</div>
+              </div>
+              <div class="txr">
+                <div class="tl">Card</div>
+                <div class="tv" id="t-card">—</div>
+              </div>
+              <div class="txr">
+                <div class="tl">Date &amp; Time</div>
+                <div class="tv" id="t-time">—</div>
+              </div>
+              <div class="txr">
+                <div class="tl">Auth Method</div>
+                <div class="tv" id="t-auth">—</div>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn btn-ghost" onclick="resetAll()">↩ Pay Again</button>
+            <div class="visa-secured-row">
+              <svg viewBox="0 0 216 68">
+                <use href="#v-blue" />
+              </svg>
+              <span class="visa-secured-txt">Secured by Visa</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /screen-host -->
+    </div><!-- /app -->
+
+    <button class="log-fab" onclick="openDrawer()" title="Flow Logs">
+      📋<div class="log-fab-badge" id="log-count">0</div>
+    </button>
+
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+    <div class="drawer" id="drawer">
+      <div class="drawer-head">
+        <div class="drawer-title">📋 Flow Logs</div>
+        <button class="drawer-close" onclick="closeDrawer()">✕</button>
+      </div>
+      <div class="drawer-toolbar">
+        <button class="dt-chip active" onclick="setFilter('all',this)">All</button>
+        <button class="dt-chip" onclick="setFilter('info',this)">Info</button>
+        <button class="dt-chip" onclick="setFilter('ok',this)">OK</button>
+        <button class="dt-chip" onclick="setFilter('warn',this)">Warn</button>
+        <button class="dt-chip" onclick="setFilter('err',this)">Error</button>
+        <div class="dt-spacer"></div>
+        <button class="dt-clear" onclick="clearLogs()">Clear</button>
+      </div>
+      <div class="drawer-logs" id="log-list">
+        <div class="log-empty">
+          <div class="log-empty-icon">🔍</div>
+          <div class="log-empty-txt">No logs yet.<br>Tap Pay to start.</div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <div class="log-status-row">
+          <div class="lsr-item">
+            <div class="lsr-dot" style="background:#58A6FF"></div>Info
+          </div>
+          <div class="lsr-item">
+            <div class="lsr-dot" style="background:#3FB950"></div>OK
+          </div>
+          <div class="lsr-item">
+            <div class="lsr-dot" style="background:#E3B341"></div>Warn
+          </div>
+          <div class="lsr-item">
+            <div class="lsr-dot" style="background:#F85149"></div>Error
+          </div>
+          <div class="lsr-item">
+            <div class="lsr-dot" style="background:#BC8CFF"></div>Visa
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /shell -->
+
+  <iframe id="vpp-iframe" style="visibility:hidden;position:absolute;width:0;height:0;"
     allow="payment *; publickey-credentials-get *; publickey-credentials-create *"
-    referrerpolicy="strict-origin-when-cross-origin" sandbox="
-      allow-scripts
-      allow-same-origin
-      allow-forms
-      allow-popups
-      allow-popups-to-escape-sandbox
-      allow-top-navigation
-      allow-top-navigation-by-user-activation
-      allow-modals
-    ">
+    referrerpolicy="strict-origin-when-cross-origin"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation allow-top-navigation-by-user-activation allow-modals">
   </iframe>
 
   <script>
-    /*********************************************************
-     * CONFIG
-     *********************************************************/
     const ORIGIN = "https://weak-tova-ungently.ngrok-free.dev";
     const VISA_BASE = "https://sandbox.auth.visa.com";
     const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
 
-    /*********************************************************
-     * STATE
-     *********************************************************/
-    let serverStateToken = null;
-    let deviceProfilingDone = false;
-    let flowStarted = false;
-    let pendingVisaAuthDataForCreate = null;
-    let pendingVisaAuthDataForLogin = null;
-    let visaPopup = null;
+    const CARDS = [
+      { id: 'c1', last4: '0492', name: 'TestCard 1', cardNumber: '4761120010000492', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)' },
+      { id: 'c2', last4: '4228', name: 'TestCard 2', cardNumber: '4761262260004228', grad: 'linear-gradient(135deg,#0D3B66,#1B6CA8)' },
+      { id: 'c3', last4: '1439', name: 'TestCard 3', cardNumber: '4761209980011439', grad: 'linear-gradient(135deg,#374151,#6B7280)' },
+      { id: 'c4', last4: '0121', name: 'TestCard 4', cardNumber: '4051069302200121', grad: 'linear-gradient(135deg,#5B21B6,#7C3AED)' },
+    ];
 
+    let selCard = null, sst = null, devDone = false, flowStart = false, createData = null, loginData = null;
+    let flow = null, otpVal = '', scanning = false, popup = null, authZTok = null, curScreen = 's-select';
+    let allLogs = [], curFilter = 'all';
 
-    /*********************************************************
-     * INITIALIZATION COMMAND
-     *********************************************************/
-    const INIT_COMMAND = {
-      type: "COMMAND",
-      ref: crypto.randomUUID(),
-      ts: Date.now(),
-      command: {
-        type: "INITIALIZATION",
-        data: {
-          response_mode: "form_post",
-          redirect_uri: ORIGIN + "/v2/pay/response",
-          session_context: {
-            apn: "vdp-web",
-            client_software: {
-              top_origin: ORIGIN,
-              integrator_origin: ORIGIN,
-              uebas: [
-                {
-                  source: "VDI",
-                  ref: crypto.randomUUID()
-                }
-              ],
-              id: "VDPW",
-              version: "24.07",
-              oauth2_version: "1.0",
-              tenancy: {
-                product_code: "VDP"
-              }
-            }
-          }
-        },
-        response_type: "urn:ext:oauth:response-type:server_state"
-      }
-    };
+    function addLog(type, msg) {
+      const now = new Date();
+      const ts = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
+      allLogs.push({ type, msg, ts });
+      const badge = document.getElementById('log-count');
+      badge.textContent = allLogs.length > 99 ? '99+' : String(allLogs.length);
+      renderLogs();
+    }
 
-    /*********************************************************
-     * MESSAGE HANDLER FROM VISA
-     *********************************************************/
-    window.addEventListener("message", async (event) => {
-      let msg;
+    function renderLogs() {
+      const list = document.getElementById('log-list');
+      const shown = curFilter === 'all' ? allLogs : allLogs.filter(l => l.type === curFilter);
+      if (!shown.length) { list.innerHTML = `<div class="log-empty"><div class="log-empty-icon">🔍</div><div class="log-empty-txt">${allLogs.length ? 'No entries match filter.' : 'No logs yet.<br>Tap Pay to start.'}</div></div>`; return; }
+      list.innerHTML = [...shown].reverse().map(l => `<div class="log-entry"><div class="log-time">${l.ts}</div><div class="log-row"><span class="log-tag tag-${l.type}">${l.type.toUpperCase()}</span><span class="log-msg">${l.msg}</span></div></div>`).join('');
+    }
 
-      try {
-        msg = typeof event.data === "string"
-          ? JSON.parse(event.data)
-          : event.data;
-      } catch {
-        return;
-      }
+    function setFilter(f, el) { curFilter = f; document.querySelectorAll('.dt-chip').forEach(b => b.classList.remove('active')); el.classList.add('active'); renderLogs(); }
+    function clearLogs() { allLogs = []; document.getElementById('log-count').textContent = '0'; renderLogs(); }
+    function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer-overlay').classList.remove('open'); }
 
-      console.log("📩 VISA MESSAGE:", JSON.stringify(msg));
+    function updateClock() { const now = new Date(); const el = document.getElementById('clock'); if (el) el.textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }); }
+    updateClock(); setInterval(updateClock, 15000);
 
-      /* ---------- INITIALIZATION SUCCESS ---------- */
-      if (msg.type === "RESULT" && msg.result?.command_type === "INITIALIZATION" && msg.result.status === "SUCCESS") {
-        serverStateToken = msg.result.data.tokens?.[0]?.token;
-        console.log("🔐 server_state_token captured");
-        tryStartFlow();
-      }
+    const INIT_CMD = { type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(), command: { type: "INITIALIZATION", data: { response_mode: "form_post", redirect_uri: ORIGIN, session_context: { apn: "vdp-web", client_software: { top_origin: ORIGIN, integrator_origin: ORIGIN, uebas: [{ source: "VDI", ref: crypto.randomUUID() }], id: "VDPW", version: "24.07", oauth2_version: "1.0", tenancy: { product_code: "VDP" } } } }, response_type: "urn:ext:oauth:response-type:server_state" } };
 
-      /* ---------- DEVICE PROFILING ---------- */
-      if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURED") {
-        deviceProfilingDone = true;
-        console.log("✅ Device profiling completed");
-        tryStartFlow();
-      }
+    function goTo(id) {
+      if (id === curScreen) return;
+      const prev = document.getElementById(curScreen), next = document.getElementById(id);
+      if (!prev || !next) return;
+      prev.classList.add('leaving');
+      setTimeout(() => { prev.classList.remove('leaving', 'active'); }, 340);
+      next.style.transition = 'none'; next.style.transform = 'translateX(100%)'; next.style.opacity = '0'; next.classList.add('active');
+      requestAnimationFrame(() => requestAnimationFrame(() => { next.style.transition = ''; next.style.transform = ''; next.style.opacity = ''; }));
+      curScreen = id;
+    }
 
-      if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURE_FAILED") {
-        console.error("❌ Device profiling failed");
-      }
+    function doBack(id) {
+      if (id === curScreen) return;
+      const cur = document.getElementById(curScreen), prev = document.getElementById(id);
+      if (!cur || !prev) return;
+      cur.style.transition = 'transform .28s cubic-bezier(.4,0,.2,1), opacity .25s ease';
+      cur.style.transform = 'translateX(100%)'; cur.style.opacity = '0';
+      setTimeout(() => { cur.classList.remove('active'); cur.style.cssText = ''; }, 290);
+      prev.style.cssText = ''; prev.classList.add('active'); curScreen = id;
+    }
 
+    function renderCards() {
+      document.getElementById('card-grid').innerHTML = CARDS.map(c => `
+        <div class="card-opt ${c.id === selCard?.id ? 'sel' : ''}" onclick="pickCard('${c.id}')">
+          <div class="card-vis" style="background:${c.grad}">
+            <svg class="card-vis-logo" viewBox="0 0 216 68" xmlns="http://www.w3.org/2000/svg"><use href="#v-white"/></svg>
+          </div>
+          <div class="ci"><div class="cn">${c.name}</div><div class="cn2">•••• •••• •••• ${c.last4}</div></div>
+          <div class="rr"></div>
+        </div>`).join('');
+    }
 
-      if (msg.type === "RESULT" && msg.result?.command_type === "AUTHORIZATION_REQUEST") {
-        if (msg.result.status === "SUCCESS" && msg.result?.data?.tokens[0]?.token) {
-          let payload = {
-            fida_authentication: "AUTHORIZE_SUCCESS",
-            auth_z_token: msg.result?.data?.tokens[0]?.token
-          }
-        } else {
-          let payload = {
-            fida_authentication: "AUTHORIZE_FAILED",
-            auth_z_token: null
-          }
-        }
-      }
+    function pickCard(id) { selCard = CARDS.find(c => c.id === id); renderCards(); addLog('info', `Card selected: <b>•••• ${selCard.last4}</b> (${selCard.name})`); }
 
+    window.addEventListener("message", async (ev) => {
+      let m; try { m = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; }
+      if (!m || !m.type) return;
+      addLog('visa', `type=<b>${m.type}</b>${m.result?.command_type ? ' cmd=' + m.result.command_type : ''}${m.event?.type ? ' evt=' + m.event.type : ''}`);
+      if (m.type === "RESULT" && m.result?.command_type === "INITIALIZATION") { if (m.result.status === "SUCCESS") { sst = m?.result?.data?.tokens[0]?.token; addLog('ok', `SDK init ✓ — token=<b>${sst?.slice(0, 18)}…</b>`); if (flowStart === false && selCard && devDone) tryStart(); } else { addLog('err', `SDK init FAILED: ${m.result?.data?.error_details?.error || 'unknown'}`); } }
+      if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURED") { devDone = true; addLog('ok', 'Device profiling complete ✓'); if (sst && selCard && !flowStart) tryStart(); }
+      if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURE_FAILED") addLog('err', 'Device profiling FAILED');
+      if (m.type === "EVENT" && m.event?.type === "POPUP_WINDOW_TERMINATED") addLog('warn', 'Visa popup closed by user');
+      if (m.type === "AUTHORIZATION_RESULT") { authZTok = m.data; addLog('ok', 'auth_z_token received — payment authorised ✓'); submitResp({ passkeyStatus: "PASSKEY_SUCCESS", passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS", payload: m.data }); goSuccess(); }
     });
 
-    /*********************************************************
-     * START LOGIN ONLY WHEN READY
-     *********************************************************/
-    async function tryStartFlow() {
-      if (!serverStateToken || !deviceProfilingDone || flowStarted) return;
-      flowStarted = true;
+    function handlePay() {
+      if (!selCard) return;
+      const btn = document.getElementById('pay-btn'); btn.disabled = true; btn.textContent = 'Connecting…';
+      addLog('info', `Pay initiated — card <b>•••• ${selCard.last4}</b>`);
+      goTo('s-loading');
+      if (sst && devDone && !flowStart) tryStart();
+    }
+
+    async function tryStart() {
+      if (!selCard || !sst || !devDone || flowStart) return;
+      flowStart = true;
+      document.getElementById('ld-t').textContent = 'Processing transaction...';
+      document.getElementById('ld-s').textContent = 'Please do not close this window';
+      addLog('info', 'SDK + device ready → calling <b>Login API</b>');
       await callLogin();
     }
 
-    /*********************************************************
-     * LOGIN API
-     *********************************************************/
     async function callLogin() {
-      console.log("➡️ Calling LOGIN API");
-
-      const res = await fetch("/api/passkey/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: serverStateToken })
-      });
-
-      const result = await res.json();
-      console.log("🔁 LOGIN RESPONSE:", result);
-
-      /* ---------- NO PASSKEY → CREATE ---------- */
-      if (result?.error === "notfound_amr_values") {
-        console.log("🆕 No passkey found, calling CREATE");
-        await callCreate();
-        return;
-      }
-
-      /* ---------- LOGIN SUCCESS ---------- */
-      if (result?.data?.request) {
-        pendingVisaAuthDataForLogin = result.data
-        document.getElementById("login-openPopupBtn").style.display = "block";
-      } else {
-        console.error("❌ Unexpected login response", result);
-      }
+      addLog('info', `POST /api/passkey/login — last4=<b>${selCard.last4}</b>`);
+      try {
+        const r = await fetch("/api/passkey/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: sst, cardNumber: selCard.cardNumber }) });
+        const d = await r.json();
+        addLog('visa', `Login response: ${JSON.stringify(d).slice(0, 80)}…`);
+        if (d?.error === "notfound_amr_values") { addLog('warn', 'No passkey → <b>CREATE flow</b> — showing OTP'); flow = 'create'; document.getElementById('otp-sub').textContent = 'Compelete 3ds Transaction'; goTo('s-otp'); await callCreate(); }
+        else if (d?.data?.request) { addLog('ok', 'Passkey found → <b>AUTH flow</b>'); loginData = d.data; flow = 'auth'; goTo('s-bio-auth'); }
+        else { addLog('warn', 'Unexpected login response → fallback to create'); flow = 'create'; goTo('s-otp'); await callCreate(); }
+      } catch (e) { addLog('err', `Login API error: ${e.message} → fallback create`); flow = 'create'; goTo('s-otp'); await callCreate(); }
     }
 
-    /*********************************************************
-     * CREATE API
-     *********************************************************/
     async function callCreate() {
-      console.log("➡️ Calling CREATE API");
-
-      const res = await fetch("/api/passkey/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: serverStateToken })
-      });
-
-      const result = await res.json();
-      console.log("🆕 CREATE RESPONSE:", result);
-
-      if (result?.data?.request) {
-        pendingVisaAuthDataForCreate = result.data
-        document.getElementById("create-openPopupBtn").style.display = "block";
-      } else {
-        console.error("❌ Create failed", result);
-      }
+      addLog('info', `POST /api/passkey/create — last4=<b>${selCard.last4}</b>`);
+      try {
+        const r = await fetch("/api/passkey/create", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: sst, cardNumber: selCard.cardNumber }) });
+        const d = await r.json();
+        if (d?.data?.request) { createData = d.data; addLog('ok', 'Create API ready — waiting for OTP'); }
+        else addLog('err', `Create API failed: ${JSON.stringify(d).slice(0, 60)}`);
+      } catch (e) { addLog('err', `Create API error: ${e.message}`); }
     }
 
-    /*********************************************************
-     * OPEN CREATE VISA POPUP
-     *********************************************************/
-
-    document.getElementById("create-openPopupBtn").addEventListener("click", () => {
-      if (!pendingVisaAuthDataForCreate) {
-        console.error("❌ No Visa auth data available");
-        return;
-      }
-
-      openCreateVisaPopup(pendingVisaAuthDataForCreate);
-    });
-
-    function openCreateVisaPopup(data) {
-      console.log("🪟 Opening Create Visa popup");
-      const popupMsg = {
-        type: "COMMAND",
-        ref: crypto.randomUUID(),
-        ts: Date.now(),
-        command: {
-          type: "AUTHORIZATION_REQUEST",
-          data: {
-            request: data.request,
-            authorization_endpoint: data.authorization_endpoint
-          }
-        }
-      };
-
-      const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
-    
-
-      const width = 500;
-      const height = 600;
-      const left = (screen.width - width) / 2;
-      const top = 120;
-
-      const windowSettings = `width=${width},height=${height},top=${top},left=${left},` + `scrollbars=yes,resizable=no,status=no,location=no`;
-
-      window.open(popupUrl, "passkey", windowSettings);
-      // window.location.href = popupUrl;
+    function otpKey(k) { if (otpVal.length >= 4) return; otpVal += String(k); updateOTP(); }
+    function otpDel() { otpVal = otpVal.slice(0, -1); updateOTP(); }
+    function updateOTP() {
+      for (let i = 0; i < 4; i++) { const b = document.getElementById('ob' + i); b.textContent = i < otpVal.length ? otpVal[i] : ''; b.className = 'obox' + (i < otpVal.length ? ' on' : ''); }
+      document.getElementById('otp-btn').disabled = otpVal.length !== 4;
+    }
+    function verifyOTP() {
+      if (otpVal !== '1234') { addLog('err', `OTP wrong: <b>${otpVal}</b> — expected 1234`); document.querySelectorAll('.obox').forEach(b => { b.className = 'obox err'; }); setTimeout(() => { otpVal = ''; updateOTP(); }, 500); return; }
+      addLog('ok', 'OTP verified ✓ → biometric registration'); goTo('s-bio-create');
     }
 
+    function openPopup(w, h) { const left = Math.round((screen.width - w) / 2); popup = window.open('about:blank', 'vpp', `width=${w},height=${h},top=80,left=${left},scrollbars=yes`); if (!popup) addLog('warn', 'Popup blocked — allow popups for this site'); return !!popup; }
+    function navPopup(data) { const msg = { type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(), command: { type: "AUTHORIZATION_REQUEST", data: { request: data.request, authorization_endpoint: data.authorization_endpoint } } }; const url = `${VISA_BASE}${data.authorization_endpoint}#msg=${encodeURIComponent(JSON.stringify(msg))}`; if (popup && !popup.closed) popup.location.href = url; else popup = window.open(url, 'vpp'); addLog('info', `Visa popup → <b>${data.authorization_endpoint}</b>`); }
 
-    /*********************************************************
-     * OPEN LOGIN VISA POPUP
-     *********************************************************/
-
-    document.getElementById("login-openPopupBtn").addEventListener("click", () => {
-      if (!pendingVisaAuthDataForLogin) {
-        console.error("❌ No Visa auth data available");
-        return;
-      }
-
-      openLoginVisaPopup(pendingVisaAuthDataForLogin);
-    });
-
-    function openLoginVisaPopup(data) {
-      console.log("🪟 Opening Login Visa popup");
-
-
-
-      const popupMsg = {
-        type: "COMMAND",
-        ref: crypto.randomUUID(),
-        ts: Date.now(),
-        command: {
-          type: "AUTHORIZATION_REQUEST",
-          data: {
-            request: data.request,
-            authorization_endpoint: data.authorization_endpoint
-          }
-        }
-      };
-
-
-      console.log("popupMsg-login",popupMsg)
-
-      const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
-
-      console.log("popupUrl-login",popupUrl)
-
-
-      const width = 400;
-      const height = 480;
-      const left = (screen.width - width) / 2;
-      const top = 120;
-
-      const settings = `width=${width},height=${height},top=${top},left=${left},` + `resizable=no,scrollbars=no,status=no,location=no`;
-      window.open(popupUrl, "passkey", settings);
-      // window.location.href = redirectUrl;
+    function startBio(type) {
+      if (scanning) return; scanning = true;
+      const ring = document.getElementById(`fp-${type}`), bar = document.getElementById(`fb-${type}`), lbl = document.getElementById(`fl-${type}`);
+      addLog('info', `Biometric started — <b>${type}</b>`);
+      if (type === 'auth' && loginData) { if (openPopup(400, 480)) navPopup(loginData); }
+      if (type === 'create' && createData) { if (openPopup(500, 600)) navPopup(createData); }
+      ring.classList.add('scanning'); bar.style.width = '100%'; lbl.textContent = 'Scanning…';
+      setTimeout(() => {
+        ring.classList.remove('scanning'); ring.classList.add('done');
+        lbl.textContent = type === 'auth' ? '✅ Authenticated!' : '✅ Passkey Registered!';
+        addLog('ok', type === 'auth' ? 'Biometric auth ✓' : 'Passkey registered ✓');
+        setTimeout(() => { if (!authZTok) authZTok = 'DEMO_' + crypto.randomUUID(); goSuccess(); }, 600);
+      }, 2000);
     }
 
-
-
-    /*********************************************************
-     * LOAD VISA IFRAME
-     *********************************************************/
-    const fragment = encodeURIComponent(JSON.stringify(INIT_COMMAND));
-    document.getElementById("vpp-iframe").src = `${INIT_URL}${fragment}`;
-
-
-    function submitResponse(payload) {
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = `${{ ORIGINv2 }}/pay/response`;
-
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'data';
-      input.value = JSON.stringify(payload);
-
-      form.appendChild(input);
-      document.body.appendChild(form);
-      form.submit();
+    function goSuccess() {
+      scanning = false; const n = new Date(); const txnId = 'TXN#' + Math.floor(1e5 + Math.random() * 9e5);
+      document.getElementById('t-id').textContent = txnId;
+      document.getElementById('t-card').textContent = `Visa •••• ${selCard.last4}`;
+      document.getElementById('t-time').textContent = n.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + '  ' + n.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+      document.getElementById('t-auth').textContent = flow === 'auth' ? 'Passkey (Biometric)' : 'Passkey (Created)';
+      document.getElementById('s-desc').textContent = flow === 'auth' ? 'Paid to QuickMart · via passkey ⚡' : 'Paid to QuickMart · passkey created 🎉';
+      addLog('ok', `Payment SUCCESS — ${txnId}`); addLog('info', `submitResponse → POST ${ORIGIN}/v2/pay/response`);
+      goTo('s-success');
     }
 
+    function submitResp(payload) { try { const f = document.createElement('form'); f.method = 'POST'; f.action = `${ORIGIN}/v2/pay/response`; const i = document.createElement('input'); i.type = 'hidden'; i.name = 'data'; i.value = JSON.stringify(payload); f.appendChild(i); document.body.appendChild(f); f.submit(); } catch (e) { addLog('err', `submitResp failed: ${e.message}`); } }
+
+    function resetAll() {
+      sst = null; devDone = false; flowStart = false; authZTok = null; createData = null; loginData = null; flow = null; otpVal = ''; scanning = false; selCard = null;
+      if (popup && !popup.closed) popup.close();
+      const payBtn = document.getElementById('pay-btn'); if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Pay ₹1.00'; }
+      updateOTP();
+      ['auth', 'create'].forEach(t => { const r = document.getElementById(`fp-${t}`); if (r) r.className = 'fp-out'; const b = document.getElementById(`fb-${t}`); if (b) b.style.width = '0%'; const l = document.getElementById(`fl-${t}`); if (l) l.textContent = 'Place your finger'; });
+      const newCmd = { ...INIT_CMD, ref: crypto.randomUUID(), ts: Date.now() };
+      document.getElementById("vpp-iframe").src = `${INIT_URL}${encodeURIComponent(JSON.stringify(newCmd))}`;
+      addLog('info', '── Session reset ──'); renderCards();
+      document.querySelectorAll('.screen').forEach(s => { s.className = 'screen'; s.removeAttribute('style'); });
+      document.getElementById('s-select').classList.add('active'); curScreen = 's-select';
+    }
+
+    renderCards();
+    addLog('info', 'App loaded — injecting Visa SDK iframe');
+    document.getElementById("vpp-iframe").src = `${INIT_URL}${encodeURIComponent(JSON.stringify(INIT_CMD))}`;
+    addLog('visa', `iframe src → ${VISA_BASE}/oauth2/…`);
   </script>
-
-
 </body>
 
 </html>

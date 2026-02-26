@@ -2,1845 +2,325 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visa Payment Passkey – Demo</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap"
-        rel="stylesheet" />
-    <style>
-        :root {
-            --blue: #1A1F6E;
-            --gold: #F6A623;
-            --accent: #1434CB;
-            --success: #00A550;
-            --danger: #D0021B;
-            --light: #F8F9FC;
-            --white: #FFFFFF;
-            --dark: #0D0F1C;
-            --muted: #6B7280;
-            --border: #E5E8F0;
-            --shadow: 0 4px 32px rgba(20, 52, 203, 0.10);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: #EEF1F8;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* TOP BAR */
-        .topbar {
-            width: 100%;
-            background: var(--blue);
-            padding: 14px 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: -1px;
-        }
-
-        .logo span {
-            color: var(--gold);
-        }
-
-        .topbar-tag {
-            font-size: 11px;
-            background: rgba(246, 166, 35, 0.18);
-            color: var(--gold);
-            border: 1px solid rgba(246, 166, 35, 0.3);
-            padding: 3px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .topbar-right {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* STATUS BAR */
-        .sbar {
-            width: 100%;
-            background: #0d1240;
-            padding: 7px 32px;
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .si {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .si b {
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 500;
-        }
-
-        .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #333;
-            transition: all 0.3s;
-        }
-
-        .dot.pend {
-            background: var(--gold);
-            box-shadow: 0 0 5px var(--gold);
-        }
-
-        .dot.ok {
-            background: var(--success);
-            box-shadow: 0 0 5px var(--success);
-        }
-
-        .dot.err {
-            background: var(--danger);
-            box-shadow: 0 0 5px var(--danger);
-        }
-
-        /* LAYOUT */
-        .main {
-            width: 100%;
-            max-width: 940px;
-            padding: 32px 20px 60px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        /* CARD SELECTOR */
-        .card-select-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-        }
-
-        .card-pick {
-            background: var(--white);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .card-pick:hover {
-            border-color: #a0b0f0;
-            background: #f5f8ff;
-        }
-
-        .card-pick.sel {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(20, 52, 203, 0.12);
-        }
-
-        .card-visual {
-            height: 56px;
-            border-radius: 10px;
-            padding: 10px 14px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-visual::after {
-            content: 'VISA';
-            position: absolute;
-            right: 10px;
-            bottom: 6px;
-            font-family: 'Playfair Display', serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .card-num-mini {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 1px;
-        }
-
-        .card-name-mini {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-        }
-
-        .card-radio {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            transition: all 0.2s;
-        }
-
-        .card-pick.sel .card-radio {
-            border-color: var(--accent);
-            background: var(--accent);
-        }
-
-        .card-pick.sel .card-radio::after {
-            content: '';
-            display: block;
-            width: 6px;
-            height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            margin: 4px auto;
-        }
-
-        /* DEMO AREA */
-        .demo {
-            display: flex;
-            gap: 28px;
-            align-items: flex-start;
-        }
-
-        /* PHONE */
-        .phone {
-            width: 295px;
-            flex-shrink: 0;
-            height: 620px;
-            background: var(--white);
-            border-radius: 42px;
-            box-shadow: 0 24px 80px rgba(20, 52, 203, 0.16), 0 2px 8px rgba(0, 0, 0, 0.07);
-            overflow: hidden;
-            border: 7px solid #1A1A2E;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .notch {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 88px;
-            height: 26px;
-            background: #1A1A2E;
-            border-radius: 0 0 16px 16px;
-            z-index: 10;
-        }
-
-        .pscreen {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .screen {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.28s ease;
-            background: #fff;
-        }
-
-        .screen.on {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* SHARED PHONE COMPONENTS */
-        .ph {
-            padding: 38px 18px 16px;
-            color: #fff;
-        }
-
-        .ph.blue {
-            background: var(--blue);
-        }
-
-        .ph.dark {
-            background: linear-gradient(160deg, #0a0c1a, var(--blue));
-        }
-
-        .ph.grad {
-            background: linear-gradient(160deg, var(--blue), #2540C8);
-        }
-
-        .ph-label {
-            font-size: 11px;
-            opacity: 0.6;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 3px;
-        }
-
-        .ph-title {
-            font-size: 17px;
-            font-weight: 600;
-        }
-
-        .ph-sub {
-            font-size: 11px;
-            opacity: 0.6;
-            margin-top: 3px;
-        }
-
-        .pbody {
-            flex: 1;
-            overflow-y: auto;
-            padding: 18px;
-        }
-
-        .pfooter {
-            padding: 14px 18px 22px;
-            background: #fff;
-        }
-
-        .pbtn {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 13px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.18s;
-            color: #fff;
-        }
-
-        .pbtn.blue {
-            background: var(--accent);
-        }
-
-        .pbtn.gold {
-            background: linear-gradient(135deg, #F6A623, #E8940F);
-        }
-
-        .pbtn.green {
-            background: var(--success);
-        }
-
-        .pbtn:hover {
-            filter: brightness(0.92);
-        }
-
-        .pbtn:active {
-            transform: scale(0.98);
-        }
-
-        .pbtn:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* CHECKOUT SCREEN */
-        .order-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .order-left {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-
-        .order-ico {
-            width: 34px;
-            height: 34px;
-            border-radius: 9px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-        }
-
-        .order-nm {
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .order-qty {
-            font-size: 11px;
-            color: var(--muted);
-        }
-
-        .order-price {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0 0;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .total-amt {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .card-chip {
-            background: linear-gradient(135deg, var(--blue), #2548D4);
-            border-radius: 12px;
-            padding: 13px;
-            color: #fff;
-            margin: 14px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-chip::after {
-            content: 'VISA';
-            position: absolute;
-            right: 12px;
-            bottom: 8px;
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 700;
-            opacity: 0.75;
-        }
-
-        .chip-num {
-            font-size: 12px;
-            letter-spacing: 1.5px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .chip-name {
-            font-size: 11px;
-            opacity: 0.7;
-        }
-
-        /* SPINNER SCREEN */
-        .spin-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .spinner {
-            width: 44px;
-            height: 44px;
-            border: 4px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.85s linear infinite;
-            margin-bottom: 16px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .spin-lbl {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--dark);
-            margin-bottom: 4px;
-        }
-
-        .spin-sub {
-            font-size: 11px;
-            color: var(--muted);
-        }
-
-        /* PASSKEY INFO */
-        .pk-ico {
-            width: 56px;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            margin: 0 auto 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-        }
-
-        .pk-benefit {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .pk-ico-sm {
-            width: 32px;
-            height: 32px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .pk-benefit h4 {
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .pk-benefit p {
-            font-size: 11px;
-            color: var(--muted);
-            margin-top: 2px;
-        }
-
-        /* OTP */
-        .otp-inputs {
-            display: flex;
-            gap: 8px;
-            margin: 18px 0 14px;
-        }
-
-        .obox {
-            flex: 1;
-            height: 54px;
-            border: 2px solid var(--border);
-            border-radius: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 700;
-            background: var(--light);
-            transition: all 0.18s;
-        }
-
-        .obox.f {
-            border-color: var(--accent);
-            background: #EBF5FF;
-            color: var(--accent);
-            animation: pop 0.18s ease;
-        }
-
-        @keyframes pop {
-            0% {
-                transform: scale(0.85)
-            }
-
-            60% {
-                transform: scale(1.07)
-            }
-
-            100% {
-                transform: scale(1)
-            }
-        }
-
-        .otp-hint {
-            font-size: 11px;
-            color: var(--muted);
-            text-align: center;
-        }
-
-        .otp-hint strong {
-            color: var(--accent);
-        }
-
-        .otp-info {
-            font-size: 12px;
-            color: var(--muted);
-            text-align: center;
-            margin-bottom: 4px;
-            line-height: 1.5;
-        }
-
-        /* BIOMETRIC */
-        .fp-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            padding: 20px;
-        }
-
-        .fp-ring {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .fp-ring.scan {
-            border-color: var(--accent);
-            animation: pulse 1.1s ease infinite;
-        }
-
-        .fp-ring.done {
-            border-color: var(--success);
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(20, 52, 203, 0.3)
-            }
-
-            70% {
-                box-shadow: 0 0 0 14px rgba(20, 52, 203, 0)
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(20, 52, 203, 0)
-            }
-        }
-
-        .fp-icon {
-            font-size: 48px;
-        }
-
-        .fp-lbl {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--dark);
-            text-align: center;
-            margin-bottom: 6px;
-        }
-
-        .fp-sub {
-            font-size: 11px;
-            color: var(--muted);
-            text-align: center;
-        }
-
-        .fp-bar {
-            width: 75%;
-            height: 3px;
-            background: var(--border);
-            border-radius: 3px;
-            margin-top: 18px;
-            overflow: hidden;
-        }
-
-        .fp-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--accent), var(--gold));
-            transition: width 1.8s ease;
-        }
-
-        /* SUCCESS */
-        .succ-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-            overflow-y: auto;
-        }
-
-        .succ-ring {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00A550, #00C360);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 34px;
-            margin-bottom: 14px;
-            box-shadow: 0 8px 28px rgba(0, 165, 80, 0.22);
-            animation: spop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes spop {
-            0% {
-                transform: scale(0);
-                opacity: 0
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1
-            }
-        }
-
-        .succ-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .succ-amt {
-            font-size: 30px;
-            font-weight: 700;
-            color: var(--success);
-            margin: 4px 0;
-        }
-
-        .succ-sub {
-            font-size: 12px;
-            color: var(--muted);
-            margin-bottom: 16px;
-        }
-
-        .txn-box {
-            width: 100%;
-            background: var(--light);
-            border-radius: 12px;
-            padding: 13px;
-            text-align: left;
-        }
-
-        .txn-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            padding: 4px 0;
-        }
-
-        .txn-row span:first-child {
-            color: var(--muted);
-        }
-
-        .txn-row span:last-child {
-            font-weight: 500;
-            color: var(--dark);
-            text-align: right;
-            max-width: 150px;
-            word-break: break-all;
-        }
-
-        .pk-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: #EBF5FF;
-            color: var(--accent);
-            font-size: 10px;
-            font-weight: 600;
-            padding: 3px 9px;
-            border-radius: 20px;
-            margin-top: 10px;
-        }
-
-        /* RIGHT PANEL */
-        .panel {
-            flex: 1;
-            background: var(--white);
-            border-radius: 18px;
-            box-shadow: var(--shadow);
-            padding: 22px;
-        }
-
-        .panel-head {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--blue);
-            margin-bottom: 16px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .flow-tag {
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            padding: 3px 9px;
-            border-radius: 20px;
-            text-transform: uppercase;
-        }
-
-        .ft-create {
-            background: #FFF4E0;
-            color: #B45309;
-        }
-
-        .ft-auth {
-            background: #EBF5FF;
-            color: #1434CB;
-        }
-
-        /* STEPS */
-        .steps {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sitem {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 9px 0;
-            position: relative;
-        }
-
-        .sitem:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 14px;
-            top: 38px;
-            width: 2px;
-            height: calc(100% - 12px);
-            background: var(--border);
-        }
-
-        .sitem.done::after {
-            background: var(--success);
-        }
-
-        .sitem.act::after {
-            background: linear-gradient(to bottom, var(--accent), var(--border));
-        }
-
-        .snum {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--muted);
-            flex-shrink: 0;
-            background: #fff;
-            z-index: 1;
-            transition: all 0.25s;
-        }
-
-        .sitem.done .snum {
-            background: var(--success);
-            border-color: var(--success);
-            color: #fff;
-        }
-
-        .sitem.act .snum {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-            box-shadow: 0 0 0 3px rgba(20, 52, 203, 0.14);
-        }
-
-        .scont {
-            flex: 1;
-            padding-top: 4px;
-        }
-
-        .slbl {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--muted);
-        }
-
-        .sitem.done .slbl {
-            color: var(--success);
-        }
-
-        .sitem.act .slbl {
-            color: var(--accent);
-        }
-
-        .sdesc {
-            font-size: 10px;
-            color: var(--muted);
-            margin-top: 2px;
-            line-height: 1.4;
-        }
-
-        .sbranch {
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 3px;
-        }
-
-        .sbranch.yes {
-            background: #F0FFF4;
-            color: #065F46;
-        }
-
-        .sbranch.no {
-            background: #FFF4E0;
-            color: #92400E;
-        }
-
-        /* ACTION AREA */
-        .aarea {
-            margin-top: 18px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
-        }
-
-        .abtn {
-            width: 100%;
-            padding: 11px;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 11px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.18s;
-            margin-bottom: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-        }
-
-        .abtn:hover {
-            background: #0f2ba0;
-        }
-
-        .abtn.gold {
-            background: linear-gradient(135deg, #F6A623, #E8940F);
-        }
-
-        .abtn.ghost {
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--border);
-        }
-
-        .abtn.ghost:hover {
-            background: var(--light);
-        }
-
-        .abtn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .ibox {
-            background: #EBF5FF;
-            border-radius: 9px;
-            padding: 9px 11px;
-            font-size: 11px;
-            color: #1434CB;
-            line-height: 1.6;
-            margin-bottom: 7px;
-        }
-
-        .wbox {
-            background: #FFF4E0;
-            border-radius: 9px;
-            padding: 9px 11px;
-            font-size: 11px;
-            color: #92400E;
-            line-height: 1.6;
-            margin-bottom: 7px;
-        }
-
-        .ebox {
-            background: #FEE2E2;
-            border-radius: 9px;
-            padding: 9px 11px;
-            font-size: 11px;
-            color: #991B1B;
-            line-height: 1.6;
-            margin-bottom: 7px;
-        }
-
-        /* OTP KEYPAD in panel */
-        .keypad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 7px;
-            margin-bottom: 8px;
-        }
-
-        .kbtn {
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            background: #fff;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
-            color: var(--dark);
-            transition: background 0.15s;
-        }
-
-        .kbtn:hover {
-            background: var(--light);
-        }
-
-        /* SECTION HEADER */
-        .sec-head {
-            margin-bottom: 6px;
-        }
-
-        .sec-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            color: var(--blue);
-            font-weight: 600;
-        }
-
-        .sec-sub {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        @media(max-width:700px) {
-            .demo {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .card-select-row {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Visa Payment Passkey – Full Flow</title>
 </head>
 
 <body>
+  <h2>Visa Payment Passkey – Sandbox Full Flow</h2>
 
-    <!-- Visa hidden iframe — required for SDK init + device profiling -->
-    <iframe id="vpp-iframe" style="visibility:hidden;position:absolute;width:0;height:0;"
-        allow="payment *; publickey-credentials-get *; publickey-credentials-create *"
-        referrerpolicy="strict-origin-when-cross-origin"
-        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation allow-top-navigation-by-user-activation allow-modals">
-    </iframe>
+  <button id="create-openPopupBtn" style="display:none">
+    Create Passkey
+  </button>
 
-    <div class="topbar">
-        <div style="display:flex;align-items:center;gap:14px;">
-            <div class="logo">VI<span>SA</span></div>
-            <div class="topbar-tag">🔐 Payment Passkey · Sandbox</div>
-        </div>
-        <div class="topbar-right">Bank Partner Demo</div>
-    </div>
+  <button id="login-openPopupBtn" style="display:none">
+    Login Passkey
+  </button>
 
-    <div class="sbar">
-        <div class="si">
-            <div class="dot pend" id="d-iframe"></div>iframe: <b id="l-iframe">loading…</b>
-        </div>
-        <div class="si">
-            <div class="dot" id="d-device"></div>Device profile: <b id="l-device">waiting…</b>
-        </div>
-        <div class="si">
-            <div class="dot" id="d-token"></div>server_state_token: <b id="l-token">waiting…</b>
-        </div>
-        <div class="si">
-            <div class="dot" id="d-api"></div>Visa API: <b id="l-api">idle</b>
-        </div>
-    </div>
 
-    <div class="main">
+  <!-- Hidden iframe required by Visa -->
+  <iframe id="vpp-iframe" style="visibility:hidden" width="0" height="0"
+    allow="payment *; publickey-credentials-get *; publickey-credentials-create *"
+    referrerpolicy="strict-origin-when-cross-origin" sandbox="
+      allow-scripts
+      allow-same-origin
+      allow-forms
+      allow-popups
+      allow-popups-to-escape-sandbox
+      allow-top-navigation
+      allow-top-navigation-by-user-activation
+      allow-modals
+    ">
+  </iframe>
 
-        <!-- CARD SELECTION -->
-        <div class="sec-head">
-            <div class="sec-title">Select a Card &amp; Start Transaction</div>
-            <div class="sec-sub">Choose your Visa card then tap "Pay ₹1.00" to begin the passkey flow</div>
-        </div>
-        <div class="card-select-row" id="card-row"></div>
+  <script>
+    /*********************************************************
+     * CONFIG
+     *********************************************************/
+    const ORIGIN = "https://weak-tova-ungently.ngrok-free.dev";
+    const VISA_BASE = "https://sandbox.auth.visa.com";
+    const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
 
-        <!-- DEMO AREA -->
-        <div class="demo">
+    /*********************************************************
+     * STATE
+     *********************************************************/
+    let serverStateToken = null;
+    let deviceProfilingDone = false;
+    let flowStarted = false;
+    let pendingVisaAuthDataForCreate = null;
+    let pendingVisaAuthDataForLogin = null;
+    let visaPopup = null;
 
-            <!-- PHONE -->
-            <div class="phone">
-                <div class="notch"></div>
-                <div class="pscreen">
 
-                    <!-- CHECKOUT -->
-                    <div class="screen on" id="s-checkout">
-                        <div class="ph blue">
-                            <div class="ph-label">QuickMart</div>
-                            <div class="ph-title">Checkout</div>
-                        </div>
-                        <div class="pbody">
-                            <div class="order-row">
-                                <div class="order-left">
-                                    <div class="order-ico">🧃</div>
-                                    <div>
-                                        <div class="order-nm">Mango Juice</div>
-                                        <div class="order-qty">Qty: 1</div>
-                                    </div>
-                                </div>
-                                <div class="order-price">₹1.00</div>
-                            </div>
-                            <div class="total-row"><span>Total</span><span class="total-amt">₹1.00</span></div>
-                            <div class="card-chip">
-                                <div class="chip-num" id="co-num">•••• •••• •••• 1111</div>
-                                <div class="chip-name" id="co-name">Rahul Kumar</div>
-                            </div>
-                        </div>
-                        <div class="pfooter">
-                            <button class="pbtn blue" id="pay-btn" onclick="handlePay()">Pay ₹1.00</button>
-                        </div>
-                    </div>
-
-                    <!-- CALLING LOGIN API -->
-                    <div class="screen" id="s-calling">
-                        <div class="spin-body">
-                            <div class="spinner"></div>
-                            <div class="spin-lbl" id="calling-lbl">Calling Login API…</div>
-                            <div class="spin-sub" id="calling-sub">Checking passkey for your card</div>
-                        </div>
-                    </div>
-
-                    <!-- PASSKEY AUTH (passkey found) -->
-                    <div class="screen" id="s-bio-auth">
-                        <div class="ph dark">
-                            <div class="ph-label">Passkey Found</div>
-                            <div class="ph-title">Authenticate Payment</div>
-                            <div class="ph-sub">Confirm ₹1.00 to QuickMart</div>
-                        </div>
-                        <div class="fp-wrap">
-                            <div class="fp-ring" id="fp-ring-auth">
-                                <div class="fp-icon">👆</div>
-                            </div>
-                            <div class="fp-lbl" id="fp-lbl-auth">Place your finger to pay</div>
-                            <div class="fp-sub">Visa Payment Passkey</div>
-                            <div class="fp-bar">
-                                <div class="fp-fill" id="fp-fill-auth"></div>
-                            </div>
-                        </div>
-                        <div class="pfooter">
-                            <button class="pbtn blue" onclick="handleAuthPopup()">Touch to Pay</button>
-                        </div>
-                    </div>
-
-                    <!-- OTP (passkey not found) -->
-                    <div class="screen" id="s-otp">
-                        <div class="ph blue">
-                            <div class="ph-label">Verification Required</div>
-                            <div class="ph-title">Enter OTP</div>
-                            <div class="ph-sub">Sent to +91 •••••• 7890</div>
-                        </div>
-                        <div class="pbody" style="display:flex;flex-direction:column;align-items:center;">
-                            <div class="otp-info">Enter the 4-digit OTP to verify your identity and create a passkey
-                            </div>
-                            <div class="otp-inputs">
-                                <div class="obox" id="o0"></div>
-                                <div class="obox" id="o1"></div>
-                                <div class="obox" id="o2"></div>
-                                <div class="obox" id="o3"></div>
-                            </div>
-                            <div class="otp-hint">Demo OTP: <strong>1234</strong></div>
-                        </div>
-                        <div class="pfooter">
-                            <button class="pbtn blue" id="otp-btn" onclick="verifyOTP()"
-                                style="opacity:0.45;pointer-events:none">Verify OTP</button>
-                        </div>
-                    </div>
-
-                    <!-- PASSKEY CREATE (after OTP) -->
-                    <div class="screen" id="s-bio-create">
-                        <div class="ph grad">
-                            <div class="ph-label">Create Passkey</div>
-                            <div class="ph-title">Register Fingerprint</div>
-                            <div class="ph-sub">One-touch payments from now on</div>
-                        </div>
-                        <div class="fp-wrap">
-                            <div class="fp-ring" id="fp-ring-create">
-                                <div class="fp-icon">👆</div>
-                            </div>
-                            <div class="fp-lbl" id="fp-lbl-create">Place your finger to register</div>
-                            <div class="fp-sub">Your biometric stays on this device</div>
-                            <div class="fp-bar">
-                                <div class="fp-fill" id="fp-fill-create"></div>
-                            </div>
-                        </div>
-                        <div class="pfooter">
-                            <button class="pbtn gold" onclick="handleCreatePopup()">Register Passkey</button>
-                        </div>
-                    </div>
-
-                    <!-- SUCCESS -->
-                    <div class="screen" id="s-success">
-                        <div class="succ-body">
-                            <div class="succ-ring">✓</div>
-                            <div class="succ-title">Payment Successful!</div>
-                            <div class="succ-amt">₹1.00</div>
-                            <div class="succ-sub" id="succ-sub">Paid to QuickMart</div>
-                            <div class="txn-box">
-                                <div class="txn-row"><span>Transaction ID</span><span id="t-id">—</span></div>
-                                <div class="txn-row"><span>Card</span><span id="t-card">—</span></div>
-                                <div class="txn-row"><span>Date &amp; Time</span><span id="t-time">—</span></div>
-                                <div class="txn-row"><span>Auth Method</span><span id="t-auth">—</span></div>
-                                <div class="txn-row"><span>auth_z_token</span><span id="t-token"
-                                        style="font-size:10px">—</span></div>
-                            </div>
-                            <div class="pk-badge">🔑 Secured by Visa Passkey</div>
-                        </div>
-                    </div>
-
-                </div><!-- /pscreen -->
-            </div><!-- /phone -->
-
-            <!-- RIGHT PANEL -->
-            <div class="panel">
-                <div class="panel-head">
-                    Flow Progress
-                    <span class="flow-tag ft-create" id="flow-tag">Live Flow</span>
-                </div>
-                <div class="steps" id="steps"></div>
-                <div class="aarea" id="aarea"></div>
-            </div>
-
-        </div><!-- /demo -->
-    </div><!-- /main -->
-
-    <script>
-        /*──────────────────────────────────────────────
-          CONFIG  — update ORIGIN to your ngrok URL
-        ──────────────────────────────────────────────*/
-        const ORIGIN = "https://visa-fido.onrender.com";
-        const VISA_BASE = "https://sandbox.auth.visa.com";
-        const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
-
-        /*──────────────────────────────────────────────
-          CARDS  — update with your real test cards
-        ──────────────────────────────────────────────*/
-        const CARDS = [
-            { id: 'c1', last4: '0492', name: 'Passkey TestCard 1', cardNumber: '4761120010000492', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)' },
-            { id: 'c2', last4: '4228', name: 'Passkey TestCard 2', cardNumber: '4761262260004228', grad: 'linear-gradient(135deg,#0D3B66,#1B6CA8)' },
-            { id: 'c3', last4: '1439', name: 'Passkey TestCard 3', cardNumber: '4761209980011439', grad: 'linear-gradient(135deg,#2D2D2D,#5C5C5C)' },
-            { id: 'c4', last4: '0121', name: 'Passkey TestCard 4', cardNumber: '4051069302200121', grad: 'linear-gradient(135deg,#2D2D2D,#5C5C5C)' },
-
-        ];
-        let selCard = CARDS[0];
-
-        /*──────────────────────────────────────────────
-          VISA SDK STATE (your original vars)
-        ──────────────────────────────────────────────*/
-        let serverStateToken = null;
-        let deviceProfilingDone = false;
-        let flowStarted = false;
-        let pendingVisaAuthDataForCreate = null;
-        let pendingVisaAuthDataForLogin = null;
-
-        /*──────────────────────────────────────────────
-          UI STATE
-        ──────────────────────────────────────────────*/
-        let authZToken = null;
-        let visaPopup = null;
-        let bioScanning = false;
-        let otpVal = '';
-
-        // Steps for each branch
-        const STEPS_BASE = [
-            { id: 'card', label: 'Card Selected', desc: 'Visa card chosen for payment' },
-            { id: 'pay', label: 'Pay ₹1.00', desc: 'User initiates transaction' },
-            { id: 'sdk', label: 'Visa SDK Init', desc: 'iframe INITIALIZATION + device profiling' },
-            { id: 'login', label: 'Call Login API', desc: 'POST /api/passkey/login with server_state_token' },
-        ];
-        const STEPS_AUTH = [
-            { id: 'pkfound', label: 'Passkey Found ✓', desc: 'Login API returned passkey data', branch: 'yes', branchText: 'passkey found' },
-            { id: 'bioauth', label: 'Biometric Auth', desc: 'Visa login popup → fingerprint scan' },
-            { id: 'success', label: 'Payment Authorised', desc: 'auth_z_token received → success' },
-        ];
-        const STEPS_CREATE = [
-            { id: 'notfound', label: 'No Passkey Found', desc: 'Login API → notfound_amr_values → call create API', branch: 'no', branchText: 'no passkey' },
-            { id: 'otp', label: 'OTP Verification', desc: 'User enters 4-digit OTP (demo: 1234)' },
-            { id: 'callcreate', label: 'Call Create API', desc: 'POST /api/passkey/create with server_state_token' },
-            { id: 'pkcreate', label: 'Register Passkey', desc: 'Visa create popup → fingerprint registered' },
-            { id: 'success', label: 'Payment Authorised', desc: 'auth_z_token received → success' },
-        ];
-
-        let activeSteps = [];
-        let currentStep = 0;
-        let detectedFlow = null; // 'auth' | 'create' — set by login API response
-
-        /*──────────────────────────────────────────────
-          RENDER CARDS
-        ──────────────────────────────────────────────*/
-        function renderCards() {
-            document.getElementById('card-row').innerHTML = CARDS.map(c => `
-    <div class="card-pick ${c.id === selCard.id ? 'sel' : ''}" onclick="pickCard('${c.id}')">
-      <div class="card-radio"></div>
-      <div class="card-visual" style="background:${c.grad}">
-        <div class="card-num-mini">•••• •••• •••• ${c.last4}</div>
-        <div class="card-name-mini">${c.name}</div>
-      </div>
-      <div style="font-size:12px;font-weight:600;color:var(--dark)">•••• ${c.last4}</div>
-      <div style="font-size:11px;color:var(--muted)">${c.name}</div>
-    </div>`).join('');
-        }
-        function pickCard(id) {
-            selCard = CARDS.find(c => c.id === id);
-            renderCards();
-            document.getElementById('co-num').textContent = `•••• •••• •••• ${selCard.last4}`;
-            document.getElementById('co-name').textContent = selCard.name;
-        }
-
-        /*──────────────────────────────────────────────
-          STEPS RENDERER
-        ──────────────────────────────────────────────*/
-        function renderSteps() {
-            document.getElementById('steps').innerHTML = activeSteps.map((s, i) => {
-                const done = i < currentStep;
-                const act = i === currentStep;
-                const cls = done ? 'sitem done' : act ? 'sitem act' : 'sitem';
-                return `<div class="${cls}">
-      <div class="snum">${done ? '✓' : i + 1}</div>
-      <div class="scont">
-        <div class="slbl">${s.label}</div>
-        <div class="sdesc">${s.desc}</div>
-        ${s.branch ? `<span class="sbranch ${s.branch}">${s.branchText}</span>` : ''}
-      </div>
-    </div>`;
-            }).join('');
-        }
-
-        function advStep() {
-            if (currentStep < activeSteps.length - 1) currentStep++;
-            renderSteps();
-        }
-
-        function setStep(id) {
-            const idx = activeSteps.findIndex(s => s.id === id);
-            if (idx !== -1) currentStep = idx;
-            renderSteps();
-        }
-
-        /*──────────────────────────────────────────────
-          ACTION AREA
-        ──────────────────────────────────────────────*/
-        function setAction(html) {
-            document.getElementById('aarea').innerHTML = html;
-        }
-
-        const resetBtn = `<button class="abtn ghost" onclick="resetAll()">↩ Restart</button>`;
-
-        /*──────────────────────────────────────────────
-          SCREEN SWITCH
-        ──────────────────────────────────────────────*/
-        function show(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-            document.getElementById(id).classList.add('on');
-        }
-
-        /*──────────────────────────────────────────────
-          VISA INITIALIZATION COMMAND (your original)
-        ──────────────────────────────────────────────*/
-        const INIT_COMMAND = {
-            type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(),
-            command: {
-                type: "INITIALIZATION",
-                data: {
-                    response_mode: "form_post", redirect_uri: ORIGIN,
-                    session_context: {
-                        apn: "vdp-web",
-                        client_software: {
-                            top_origin: ORIGIN, integrator_origin: ORIGIN,
-                            uebas: [{ source: "VDI", ref: crypto.randomUUID() }],
-                            id: "VDPW", version: "24.07", oauth2_version: "1.0",
-                            tenancy: { product_code: "VDP" }
-                        }
-                    }
-                },
-                response_type: "urn:ext:oauth:response-type:server_state"
-            }
-        };
-
-        /*──────────────────────────────────────────────
-          VISA MESSAGE HANDLER (your original + UI hooks)
-        ──────────────────────────────────────────────*/
-        window.addEventListener("message", async (event) => {
-            let msg;
-            try { msg = typeof event.data === "string" ? JSON.parse(event.data) : event.data; }
-            catch { return; }
-            console.log("📩 VISA:", JSON.stringify(msg));
-
-            // INITIALIZATION SUCCESS
-            if (msg.type === "RESULT" && msg.result?.command_type === "INITIALIZATION" && msg.result.status === "SUCCESS") {
-                if (msg.result.status === "SUCCESS") {
-                    serverStateToken = msg?.result?.data?.tokens[0]?.token;
-                    setDot('token', 'ok', 'captured ✓');
-                    console.log("🔐 server_state_token captured");
-                    tryStartFlow();
-                } else {
-                    let error = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
-                    let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "Error while passkey initialization";
-                    submitError("PASSKEY_INITIALIZATION_FAILED", error, errorDescription);
+    /*********************************************************
+     * INITIALIZATION COMMAND
+     *********************************************************/
+    const INIT_COMMAND = {
+      type: "COMMAND",
+      ref: crypto.randomUUID(),
+      ts: Date.now(),
+      command: {
+        type: "INITIALIZATION",
+        data: {
+          response_mode: "form_post",
+          redirect_uri: ORIGIN + "/v2/pay/response",
+          session_context: {
+            apn: "vdp-web",
+            client_software: {
+              top_origin: ORIGIN,
+              integrator_origin: ORIGIN,
+              uebas: [
+                {
+                  source: "VDI",
+                  ref: crypto.randomUUID()
                 }
+              ],
+              id: "VDPW",
+              version: "24.07",
+              oauth2_version: "1.0",
+              tenancy: {
+                product_code: "VDP"
+              }
             }
+          }
+        },
+        response_type: "urn:ext:oauth:response-type:server_state"
+      }
+    };
 
-            // DEVICE PROFILING
-            if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURED") {
-                deviceProfilingDone = true;
-                setDot('device', 'ok', 'done ✓');
-                tryStartFlow();
-            }
+    /*********************************************************
+     * MESSAGE HANDLER FROM VISA
+     *********************************************************/
+    window.addEventListener("message", async (event) => {
+      let msg;
 
-            if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURE_FAILED") {
-                setDot('device', 'err', 'failed ✗');
-                setAction(`<div class="ebox">❌ Device profiling failed. Check console.</div>${resetBtn}`);
-                let error = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
-                let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "Error while device capturing.";
-                submitError("PASSKEY_DEVICE_DATA_CAPTURE_FAILED", error, errorDescription);
-            }
+      try {
+        msg = typeof event.data === "string"
+          ? JSON.parse(event.data)
+          : event.data;
+      } catch {
+        return;
+      }
 
-            // POPUP_WINDOW_TERMINATED
-            if (msg.type === "EVENT" && msg.event?.type === "POPUP_WINDOW_TERMINATED") {
-                let error = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
-                let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "User closed the window or popup.";
-                submitError("USER_OPTED_OUT", error, errorDescription);
-            }
+      console.log("📩 VISA MESSAGE:", JSON.stringify(msg));
 
-            // AUTHORIZATION RESULT 
-            if (msg.type === "AUTHORIZATION_RESULT") {
-                setDot('api', 'ok', 'authorised ✓');
-                submitResponse({
-                    passkeyStatus: "PASSKEY_SUCCESS",
-                    passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS",
-                    payload: msg.data
-                });
-                goSuccess();
-            }
-        });
+      /* ---------- INITIALIZATION SUCCESS ---------- */
+      if (msg.type === "RESULT" && msg.result?.command_type === "INITIALIZATION" && msg.result.status === "SUCCESS") {
+        serverStateToken = msg.result.data.tokens?.[0]?.token;
+        console.log("🔐 server_state_token captured");
+        tryStartFlow();
+      }
 
-        /*──────────────────────────────────────────────
-          tryStartFlow (your original logic)
-        ──────────────────────────────────────────────*/
-        async function tryStartFlow() {
-            if (!serverStateToken || !deviceProfilingDone || flowStarted) return;
-            flowStarted = true;
-            setDot('api', 'pend', 'calling login…');
-            document.getElementById('calling-lbl').textContent = 'Calling Login API…';
-            document.getElementById('calling-sub').textContent = 'Checking passkey for your card';
-            setStep('login');
-            setAction(`<div class="ibox">⏳ Waiting for Visa iframe init + device profiling…<br>Then calling <code>/api/passkey/login</code> automatically.</div>${resetBtn}`);
-            await callLogin();
+      /* ---------- DEVICE PROFILING ---------- */
+      if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURED") {
+        deviceProfilingDone = true;
+        console.log("✅ Device profiling completed");
+        tryStartFlow();
+      }
+
+      if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURE_FAILED") {
+        console.error("❌ Device profiling failed");
+      }
+
+
+      if (msg.type === "RESULT" && msg.result?.command_type === "AUTHORIZATION_REQUEST") {
+        if (msg.result.status === "SUCCESS" && msg.result?.data?.tokens[0]?.token) {
+          let payload = {
+            fida_authentication: "AUTHORIZE_SUCCESS",
+            auth_z_token: msg.result?.data?.tokens[0]?.token
+          }
+        } else {
+          let payload = {
+            fida_authentication: "AUTHORIZE_FAILED",
+            auth_z_token: null
+          }
         }
+      }
 
-        /*──────────────────────────────────────────────
-          goCreateBranch — shared by notfound + error fallback
-        ──────────────────────────────────────────────*/
-        function goCreateBranch() {
-            detectedFlow = 'create';
-            activeSteps = [...STEPS_BASE, ...STEPS_CREATE];
-            document.getElementById('flow-tag').textContent = 'Create Flow';
-            document.getElementById('flow-tag').className = 'flow-tag ft-create';
-            setStep('notfound');
-            renderSteps();
-            show('s-otp');
-            setAction(`<div class="ibox">🔑 No passkey on this card — proceeding to OTP verification.<br>Enter OTP on the phone (demo: <strong>1234</strong>).</div>
-    <div class="keypad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].map(n => `<button class="kbtn" onclick="otpKey('${n}')">${n}</button>`).join('')}</div>
-    <button class="abtn" id="p-otp-btn" style="opacity:0.4;pointer-events:none" onclick="verifyOTP()">✓ Verify OTP</button>
-    ${resetBtn}`);
+    });
+
+    /*********************************************************
+     * START LOGIN ONLY WHEN READY
+     *********************************************************/
+    async function tryStartFlow() {
+      if (!serverStateToken || !deviceProfilingDone || flowStarted) return;
+      flowStarted = true;
+      await callLogin();
+    }
+
+    /*********************************************************
+     * LOGIN API
+     *********************************************************/
+    async function callLogin() {
+      console.log("➡️ Calling LOGIN API");
+
+      const res = await fetch("/api/passkey/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: serverStateToken })
+      });
+
+      const result = await res.json();
+      console.log("🔁 LOGIN RESPONSE:", result);
+
+      /* ---------- NO PASSKEY → CREATE ---------- */
+      if (result?.error === "notfound_amr_values") {
+        console.log("🆕 No passkey found, calling CREATE");
+        await callCreate();
+        return;
+      }
+
+      /* ---------- LOGIN SUCCESS ---------- */
+      if (result?.data?.request) {
+        pendingVisaAuthDataForLogin = result.data
+        document.getElementById("login-openPopupBtn").style.display = "block";
+      } else {
+        console.error("❌ Unexpected login response", result);
+      }
+    }
+
+    /*********************************************************
+     * CREATE API
+     *********************************************************/
+    async function callCreate() {
+      console.log("➡️ Calling CREATE API");
+
+      const res = await fetch("/api/passkey/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: serverStateToken })
+      });
+
+      const result = await res.json();
+      console.log("🆕 CREATE RESPONSE:", result);
+
+      if (result?.data?.request) {
+        pendingVisaAuthDataForCreate = result.data
+        document.getElementById("create-openPopupBtn").style.display = "block";
+      } else {
+        console.error("❌ Create failed", result);
+      }
+    }
+
+    /*********************************************************
+     * OPEN CREATE VISA POPUP
+     *********************************************************/
+
+    document.getElementById("create-openPopupBtn").addEventListener("click", () => {
+      if (!pendingVisaAuthDataForCreate) {
+        console.error("❌ No Visa auth data available");
+        return;
+      }
+
+      openCreateVisaPopup(pendingVisaAuthDataForCreate);
+    });
+
+    function openCreateVisaPopup(data) {
+      console.log("🪟 Opening Create Visa popup");
+      const popupMsg = {
+        type: "COMMAND",
+        ref: crypto.randomUUID(),
+        ts: Date.now(),
+        command: {
+          type: "AUTHORIZATION_REQUEST",
+          data: {
+            request: data.request,
+            authorization_endpoint: data.authorization_endpoint
+          }
         }
+      };
 
-        /*──────────────────────────────────────────────
-          callLogin (your original)
-        ──────────────────────────────────────────────*/
-        async function callLogin() {
-            console.log("➡️ Calling LOGIN API");
-            try {
-                const res = await fetch("/api/passkey/login", {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ token: serverStateToken, cardNumber: selCard.cardNumber })
-                });
-                const result = await res.json();
-                console.log("🔁 LOGIN RESPONSE:", result);
+      const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
+    
 
-                // NO PASSKEY → branch to create flow
-                if (result?.error === "notfound_amr_values") {
-                    console.log("🆕 No passkey found");
-                    setDot('api', 'ok', 'no passkey → create');
-                    goCreateBranch();
-                    await callCreate();
-                    return;
-                }
+      const width = 500;
+      const height = 600;
+      const left = (screen.width - width) / 2;
+      const top = 120;
 
-                // PASSKEY FOUND → branch to auth flow
-                if (result?.data?.request) {
-                    pendingVisaAuthDataForLogin = result.data;
-                    setDot('api', 'ok', 'passkey found ✓');
-                    detectedFlow = 'auth';
-                    activeSteps = [...STEPS_BASE, ...STEPS_AUTH];
-                    document.getElementById('flow-tag').textContent = 'Auth Flow';
-                    document.getElementById('flow-tag').className = 'flow-tag ft-auth';
-                    setStep('pkfound');
-                    renderSteps();
-                    show('s-bio-auth');
-                    setAction(`<div class="ibox">✅ Passkey found on this card!<br>Tap <strong>Touch to Pay</strong> on the phone — or use the button below.</div>
-        <button class="abtn" onclick="handleAuthPopup()">🪟 Open Visa Auth Popup</button>
-        <div class="wbox">⚠️ Popup must be opened by a button click to avoid browser blocking.</div>
-        ${resetBtn}`);
-                } else {
-                    // ANY OTHER ERROR → fallback to OTP/create flow
-                    console.warn("⚠️ Login API unexpected response — falling back to OTP flow", result);
-                    setDot('api', 'warn', 'error → fallback');
-                    goCreateBranch();
-                    await callCreate();
-                }
-            } catch (err) {
-                // NETWORK / SERVER ERROR → fallback to OTP/create flow
-                console.error("❌ Login API error — falling back to OTP flow:", err);
-                setDot('api', 'warn', 'error → fallback');
-                goCreateBranch();
-                await callCreate();
-            }
+      const windowSettings = `width=${width},height=${height},top=${top},left=${left},` + `scrollbars=yes,resizable=no,status=no,location=no`;
+
+      window.open(popupUrl, "passkey", windowSettings);
+      // window.location.href = popupUrl;
+    }
+
+
+    /*********************************************************
+     * OPEN LOGIN VISA POPUP
+     *********************************************************/
+
+    document.getElementById("login-openPopupBtn").addEventListener("click", () => {
+      if (!pendingVisaAuthDataForLogin) {
+        console.error("❌ No Visa auth data available");
+        return;
+      }
+
+      openLoginVisaPopup(pendingVisaAuthDataForLogin);
+    });
+
+    function openLoginVisaPopup(data) {
+      console.log("🪟 Opening Login Visa popup");
+
+
+
+      const popupMsg = {
+        type: "COMMAND",
+        ref: crypto.randomUUID(),
+        ts: Date.now(),
+        command: {
+          type: "AUTHORIZATION_REQUEST",
+          data: {
+            request: data.request,
+            authorization_endpoint: data.authorization_endpoint
+          }
         }
-
-        /*──────────────────────────────────────────────
-          callCreate (your original)
-        ──────────────────────────────────────────────*/
-        async function callCreate() {
-            console.log("➡️ Calling CREATE API");
-            try {
-                const res = await fetch("/api/passkey/create", {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ token: serverStateToken, cardNumber: selCard.cardNumber })
-                });
-                const result = await res.json();
-                console.log("🆕 CREATE RESPONSE:", result);
-                if (result?.data?.request) {
-                    pendingVisaAuthDataForCreate = result.data;
-                    setDot('api', 'ok', 'create ready ✓');
-                    setStep('callcreate');
-                    renderSteps();
-                    // Update action area to show OTP keypad with verify enabled if OTP already entered
-                    setAction(`<div class="ibox">✅ Create API ready. Enter OTP on phone (demo: <strong>1234</strong>), then Visa popup will open.</div>
-        <div class="keypad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].map(n => `<button class="kbtn" onclick="otpKey('${n}')">${n}</button>`).join('')}</div>
-        <button class="abtn" id="p-otp-btn" style="opacity:${otpVal.length === 4 ? '1' : '0.4'};pointer-events:${otpVal.length === 4 ? 'all' : 'none'}" onclick="verifyOTP()">✓ Verify OTP</button>
-        ${resetBtn}`);
-                } else {
-                    // CREATE API ERROR → still stay on OTP page, show warning
-                    console.error("❌ Create API failed", result);
-                    setDot('api', 'err', 'create failed');
-                    setAction(`<div class="ebox">❌ Create API failed. See console.</div>
-        <div class="ibox">You can still try OTP verification (demo: <strong>1234</strong>).</div>
-        <div class="keypad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].map(n => `<button class="kbtn" onclick="otpKey('${n}')">${n}</button>`).join('')}</div>
-        <button class="abtn" id="p-otp-btn" style="opacity:${otpVal.length === 4 ? '1' : '0.4'};pointer-events:${otpVal.length === 4 ? 'all' : 'none'}" onclick="verifyOTP()">✓ Verify OTP</button>
-        ${resetBtn}`);
-                }
-            } catch (err) {
-                console.error("❌ Create API error:", err);
-                setDot('api', 'err', 'error');
-                setAction(`<div class="ebox">❌ Create API error: ${err.message}</div>
-      <div class="ibox">Continuing with OTP flow (demo: <strong>1234</strong>).</div>
-      <div class="keypad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].map(n => `<button class="kbtn" onclick="otpKey('${n}')">${n}</button>`).join('')}</div>
-      <button class="abtn" id="p-otp-btn" style="opacity:${otpVal.length === 4 ? '1' : '0.4'};pointer-events:${otpVal.length === 4 ? 'all' : 'none'}" onclick="verifyOTP()">✓ Verify OTP</button>
-      ${resetBtn}`);
-            }
-        }
-
-        /*──────────────────────────────────────────────
-          POPUP HELPERS  — pre-open on user gesture to avoid browser blocking
-        ──────────────────────────────────────────────*/
-        function openBlankPopup(w, h) {
-            const left = Math.round((screen.width - w) / 2);
-            visaPopup = window.open('about:blank', 'vpp', `width=${w},height=${h},top=120,left=${left},scrollbars=yes,resizable=no,status=no,location=no`);
-            if (!visaPopup) { alert('Popup was blocked! Allow popups for this site and try again.'); return false; }
-            visaPopup.document.write('<body style="margin:0;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#f0f2f8"><p style="color:#1A1F6E;font-size:15px">⏳ Connecting to Visa…</p></body>');
-            return true;
-        }
-
-        function navigatePopup(data) {
-            const msg = {
-                type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(),
-                command: { type: "AUTHORIZATION_REQUEST", data: { request: data.request, authorization_endpoint: data.authorization_endpoint } }
-            };
-            const url = `${VISA_BASE}${data.authorization_endpoint}#msg=${encodeURIComponent(JSON.stringify(msg))}`;
-            if (visaPopup && !visaPopup.closed) visaPopup.location.href = url;
-            else visaPopup = window.open(url, 'vpp'); // fallback
-        }
-
-        /*──────────────────────────────────────────────
-          AUTH POPUP — opened by phone "Touch to Pay" button OR panel button
-          Pre-opens on user gesture to avoid browser blocking
-        ──────────────────────────────────────────────*/
-        function handleAuthPopup() {
-            if (!openBlankPopup(400, 480)) return;
-            if (pendingVisaAuthDataForLogin) {
-                navigatePopup(pendingVisaAuthDataForLogin);
-                setStep('bioauth'); renderSteps();
-                setAction(`<div class="ibox">🪟 Visa login popup is open.<br>Complete biometric scan — <code>auth_z_token</code> will return via <code>window.message</code>.</div>
-      <div class="wbox">📱 Demo only — simulate below if popup unavailable:</div>
-      <button class="abtn" onclick="startBio('auth')">👆 Simulate Fingerprint</button>
-      ${resetBtn}`);
-            } else {
-                // Data not ready yet — show loading, navigate when ready
-                const poll = setInterval(() => {
-                    if (pendingVisaAuthDataForLogin) {
-                        clearInterval(poll);
-                        navigatePopup(pendingVisaAuthDataForLogin);
-                        setStep('bioauth'); renderSteps();
-                        setAction(`<div class="ibox">🪟 Visa login popup navigated.<br>Complete biometric scan.</div>
-          <div class="wbox">📱 Demo only — simulate below:</div>
-          <button class="abtn" onclick="startBio('auth')">👆 Simulate Fingerprint</button>
-          ${resetBtn}`);
-                    }
-                }, 300);
-            }
-        }
-
-        /*──────────────────────────────────────────────
-          CREATE POPUP — opened by phone "Register Passkey" button OR panel button
-        ──────────────────────────────────────────────*/
-        function handleCreatePopup() {
-            if (!openBlankPopup(500, 600)) return;
-            if (pendingVisaAuthDataForCreate) {
-                navigatePopup(pendingVisaAuthDataForCreate);
-                setStep('pkcreate'); renderSteps();
-                setAction(`<div class="ibox">🪟 Visa create popup is open.<br>Complete fingerprint registration — <code>auth_z_token</code> will return via <code>window.message</code>.</div>
-      <div class="wbox">📱 Demo only — simulate below if popup unavailable:</div>
-      <button class="abtn gold" onclick="startBio('create')">👆 Simulate Fingerprint</button>
-      ${resetBtn}`);
-            } else {
-                // Data not ready — show loading in popup, navigate when ready
-                const poll = setInterval(() => {
-                    if (pendingVisaAuthDataForCreate) {
-                        clearInterval(poll);
-                        navigatePopup(pendingVisaAuthDataForCreate);
-                        setStep('pkcreate'); renderSteps();
-                        setAction(`<div class="ibox">🪟 Visa create popup navigated.<br>Complete fingerprint registration.</div>
-          <div class="wbox">📱 Demo only — simulate below:</div>
-          <button class="abtn gold" onclick="startBio('create')">👆 Simulate Fingerprint</button>
-          ${resetBtn}`);
-                    }
-                }, 300);
-            }
-        }
-
-        /*──────────────────────────────────────────────
-          OTP
-        ──────────────────────────────────────────────*/
-        function otpKey(k) {
-            if (k === '⌫') otpVal = otpVal.slice(0, -1);
-            else if (k !== '' && otpVal.length < 4) otpVal += k;
-            // Update phone boxes
-            for (let i = 0; i < 4; i++) {
-                const b = document.getElementById('o' + i);
-                if (!b) continue;
-                b.textContent = i < otpVal.length ? otpVal[i] : '';
-                b.classList.toggle('f', i < otpVal.length);
-            }
-            // Enable/disable verify buttons
-            const ok = otpVal.length === 4;
-            ['otp-btn', 'p-otp-btn'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.style.opacity = ok ? '1' : '0.45'; el.style.pointerEvents = ok ? 'all' : 'none'; }
-            });
-        }
-
-        function verifyOTP() {
-            if (otpVal !== '1234') { alert('Incorrect OTP. Use 1234 for demo.'); return; }
-            show('s-bio-create');
-            setStep('pkcreate'); renderSteps();
-            // Delegate to handleCreatePopup — opens popup on this user gesture
-            handleCreatePopup();
-        }
-
-        /*──────────────────────────────────────────────
-          BIOMETRIC SIMULATION
-        ──────────────────────────────────────────────*/
-        function startBio(type) {
-            if (bioScanning) return;
-            bioScanning = true;
-            const suffix = type === 'auth' ? 'auth' : 'create';
-            const ring = document.getElementById(`fp-ring-${suffix}`);
-            const fill = document.getElementById(`fp-fill-${suffix}`);
-            const lbl = document.getElementById(`fp-lbl-${suffix}`);
-            ring.classList.add('scan');
-            if (fill) fill.style.width = '100%';
-            if (lbl) lbl.textContent = 'Scanning…';
-            setTimeout(() => {
-                ring.classList.remove('scan');
-                ring.classList.add('done');
-                if (lbl) lbl.textContent = type === 'auth' ? '✅ Authenticated!' : '✅ Passkey Registered!';
-                setTimeout(() => {
-                    authZToken = 'DEMO_' + crypto.randomUUID();
-                    goSuccess();
-                }, 800);
-            }, 2000);
-        }
-
-        /*──────────────────────────────────────────────
-          PAY BUTTON
-        ──────────────────────────────────────────────*/
-        function handlePay() {
-            const btn = document.getElementById('pay-btn');
-            btn.disabled = true;
-            btn.textContent = 'Connecting…';
-            // Init steps with base steps only (branch not known yet)
-            activeSteps = [...STEPS_BASE];
-            currentStep = 1; // pay step
-            renderSteps();
-            show('s-calling');
-            setAction(`<div class="ibox">⏳ Visa iframe initialising + device profiling…<br><code>tryStartFlow()</code> fires automatically when both are ready.</div>${resetBtn}`);
-            // If SDK already ready, fire immediately
-            if (serverStateToken && deviceProfilingDone && !flowStarted) tryStartFlow();
-        }
-
-        /*──────────────────────────────────────────────
-          SUCCESS
-        ──────────────────────────────────────────────*/
-        function goSuccess() {
-            bioScanning = false;
-            const now = new Date();
-            document.getElementById('t-id').textContent = 'TXN#' + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('t-card').textContent = `Visa •••• ${selCard.last4}`;
-            document.getElementById('t-time').textContent = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('t-auth').textContent = detectedFlow === 'auth' ? 'Passkey (Biometric)' : 'Passkey (New · Registered)';
-            document.getElementById('t-token').textContent = authZToken ? authZToken.slice(0, 40) + '…' : '(real token via popup)';
-            document.getElementById('succ-sub').textContent = detectedFlow === 'auth'
-                ? 'Paid to QuickMart · Authenticated via passkey ⚡'
-                : 'Paid to QuickMart · Passkey created & payment done 🎉';
-            show('s-success');
-            // Advance to final step
-            currentStep = activeSteps.length - 1;
-            renderSteps();
-            setAction(`<div class="ibox">🎉 <strong>Payment authorised!</strong><br>
-    <code>auth_z_token</code> captured → <code>submitResponse()</code> called → POST to <code>${ORIGIN}/pay/response</code></div>
-    <button class="abtn ghost" onclick="resetAll()">↩ Restart Demo</button>`);
-        }
+      };
 
 
-        /*──────────────────────────────────────────────
-          submitErro (your original — form.submit commented for demo)
-        ──────────────────────────────────────────────*/
+      console.log("popupMsg-login",popupMsg)
+
+      const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
+
+      console.log("popupUrl-login",popupUrl)
 
 
-        function submitError(passkeyResult, error, errorMessage) {
-            submitResponse({
-                passkeyStatus: "PASSKEY_FAILURE",
-                passkeyResult: passkeyResult,
-                error: error,
-                errorMessage: errorMessage,
-                payload: null
-            });
-        }
+      const width = 400;
+      const height = 480;
+      const left = (screen.width - width) / 2;
+      const top = 120;
 
-        /*──────────────────────────────────────────────
-          submitResponse (your original — form.submit commented for demo)
-        ──────────────────────────────────────────────*/
-        function submitResponse(payload) {
-            console.log("📤 submitResponse:", payload);
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `${ORIGIN}/v2/pay/response`;
-            const inp = document.createElement('input');
-            inp.type = 'hidden'; inp.name = 'data'; inp.value = JSON.stringify(payload);
-            form.appendChild(inp); document.body.appendChild(form);
-            form.submit();
-        }
+      const settings = `width=${width},height=${height},top=${top},left=${left},` + `resizable=no,scrollbars=no,status=no,location=no`;
+      window.open(popupUrl, "passkey", settings);
+      // window.location.href = redirectUrl;
+    }
 
-        /*──────────────────────────────────────────────
-          VISA IFRAME LOAD (your original)
-        ──────────────────────────────────────────────*/
-        (function () {
-            const frag = encodeURIComponent(JSON.stringify(INIT_COMMAND));
-            document.getElementById("vpp-iframe").src = `${INIT_URL}${frag}`;
-            setDot('iframe', 'pend', 'src set…');
-            setDot('token', 'pend', 'waiting…');
-            console.log("📡 Visa iframe src set");
-        })();
 
-        /*──────────────────────────────────────────────
-          STATUS DOTS
-        ──────────────────────────────────────────────*/
-        function setDot(k, state, text) {
-            const d = document.getElementById('d-' + k);
-            const l = document.getElementById('l-' + k);
-            if (d) d.className = 'dot ' + (state === 'ok' ? 'ok' : state === 'err' ? 'err' : state === 'warn' ? 'pend' : 'pend');
-            if (l) l.textContent = text;
-        }
 
-        /*──────────────────────────────────────────────
-          RESET
-        ──────────────────────────────────────────────*/
-        function resetAll() {
-            serverStateToken = null; deviceProfilingDone = false;
-            flowStarted = false; authZToken = null;
-            pendingVisaAuthDataForCreate = null; pendingVisaAuthDataForLogin = null;
-            detectedFlow = null; bioScanning = false; otpVal = '';
-            selCard = CARDS[0];
-            activeSteps = []; currentStep = 0;
-            if (visaPopup && !visaPopup.closed) visaPopup.close();
-            const btn = document.getElementById('pay-btn');
-            if (btn) { btn.disabled = false; btn.textContent = 'Pay ₹1.00'; }
-            // Reset OTP boxes
-            for (let i = 0; i < 4; i++) { const b = document.getElementById('o' + i); if (b) { b.textContent = ''; b.classList.remove('f'); } }
-            // Reset bio rings
-            ['auth', 'create'].forEach(t => {
-                const r = document.getElementById(`fp-ring-${t}`); if (r) r.className = 'fp-ring';
-                const f = document.getElementById(`fp-fill-${t}`); if (f) f.style.width = '0%';
-                const l = document.getElementById(`fp-lbl-${t}`);
-                if (l) l.textContent = t === 'auth' ? 'Place your finger to pay' : 'Place your finger to register';
-            });
-            // Re-init iframe
-            const frag = encodeURIComponent(JSON.stringify({ ...INIT_COMMAND, ref: crypto.randomUUID(), ts: Date.now() }));
-            document.getElementById("vpp-iframe").src = `${INIT_URL}${frag}`;
-            setDot('iframe', 'pend', 'reloading…'); setDot('device', '', '—'); setDot('token', 'pend', 'waiting…'); setDot('api', '', 'idle');
-            document.getElementById('l-device').textContent = 'waiting…';
-            document.getElementById('l-api').textContent = 'idle';
-            renderCards();
-            document.getElementById('co-num').textContent = `•••• •••• •••• ${selCard.last4}`;
-            document.getElementById('co-name').textContent = selCard.name;
-            document.getElementById('steps').innerHTML = '';
-            document.getElementById('aarea').innerHTML = `<div class="ibox">💳 Select a card above and tap <strong>Pay ₹1.00</strong> to begin.</div>`;
-            document.getElementById('flow-tag').textContent = 'Live Flow';
-            document.getElementById('flow-tag').className = 'flow-tag ft-create';
-            show('s-checkout');
-        }
+    /*********************************************************
+     * LOAD VISA IFRAME
+     *********************************************************/
+    const fragment = encodeURIComponent(JSON.stringify(INIT_COMMAND));
+    document.getElementById("vpp-iframe").src = `${INIT_URL}${fragment}`;
 
-        /*──────────────────────────────────────────────
-          INIT
-        ──────────────────────────────────────────────*/
-        renderCards();
-        document.getElementById('aarea').innerHTML = `<div class="ibox">💳 Select a card above and tap <strong>Pay ₹1.00</strong> to begin.</div>`;
-    </script>
+
+    function submitResponse(payload) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = `${{ ORIGINv2 }}/pay/response`;
+
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'data';
+      input.value = JSON.stringify(payload);
+
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+
+  </script>
+
+
 </body>
 
 </html>

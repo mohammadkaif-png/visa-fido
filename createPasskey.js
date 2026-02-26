@@ -19,7 +19,7 @@ router.post('/passkey/create', async (req, res) => {
                 error: " token or operation or operationType is missing"
             });
         }
-
+        let cardNumber = req.body?.cardNumber || 4761120010000492
         const body = {
             response_type: "code",
             response_mode: "form_post",
@@ -42,7 +42,7 @@ router.post('/passkey/create', async (req, res) => {
                 payer: {
                     account: {
                         scheme: "com_visa_pan",
-                        id: "4761120010000492"
+                        id: cardNumber
                     }
                 },
                 payee: {
@@ -88,7 +88,7 @@ router.post('/passkey/create', async (req, res) => {
         const password = process.env.VISA_PASSWORD;
         const kId = process.env.VISA_KEY_ID;
         const headers = getHeaders(username, password, kId)
-        const response = await axios.post(`${baseUrl}/vpp/v1/passkeys/oauth2/authorization/request/pushed`,
+        const response = await axios.post(`${process.env.VISA_BASE_URL}/vpp/v1/passkeys/oauth2/authorization/request/pushed`,
             {
                 encData: encrypted.encData
             },

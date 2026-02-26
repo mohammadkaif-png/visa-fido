@@ -16,12 +16,14 @@ router.post('/passkey/login', async (req, res) => {
         console.log("login-passkey-------")
         const txnId = crypto.randomBytes(16).toString("hex");
 
+
         if (!req.body?.token) {
             return res.status(400).json({
                 error: " token or operation or operationType is missing"
             });
         }
 
+        let cardNumber = req.body?.cardNumber || 4761120010000492
         const body = {
             response_type: "code",
             response_mode: "form_post",
@@ -44,7 +46,7 @@ router.post('/passkey/login', async (req, res) => {
                 payer: {
                     account: {
                         scheme: "com_visa_pan",
-                        id: "4761120010000492"
+                        id: cardNumber
                     }
                 },
                 payee: {

@@ -1250,9 +1250,11 @@
           CARDS  — update with your real test cards
         ──────────────────────────────────────────────*/
         const CARDS = [
-            { id: 'c1', last4: '1111', name: 'Rahul Kumar', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)' },
-            { id: 'c2', last4: '0366', name: 'Priya Sharma', grad: 'linear-gradient(135deg,#0D3B66,#1B6CA8)' },
-            { id: 'c3', last4: '9876', name: 'Arjun Mehta', grad: 'linear-gradient(135deg,#2D2D2D,#5C5C5C)' },
+            { id: 'c1', last4: '0492', name: 'Passkey TestCard 1', cardNumber: '4761120010000492', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)' },
+            { id: 'c2', last4: '4228', name: 'Passkey TestCard 2', cardNumber: '4761262260004228', grad: 'linear-gradient(135deg,#0D3B66,#1B6CA8)' },
+            { id: 'c3', last4: '1439', name: 'Passkey TestCard 3', cardNumber: '4761209980011439', grad: 'linear-gradient(135deg,#2D2D2D,#5C5C5C)' },
+            { id: 'c4', last4: '0121', name: 'Passkey TestCard 4', cardNumber: '4051069302200121', grad: 'linear-gradient(135deg,#2D2D2D,#5C5C5C)' },
+
         ];
         let selCard = CARDS[0];
 
@@ -1485,7 +1487,7 @@
             try {
                 const res = await fetch("/api/passkey/login", {
                     method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ token: serverStateToken, cardNumber: selCard.last4 })
+                    body: JSON.stringify({ token: serverStateToken, cardNumber: selCard.cardNumber })
                 });
                 const result = await res.json();
                 console.log("🔁 LOGIN RESPONSE:", result);
@@ -1538,7 +1540,7 @@
             try {
                 const res = await fetch("/api/passkey/create", {
                     method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ token: serverStateToken, cardNumber: selCard.last4 })
+                    body: JSON.stringify({ token: serverStateToken, cardNumber: selCard.cardNumber })
                 });
                 const result = await res.json();
                 console.log("🆕 CREATE RESPONSE:", result);

@@ -34,33 +34,42 @@
       height: 100%;
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: #D4D8E8;
-      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
+    }
+
+    #shell-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
     }
 
     #shell {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 390px;
+      height: 844px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      flex-shrink: 0;
+      transform-origin: center center;
+      transition: transform 0.15s ease;
     }
 
-    @media (min-width:600px) {
+    @media (min-width: 600px) {
       body {
         background: linear-gradient(145deg, #BEC3D8 0%, #A8AEBE 100%);
       }
 
       #shell {
-        width: 390px;
-        height: 844px;
         border-radius: 52px;
-        overflow: hidden;
-        box-shadow: 0 0 0 10px #141420, 0 0 0 13px #24243A, 0 44px 120px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        flex-shrink: 0;
+        box-shadow: 0 0 0 10px #141420, 0 0 0 13px #24243A,
+          0 44px 120px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
 
       #shell::before {
@@ -185,10 +194,51 @@
       gap: 10px;
     }
 
-    .visa-logo-svg {
+    /* PNG logo styles — replaces svg.visa-logo-svg */
+    .visa-logo-png {
       height: 22px;
       width: auto;
+      min-width: 64px;
+      object-fit: contain;
       flex-shrink: 0;
+      display: block;
+    }
+
+    /* Small inline logo used in footer / badges */
+    .visa-logo-png-sm {
+      height: 13px;
+      width: auto;
+      min-width: 40px;
+      object-fit: contain;
+      display: block;
+      opacity: 0.55;
+    }
+
+    /* Card thumbnail white logo */
+    .card-vis-logo-png {
+      height: 10px;
+      width: auto;
+      min-width: 26px;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Visa loading badge logo */
+    .visa-badge-logo-png {
+      height: 16px;
+      width: auto;
+      min-width: 49px;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* pk-pill logo */
+    .pk-pill-logo-png {
+      height: 13px;
+      width: auto;
+      min-width: 40px;
+      object-fit: contain;
+      display: block;
     }
 
     .topbar-divider {
@@ -314,12 +364,6 @@
       margin-top: 8px;
     }
 
-    .visa-secured-row svg {
-      height: 13px;
-      width: auto;
-      opacity: 0.55;
-    }
-
     .visa-secured-txt {
       font-size: 10px;
       color: var(--muted);
@@ -411,11 +455,6 @@
       align-items: flex-end;
       justify-content: flex-end;
       padding: 4px 5px;
-    }
-
-    .card-vis-logo {
-      height: 10px;
-      width: auto;
     }
 
     .ci {
@@ -573,11 +612,6 @@
       border-radius: 20px;
     }
 
-    .visa-loading-badge svg {
-      height: 16px;
-      width: auto;
-    }
-
     .visa-loading-badge span {
       font-size: 11px;
       font-weight: 700;
@@ -621,41 +655,17 @@
     }
 
     @keyframes bop {
-      0% {
-        transform: scale(.8)
-      }
-
-      60% {
-        transform: scale(1.08)
-      }
-
-      100% {
-        transform: scale(1)
-      }
+      0% { transform: scale(.8) }
+      60% { transform: scale(1.08) }
+      100% { transform: scale(1) }
     }
 
     @keyframes shake {
-
-      0%,
-      100% {
-        transform: translateX(0)
-      }
-
-      20% {
-        transform: translateX(-4px)
-      }
-
-      40% {
-        transform: translateX(4px)
-      }
-
-      60% {
-        transform: translateX(-3px)
-      }
-
-      80% {
-        transform: translateX(3px)
-      }
+      0%, 100% { transform: translateX(0) }
+      20% { transform: translateX(-4px) }
+      40% { transform: translateX(4px) }
+      60% { transform: translateX(-3px) }
+      80% { transform: translateX(3px) }
     }
 
     .otp-hint {
@@ -739,17 +749,9 @@
     }
 
     @keyframes fpulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(20, 52, 203, .3)
-      }
-
-      70% {
-        box-shadow: 0 0 0 16px rgba(20, 52, 203, 0)
-      }
-
-      100% {
-        box-shadow: 0 0 0 0 rgba(20, 52, 203, 0)
-      }
+      0% { box-shadow: 0 0 0 0 rgba(20, 52, 203, .3) }
+      70% { box-shadow: 0 0 0 16px rgba(20, 52, 203, 0) }
+      100% { box-shadow: 0 0 0 0 rgba(20, 52, 203, 0) }
     }
 
     .fp-icon {
@@ -805,15 +807,8 @@
     }
 
     @keyframes popIn {
-      from {
-        transform: scale(0);
-        opacity: 0
-      }
-
-      to {
-        transform: scale(1);
-        opacity: 1
-      }
+      from { transform: scale(0); opacity: 0 }
+      to { transform: scale(1); opacity: 1 }
     }
 
     .s-ttl {
@@ -849,11 +844,6 @@
       font-weight: 700;
       color: var(--blue);
       margin-bottom: 16px;
-    }
-
-    .pk-pill svg {
-      height: 13px;
-      width: auto;
     }
 
     .txn-blk {
@@ -993,9 +983,7 @@
       border-color: #1F6FEB;
     }
 
-    .dt-spacer {
-      flex: 1;
-    }
+    .dt-spacer { flex: 1; }
 
     .dt-clear {
       padding: 3px 9px;
@@ -1021,27 +1009,16 @@
       padding: 8px 0;
     }
 
-    .drawer-logs::-webkit-scrollbar {
-      width: 3px;
-    }
-
-    .drawer-logs::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .drawer-logs::-webkit-scrollbar-thumb {
-      background: #30363D;
-      border-radius: 3px;
-    }
+    .drawer-logs::-webkit-scrollbar { width: 3px; }
+    .drawer-logs::-webkit-scrollbar-track { background: transparent; }
+    .drawer-logs::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
 
     .log-entry {
       padding: 6px 16px;
       border-bottom: 1px solid #161B22;
     }
 
-    .log-entry:hover {
-      background: #161B22;
-    }
+    .log-entry:hover { background: #161B22; }
 
     .log-time {
       font-size: 10px;
@@ -1067,30 +1044,11 @@
       letter-spacing: .3px;
     }
 
-    .tag-info {
-      background: #0D419D;
-      color: #58A6FF;
-    }
-
-    .tag-ok {
-      background: #033A16;
-      color: #3FB950;
-    }
-
-    .tag-warn {
-      background: #4A2900;
-      color: #E3B341;
-    }
-
-    .tag-err {
-      background: #67060C;
-      color: #F85149;
-    }
-
-    .tag-visa {
-      background: #3D1A78;
-      color: #BC8CFF;
-    }
+    .tag-info  { background: #0D419D; color: #58A6FF; }
+    .tag-ok    { background: #033A16; color: #3FB950; }
+    .tag-warn  { background: #4A2900; color: #E3B341; }
+    .tag-err   { background: #67060C; color: #F85149; }
+    .tag-visa  { background: #3D1A78; color: #BC8CFF; }
 
     .log-msg {
       font-size: 11px;
@@ -1100,9 +1058,7 @@
       word-break: break-word;
     }
 
-    .log-msg b {
-      color: #79C0FF;
-    }
+    .log-msg b { color: #79C0FF; }
 
     .log-empty {
       display: flex;
@@ -1114,15 +1070,8 @@
       color: #484F58;
     }
 
-    .log-empty-icon {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-
-    .log-empty-txt {
-      font-size: 11px;
-      line-height: 1.6;
-    }
+    .log-empty-icon { font-size: 28px; margin-bottom: 8px; }
+    .log-empty-txt  { font-size: 11px; line-height: 1.6; }
 
     .drawer-footer {
       padding: 10px 16px;
@@ -1130,11 +1079,7 @@
       flex-shrink: 0;
     }
 
-    .log-status-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .log-status-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
     .lsr-item {
       display: flex;
@@ -1144,11 +1089,7 @@
       color: #484F58;
     }
 
-    .lsr-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
+    .lsr-dot { width: 6px; height: 6px; border-radius: 50%; }
 
     /* ── LOG FAB ── */
     .log-fab {
@@ -1171,9 +1112,7 @@
       font-size: 17px;
     }
 
-    .log-fab:active {
-      transform: scale(.9);
-    }
+    .log-fab:active { transform: scale(.9); }
 
     .log-fab-badge {
       position: absolute;
@@ -1197,334 +1136,286 @@
 
 <body>
 
-  <!-- Hidden SVG symbol defs — reused everywhere via <use> -->
-  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Blue Visa wordmark -->
-    <symbol id="v-blue" viewBox="0 0 216 68">
-      <path fill="#1434CB"
-        d="M84.88 1.49 70.07 66.7H51.4L66.22 1.49Zm76.03 42.2 9.44-26.04 5.43 26.04Zm20.97 23h17.12L183.6 1.49h-15.8c-3.56 0-6.55 2.07-7.88 5.25L131.28 66.7h17.9l3.55-9.83h21.87ZM128.9 45.88c.07-17.38-24.03-18.34-23.87-26.1.05-2.36 2.3-4.88 7.22-5.52 2.44-.32 9.16-.57 16.77 2.94l2.99-13.96C128.73 1.97 123.05 0 115.95 0 99.4 0 87.63 8.75 87.53 21.32c-.11 9.29 8.3 14.47 14.63 17.56 6.51 3.16 8.7 5.19 8.67 8.02-.05 4.33-5.19 6.25-9.99 6.32-8.4.13-13.27-2.27-17.14-4.08l-3.02 14.15c3.9 1.79 11.1 3.35 18.56 3.43 17.55.02 29.03-8.67 29.1-22.09Zm-69.2-44.4L34.32 66.71H16.3L3.57 13.93C2.78 10.81 2.1 9.7.91 8.99-1.46 7.58-5.31 6.26-8.66 5.4L-8.28 3.49h28.9c3.67 0 6.97 2.44 7.8 6.67l7.13 37.88 17.62-44.55Z" />
-    </symbol>
-    <!-- White Visa wordmark (for dark card backgrounds) -->
-    <symbol id="v-white" viewBox="0 0 216 68">
-      <path fill="#ffffff"
-        d="M84.88 1.49 70.07 66.7H51.4L66.22 1.49Zm76.03 42.2 9.44-26.04 5.43 26.04Zm20.97 23h17.12L183.6 1.49h-15.8c-3.56 0-6.55 2.07-7.88 5.25L131.28 66.7h17.9l3.55-9.83h21.87ZM128.9 45.88c.07-17.38-24.03-18.34-23.87-26.1.05-2.36 2.3-4.88 7.22-5.52 2.44-.32 9.16-.57 16.77 2.94l2.99-13.96C128.73 1.97 123.05 0 115.95 0 99.4 0 87.63 8.75 87.53 21.32c-.11 9.29 8.3 14.47 14.63 17.56 6.51 3.16 8.7 5.19 8.67 8.02-.05 4.33-5.19 6.25-9.99 6.32-8.4.13-13.27-2.27-17.14-4.08l-3.02 14.15c3.9 1.79 11.1 3.35 18.56 3.43 17.55.02 29.03-8.67 29.1-22.09Zm-69.2-44.4L34.32 66.71H16.3L3.57 13.93C2.78 10.81 2.1 9.7.91 8.99-1.46 7.58-5.31 6.26-8.66 5.4L-8.28 3.49h28.9c3.67 0 6.97 2.44 7.8 6.67l7.13 37.88 17.62-44.55Z" />
-    </symbol>
-  </svg>
-
   <!-- ══ PHONE SHELL ══ -->
-  <div id="shell">
-    <div id="app">
-      <div class="status-bar">
-        <span id="clock">00:00</span>
-        <div class="sb-icons"><span>📶</span><span>🔋</span></div>
-      </div>
+  <div id="shell-wrap">
+    <div id="shell">
+      <div id="app">
+        <div class="status-bar">
+          <span id="clock">00:00</span>
+          <div class="sb-icons"><span>📶</span><span>🔋</span></div>
+        </div>
 
-      <div class="screen-host">
+        <div class="screen-host">
 
-        <!-- ▌S1: SELECT CARD ▌-->
-        <div class="screen active" id="s-select">
-          <div class="topbar">
-            <div class="visa-logo-wrap">
-              <svg class="visa-logo-svg" viewBox="0 0 216 68" aria-label="Visa">
-                <use href="#v-blue" />
-              </svg>
-              <div class="topbar-divider"></div>
-              <div class="brand">PASSKEY PAYMENT</div>
-            </div>
-            <div class="tb-right">
-              <div class="badge-green">
-                <div class="sdot"></div>Secure
+          <!-- ▌S1: SELECT CARD ▌-->
+          <div class="screen active" id="s-select">
+            <div class="topbar">
+              <div class="visa-logo-wrap">
+                <!-- BLUE logo for topbar -->
+                <img class="visa-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                <div class="topbar-divider"></div>
+                <div class="brand">PASSKEY PAYMENT</div>
               </div>
-            </div>
-          </div>
-          <div class="ph">
-            <div class="ph-lbl">QuickMart · ₹1.00</div>
-            <div class="ph-title">Choose Card</div>
-            <div class="ph-sub">Select your Visa card to continue</div>
-          </div>
-          <div class="scr-body">
-            <div class="card-list" id="card-grid"></div>
-            <div class="order-card">
-              <div class="or">
-                <div class="ol">
-                  <div class="o-ico">🧃</div>
-                  <div>
-                    <div class="o-nm">Mango Juice</div>
-                    <div class="o-qty">Qty: 1</div>
-                  </div>
+              <div class="tb-right">
+                <div class="badge-green">
+                  <div class="sdot"></div>Secure
                 </div>
-                <div class="o-pr">₹1.00</div>
-              </div>
-              <div class="or">
-                <div class="o-tl">Total</div>
-                <div class="o-tot">₹1.00</div>
               </div>
             </div>
-          </div>
-          <div class="foot">
-            <button class="btn btn-blue" id="pay-btn" onclick="handlePay()">Pay ₹1.00</button>
-            <div class="visa-secured-row">
-              <svg viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <span class="visa-secured-txt">Secured by Visa</span>
+            <div class="ph">
+              <div class="ph-lbl">QuickMart · ₹1.00</div>
+              <div class="ph-title">Choose Card</div>
+              <div class="ph-sub">Select your Visa card to continue</div>
             </div>
-          </div>
-        </div>
-
-        <!-- ▌S2: LOADING ▌-->
-        <div class="screen" id="s-loading">
-          <div class="topbar">
-            <div class="visa-logo-wrap">
-              <svg class="visa-logo-svg" viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <div class="topbar-divider"></div>
-              <div class="brand">PASSKEY PAYMENT</div>
-            </div>
-          </div>
-          <div class="fill-c">
-            <div class="spinner"></div>
-            <div class="ld-t" id="ld-t">Processing transaction...</div>
-            <div class="ld-s" id="ld-s">Please do not close this window</div>
-            <div class="visa-loading-badge">
-              <svg viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <span>Visa Secure Processing</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ▌S3: OTP ▌-->
-        <div class="screen" id="s-otp">
-          <div class="topbar">
-            <div class="visa-logo-wrap">
-              <svg class="visa-logo-svg" viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <div class="topbar-divider"></div>
-              <div class="brand">PASSKEY PAYMENT</div>
-            </div>
-            <div class="tb-right">
-              <div class="icon-btn" onclick="doBack('s-select')">←</div>
-            </div>
-          </div>
-          <div class="ph">
-            <div class="ph-lbl">Bank Verification</div>
-            <div class="ph-title">Enter OTP</div>
-            <div class="ph-sub" id="otp-sub">Sent to +91 ••••••7890</div>
-          </div>
-          <div class="scr-body">
-            <div class="otp-row">
-              <div class="obox" id="ob0"></div>
-              <div class="obox" id="ob1"></div>
-              <div class="obox" id="ob2"></div>
-              <div class="obox" id="ob3"></div>
-            </div>
-            <div class="otp-hint">OTP: <b>1234</b></div>
-            <div class="keypad">
-              <button class="kb" onclick="otpKey(1)">1</button>
-              <button class="kb" onclick="otpKey(2)">2</button>
-              <button class="kb" onclick="otpKey(3)">3</button>
-              <button class="kb" onclick="otpKey(4)">4</button>
-              <button class="kb" onclick="otpKey(5)">5</button>
-              <button class="kb" onclick="otpKey(6)">6</button>
-              <button class="kb" onclick="otpKey(7)">7</button>
-              <button class="kb" onclick="otpKey(8)">8</button>
-              <button class="kb" onclick="otpKey(9)">9</button>
-              <button class="kb ghost"></button>
-              <button class="kb" onclick="otpKey(0)">0</button>
-              <button class="kb del" onclick="otpDel()">⌫</button>
-            </div>
-          </div>
-          <div class="foot">
-            <button class="btn btn-blue" id="otp-btn" onclick="verifyOTP()" disabled>Confirm OTP</button>
-            <div class="visa-secured-row">
-              <svg viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <span class="visa-secured-txt">Verified by Visa</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ▌S4: BIO CREATE ▌-->
-        <div class="screen" id="s-bio-create">
-          <div class="topbar">
-            <div class="visa-logo-wrap">
-              <svg class="visa-logo-svg" viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <div class="topbar-divider"></div>
-              <div class="brand">PASSKEY PAYMENT</div>
-            </div>
-          </div>
-          <div class="ph">
-            <div class="ph-lbl">Passkey Enrollment</div>
-            <div class="ph-title">Register Device for Secure Transactions</div>
-            <div class="ph-sub">Establish a FIDO compliant passkey for secure, phishing-resistant Visa transactions
-            </div>
-          </div>
-          <div class="bio-c">
-            <div class="fp-out" id="fp-create">
-              <div class="fp-icon">👆</div>
-            </div>
-            <div class="fp-lbl" id="fl-create">Use fingerprint, face recognition, or device PIN</div>
-            <div class="fp-track">
-              <div class="fp-fill" id="fb-create"></div>
-            </div>
-          </div>
-          <div class="foot">
-            <button class="btn btn-gold" onclick="startBio('create')">Complete Passkey Enrollment</button>
-            <div class="visa-secured-row">
-              <svg viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <span class="visa-secured-txt">Secured by Visa</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ▌S5: BIO AUTH ▌-->
-        <div class="screen" id="s-bio-auth">
-          <div class="topbar">
-            <div class="visa-logo-wrap">
-              <svg class="visa-logo-svg" viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <div class="topbar-divider"></div>
-              <div class="brand">PASSKEY PAYMENT</div>
-            </div>
-          </div>
-          <div class="ph">
-            <div class="ph-lbl">Passkey Detected ✓</div>
-            <div class="ph-title">Authenticate Transaction</div>
-            <div class="ph-sub">Confirm ₹1.00 to QuickMart</div>
-          </div>
-          <div class="bio-c">
-            <div class="fp-out" id="fp-auth">
-              <div class="fp-icon">👆</div>
-            </div>
-            <div class="fp-lbl" id="fl-auth">User Verification Required</div>
-            <div class="fp-track">
-              <div class="fp-fill" id="fb-auth"></div>
-            </div>
-          </div>
-          <div class="foot">
-            <button class="btn btn-blue" onclick="startBio('auth')">Continue</button>
-            <div class="visa-secured-row">
-              <svg viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <span class="visa-secured-txt">Secured by Visa</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ▌S6: SUCCESS ▌-->
-        <div class="screen" id="s-success">
-          <div class="topbar">
-            <div class="visa-logo-wrap">
-              <svg class="visa-logo-svg" viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <div class="topbar-divider"></div>
-              <div class="brand">PASSKEY PAYMENT</div>
-            </div>
-          </div>
-          <div class="succ-c">
-            <div class="succ-ring">✓</div>
-            <div class="s-ttl">Payment Done!</div>
-            <div class="s-amt">₹1.00</div>
-            <div class="s-desc" id="s-desc">Paid to QuickMart</div>
-            <div class="pk-pill">
-              🔑 Secured by&nbsp;
-              <svg viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              &nbsp;Passkey
-            </div>
-            <div class="txn-blk">
-              <div class="txr">
-                <div class="tl">Transaction ID</div>
-                <div class="tv" id="t-id">—</div>
+            <div class="scr-body">
+              <div class="card-list" id="card-grid"></div>
+              <div class="order-card">
+                <div class="or">
+                  <div class="ol">
+                    <div class="o-ico">🧃</div>
+                    <div>
+                      <div class="o-nm">Mango Juice</div>
+                      <div class="o-qty">Qty: 1</div>
+                    </div>
+                  </div>
+                  <div class="o-pr">₹1.00</div>
+                </div>
+                <div class="or">
+                  <div class="o-tl">Total</div>
+                  <div class="o-tot">₹1.00</div>
+                </div>
               </div>
-              <div class="txr">
-                <div class="tl">Card</div>
-                <div class="tv" id="t-card">—</div>
-              </div>
-              <div class="txr">
-                <div class="tl">Date &amp; Time</div>
-                <div class="tv" id="t-time">—</div>
-              </div>
-              <div class="txr">
-                <div class="tl">Auth Method</div>
-                <div class="tv" id="t-auth">—</div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-blue" id="pay-btn" onclick="handlePay()">Pay ₹1.00</button>
+              <div class="visa-secured-row">
+                <img class="visa-logo-png-sm" src="/LOGO_BLUE.png" alt="Visa" />
+                <span class="visa-secured-txt">Secured by Visa</span>
               </div>
             </div>
           </div>
-          <div class="foot">
-            <button class="btn btn-ghost" onclick="resetAll()">↩ Pay Again</button>
-            <div class="visa-secured-row">
-              <svg viewBox="0 0 216 68">
-                <use href="#v-blue" />
-              </svg>
-              <span class="visa-secured-txt">Secured by Visa</span>
+
+          <!-- ▌S2: LOADING ▌-->
+          <div class="screen" id="s-loading">
+            <div class="topbar">
+              <div class="visa-logo-wrap">
+                <img class="visa-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                <div class="topbar-divider"></div>
+                <div class="brand">PASSKEY PAYMENT</div>
+              </div>
+            </div>
+            <div class="fill-c">
+              <div class="spinner"></div>
+              <div class="ld-t" id="ld-t">Processing transaction...</div>
+              <div class="ld-s" id="ld-s">Please do not close this window</div>
+              <div class="visa-loading-badge">
+                <img class="visa-badge-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                <span>Visa Secure Processing</span>
+              </div>
             </div>
           </div>
+
+          <!-- ▌S3: OTP ▌-->
+          <div class="screen" id="s-otp">
+            <div class="topbar">
+              <div class="visa-logo-wrap">
+                <img class="visa-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                <div class="topbar-divider"></div>
+                <div class="brand">PASSKEY PAYMENT</div>
+              </div>
+              <div class="tb-right">
+                <div class="icon-btn" onclick="doBack('s-select')">←</div>
+              </div>
+            </div>
+            <div class="ph">
+              <div class="ph-lbl">Bank Verification</div>
+              <div class="ph-title">Enter OTP</div>
+              <div class="ph-sub" id="otp-sub">Sent to +91 ••••••7890</div>
+            </div>
+            <div class="scr-body">
+              <div class="otp-row">
+                <div class="obox" id="ob0"></div>
+                <div class="obox" id="ob1"></div>
+                <div class="obox" id="ob2"></div>
+                <div class="obox" id="ob3"></div>
+              </div>
+              <div class="otp-hint">OTP: <b>1234</b></div>
+              <div class="keypad">
+                <button class="kb" onclick="otpKey(1)">1</button>
+                <button class="kb" onclick="otpKey(2)">2</button>
+                <button class="kb" onclick="otpKey(3)">3</button>
+                <button class="kb" onclick="otpKey(4)">4</button>
+                <button class="kb" onclick="otpKey(5)">5</button>
+                <button class="kb" onclick="otpKey(6)">6</button>
+                <button class="kb" onclick="otpKey(7)">7</button>
+                <button class="kb" onclick="otpKey(8)">8</button>
+                <button class="kb" onclick="otpKey(9)">9</button>
+                <button class="kb ghost"></button>
+                <button class="kb" onclick="otpKey(0)">0</button>
+                <button class="kb del" onclick="otpDel()">⌫</button>
+              </div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-blue" id="otp-btn" onclick="verifyOTP()" disabled>Confirm OTP</button>
+              <div class="visa-secured-row">
+                <img class="visa-logo-png-sm" src="/LOGO_BLUE.png" alt="Visa" />
+                <span class="visa-secured-txt">Verified by Visa</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ▌S4: BIO CREATE ▌-->
+          <div class="screen" id="s-bio-create">
+            <div class="topbar">
+              <div class="visa-logo-wrap">
+                <img class="visa-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                <div class="topbar-divider"></div>
+                <div class="brand">PASSKEY PAYMENT</div>
+              </div>
+            </div>
+            <div class="ph">
+              <div class="ph-lbl">Passkey Enrollment</div>
+              <div class="ph-title">Register Device for Secure Transactions</div>
+              <div class="ph-sub">Establish a FIDO compliant passkey for secure, phishing-resistant Visa transactions</div>
+            </div>
+            <div class="bio-c">
+              <div class="fp-out" id="fp-create">
+                <div class="fp-icon">👆</div>
+              </div>
+              <div class="fp-lbl" id="fl-create">Use fingerprint, face recognition, or device PIN</div>
+              <div class="fp-track">
+                <div class="fp-fill" id="fb-create"></div>
+              </div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-gold" onclick="startBio('create')">Complete Passkey Enrollment</button>
+              <div class="visa-secured-row">
+                <img class="visa-logo-png-sm" src="/LOGO_BLUE.png" alt="Visa" />
+                <span class="visa-secured-txt">Secured by Visa</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ▌S5: BIO AUTH ▌-->
+          <div class="screen" id="s-bio-auth">
+            <div class="topbar">
+              <div class="visa-logo-wrap">
+                <img class="visa-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                <div class="topbar-divider"></div>
+                <div class="brand">PASSKEY PAYMENT</div>
+              </div>
+            </div>
+            <div class="ph">
+              <div class="ph-lbl">Passkey Detected ✓</div>
+              <div class="ph-title">Authenticate Transaction</div>
+              <div class="ph-sub">Confirm ₹1.00 to QuickMart</div>
+            </div>
+            <div class="bio-c">
+              <div class="fp-out" id="fp-auth">
+                <div class="fp-icon">👆</div>
+              </div>
+              <div class="fp-lbl" id="fl-auth">User Verification Required</div>
+              <div class="fp-track">
+                <div class="fp-fill" id="fb-auth"></div>
+              </div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-blue" onclick="startBio('auth')">Continue</button>
+              <div class="visa-secured-row">
+                <img class="visa-logo-png-sm" src="/LOGO_BLUE.png" alt="Visa" />
+                <span class="visa-secured-txt">Secured by Visa</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ▌S6: SUCCESS ▌-->
+          <div class="screen" id="s-success">
+            <div class="topbar">
+              <div class="visa-logo-wrap">
+                <img class="visa-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                <div class="topbar-divider"></div>
+                <div class="brand">PASSKEY PAYMENT</div>
+              </div>
+            </div>
+            <div class="succ-c">
+              <div class="succ-ring">✓</div>
+              <div class="s-ttl">Payment Done!</div>
+              <div class="s-amt">₹1.00</div>
+              <div class="s-desc" id="s-desc">Paid to QuickMart</div>
+              <div class="pk-pill">
+                🔑 Secured by&nbsp;
+                <img class="pk-pill-logo-png" src="/LOGO_BLUE.png" alt="Visa" />
+                &nbsp;Passkey
+              </div>
+              <div class="txn-blk">
+                <div class="txr">
+                  <div class="tl">Transaction ID</div>
+                  <div class="tv" id="t-id">—</div>
+                </div>
+                <div class="txr">
+                  <div class="tl">Card</div>
+                  <div class="tv" id="t-card">—</div>
+                </div>
+                <div class="txr">
+                  <div class="tl">Date &amp; Time</div>
+                  <div class="tv" id="t-time">—</div>
+                </div>
+                <div class="txr">
+                  <div class="tl">Auth Method</div>
+                  <div class="tv" id="t-auth">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="foot">
+              <button class="btn btn-ghost" onclick="resetAll()">↩ Pay Again</button>
+              <div class="visa-secured-row">
+                <img class="visa-logo-png-sm" src="/LOGO_BLUE.png" alt="Visa" />
+                <span class="visa-secured-txt">Secured by Visa</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /screen-host -->
+      </div><!-- /app -->
+
+      <button class="log-fab" onclick="openDrawer()" title="Flow Logs">
+        📋<div class="log-fab-badge" id="log-count">0</div>
+      </button>
+
+      <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+      <div class="drawer" id="drawer">
+        <div class="drawer-head">
+          <div class="drawer-title">📋 Flow Logs</div>
+          <button class="drawer-close" onclick="closeDrawer()">✕</button>
         </div>
-
-      </div><!-- /screen-host -->
-    </div><!-- /app -->
-
-    <button class="log-fab" onclick="openDrawer()" title="Flow Logs">
-      📋<div class="log-fab-badge" id="log-count">0</div>
-    </button>
-
-    <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
-
-    <div class="drawer" id="drawer">
-      <div class="drawer-head">
-        <div class="drawer-title">📋 Flow Logs</div>
-        <button class="drawer-close" onclick="closeDrawer()">✕</button>
-      </div>
-      <div class="drawer-toolbar">
-        <button class="dt-chip active" onclick="setFilter('all',this)">All</button>
-        <button class="dt-chip" onclick="setFilter('info',this)">Info</button>
-        <button class="dt-chip" onclick="setFilter('ok',this)">OK</button>
-        <button class="dt-chip" onclick="setFilter('warn',this)">Warn</button>
-        <button class="dt-chip" onclick="setFilter('err',this)">Error</button>
-        <div class="dt-spacer"></div>
-        <button class="dt-clear" onclick="clearLogs()">Clear</button>
-      </div>
-      <div class="drawer-logs" id="log-list">
-        <div class="log-empty">
-          <div class="log-empty-icon">🔍</div>
-          <div class="log-empty-txt">No logs yet.<br>Tap Pay to start.</div>
+        <div class="drawer-toolbar">
+          <button class="dt-chip active" onclick="setFilter('all',this)">All</button>
+          <button class="dt-chip" onclick="setFilter('info',this)">Info</button>
+          <button class="dt-chip" onclick="setFilter('ok',this)">OK</button>
+          <button class="dt-chip" onclick="setFilter('warn',this)">Warn</button>
+          <button class="dt-chip" onclick="setFilter('err',this)">Error</button>
+          <div class="dt-spacer"></div>
+          <button class="dt-clear" onclick="clearLogs()">Clear</button>
         </div>
-      </div>
-      <div class="drawer-footer">
-        <div class="log-status-row">
-          <div class="lsr-item">
-            <div class="lsr-dot" style="background:#58A6FF"></div>Info
+        <div class="drawer-logs" id="log-list">
+          <div class="log-empty">
+            <div class="log-empty-icon">🔍</div>
+            <div class="log-empty-txt">No logs yet.<br>Tap Pay to start.</div>
           </div>
-          <div class="lsr-item">
-            <div class="lsr-dot" style="background:#3FB950"></div>OK
-          </div>
-          <div class="lsr-item">
-            <div class="lsr-dot" style="background:#E3B341"></div>Warn
-          </div>
-          <div class="lsr-item">
-            <div class="lsr-dot" style="background:#F85149"></div>Error
-          </div>
-          <div class="lsr-item">
-            <div class="lsr-dot" style="background:#BC8CFF"></div>Visa
+        </div>
+        <div class="drawer-footer">
+          <div class="log-status-row">
+            <div class="lsr-item"><div class="lsr-dot" style="background:#58A6FF"></div>Info</div>
+            <div class="lsr-item"><div class="lsr-dot" style="background:#3FB950"></div>OK</div>
+            <div class="lsr-item"><div class="lsr-dot" style="background:#E3B341"></div>Warn</div>
+            <div class="lsr-item"><div class="lsr-dot" style="background:#F85149"></div>Error</div>
+            <div class="lsr-item"><div class="lsr-dot" style="background:#BC8CFF"></div>Visa</div>
           </div>
         </div>
       </div>
-    </div>
-  </div><!-- /shell -->
+    </div><!-- /shell -->
+  </div><!-- /shell-wrap -->
 
   <iframe id="vpp-iframe" style="visibility:hidden;position:absolute;width:0;height:0;"
     allow="payment *; publickey-credentials-get *; publickey-credentials-create *"
@@ -1533,6 +1424,36 @@
   </iframe>
 
   <script>
+    const SHELL_W = 390;
+    const SHELL_H = 844;
+    const SHELL_OUTER_W = SHELL_W + 26;
+
+    function scaleShell() {
+      const shell = document.getElementById('shell');
+      const vw = document.documentElement.clientWidth;
+      const vh = document.documentElement.clientHeight;
+      if (vw < 600) {
+        shell.style.cssText = 'width:100%;height:100%;border-radius:0;box-shadow:none;transform:none;';
+        document.getElementById('app').style.paddingTop = '';
+      } else {
+        shell.style.width = SHELL_W + 'px';
+        shell.style.height = SHELL_H + 'px';
+        shell.style.borderRadius = '';
+        shell.style.boxShadow = '';
+        const PADDING = 40;
+        const scaleX = (vw - PADDING * 2) / SHELL_OUTER_W;
+        const scaleY = (vh - PADDING * 2) / SHELL_H;
+        const scale = Math.min(scaleX, scaleY, 1);
+        shell.style.transform = `scale(${scale})`;
+        shell.style.transformOrigin = 'center center';
+      }
+    }
+
+    scaleShell();
+    window.addEventListener('resize', scaleShell);
+    let _rzTimer;
+    window.addEventListener('resize', () => { clearTimeout(_rzTimer); _rzTimer = setTimeout(scaleShell, 120); });
+
     const ORIGIN = "https://visa-fido.onrender.com";
     const VISA_BASE = "https://sandbox.auth.visa.com";
     const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
@@ -1599,7 +1520,8 @@
       document.getElementById('card-grid').innerHTML = CARDS.map(c => `
         <div class="card-opt ${c.id === selCard?.id ? 'sel' : ''}" onclick="pickCard('${c.id}')">
           <div class="card-vis" style="background:${c.grad}">
-            <svg class="card-vis-logo" viewBox="0 0 216 68" xmlns="http://www.w3.org/2000/svg"><use href="#v-white"/></svg>
+            <!-- WHITE logo on dark card background -->
+            <img class="card-vis-logo-png" src="/LOGO_WHITE.png" alt="Visa" />
           </div>
           <div class="ci"><div class="cn">${c.name}</div><div class="cn2">•••• •••• •••• ${c.last4}</div></div>
           <div class="rr"></div>
@@ -1616,7 +1538,7 @@
       if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURED") { devDone = true; addLog('ok', 'Device profiling complete ✓'); if (sst && selCard && !flowStart) tryStart(); }
       if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURE_FAILED") addLog('err', 'Device profiling FAILED');
       if (m.type === "EVENT" && m.event?.type === "POPUP_WINDOW_TERMINATED") addLog('warn', 'Visa popup closed by user');
-      if (m.type === "AUTHORIZATION_RESULT") { authZTok = m.data; addLog('ok', 'auth_z_token received — payment authorised ✓'); submitResp({ passkeyStatus: "PASSKEY_SUCCESS", passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS", payload: m.data }); goSuccess(); }
+      if (m.type === "AUTHORIZATION_RESULT") { authZTok = m.data; addLog('ok', 'auth_z_token received — payment authorised ✓'); submitResp({ passkeyStatus: "PASSKEY_SUCCESS", passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS", payload: m.data });}
     });
 
     function handlePay() {
@@ -1679,12 +1601,6 @@
       if (type === 'auth' && loginData) { if (openPopup(400, 480)) navPopup(loginData); }
       if (type === 'create' && createData) { if (openPopup(500, 600)) navPopup(createData); }
       ring.classList.add('scanning'); bar.style.width = '100%'; lbl.textContent = 'Scanning…';
-      setTimeout(() => {
-        ring.classList.remove('scanning'); ring.classList.add('done');
-        lbl.textContent = type === 'auth' ? '✅ Authenticated!' : '✅ Passkey Registered!';
-        addLog('ok', type === 'auth' ? 'Biometric auth ✓' : 'Passkey registered ✓');
-        setTimeout(() => { if (!authZTok) authZTok = 'DEMO_' + crypto.randomUUID(); goSuccess(); }, 600);
-      }, 2000);
     }
 
     function goSuccess() {
@@ -1719,5 +1635,4 @@
     addLog('visa', `iframe src → ${VISA_BASE}/oauth2/…`);
   </script>
 </body>
-
 </html>

@@ -20,21 +20,17 @@ router.post('/pay/response', async (req, res) => {
                             type: "AUTHORIZATION_RESULT",
                             data: ${JSON.stringify(req.body)}
                         };
-
                         if (window.opener && !window.opener.closed) {
                             window.opener.postMessage(payload, window.location.origin);
                             window.close();
                         } else {
-                            document.body.innerHTML = "Transation successfull.";
+                            document.body.innerHTML = "processsing.......";
                         }
                     })();
                 </script>
             </body>
             </html>
         `);
-        // res.status(200).send("Succeess");
-
-
     } catch (err) {
         res.status(200).send("Error");
 

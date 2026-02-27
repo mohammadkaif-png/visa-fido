@@ -655,17 +655,41 @@
     }
 
     @keyframes bop {
-      0% { transform: scale(.8) }
-      60% { transform: scale(1.08) }
-      100% { transform: scale(1) }
+      0% {
+        transform: scale(.8)
+      }
+
+      60% {
+        transform: scale(1.08)
+      }
+
+      100% {
+        transform: scale(1)
+      }
     }
 
     @keyframes shake {
-      0%, 100% { transform: translateX(0) }
-      20% { transform: translateX(-4px) }
-      40% { transform: translateX(4px) }
-      60% { transform: translateX(-3px) }
-      80% { transform: translateX(3px) }
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      20% {
+        transform: translateX(-4px)
+      }
+
+      40% {
+        transform: translateX(4px)
+      }
+
+      60% {
+        transform: translateX(-3px)
+      }
+
+      80% {
+        transform: translateX(3px)
+      }
     }
 
     .otp-hint {
@@ -749,9 +773,17 @@
     }
 
     @keyframes fpulse {
-      0% { box-shadow: 0 0 0 0 rgba(20, 52, 203, .3) }
-      70% { box-shadow: 0 0 0 16px rgba(20, 52, 203, 0) }
-      100% { box-shadow: 0 0 0 0 rgba(20, 52, 203, 0) }
+      0% {
+        box-shadow: 0 0 0 0 rgba(20, 52, 203, .3)
+      }
+
+      70% {
+        box-shadow: 0 0 0 16px rgba(20, 52, 203, 0)
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(20, 52, 203, 0)
+      }
     }
 
     .fp-icon {
@@ -807,8 +839,15 @@
     }
 
     @keyframes popIn {
-      from { transform: scale(0); opacity: 0 }
-      to { transform: scale(1); opacity: 1 }
+      from {
+        transform: scale(0);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
     }
 
     .s-ttl {
@@ -983,7 +1022,9 @@
       border-color: #1F6FEB;
     }
 
-    .dt-spacer { flex: 1; }
+    .dt-spacer {
+      flex: 1;
+    }
 
     .dt-clear {
       padding: 3px 9px;
@@ -1009,16 +1050,27 @@
       padding: 8px 0;
     }
 
-    .drawer-logs::-webkit-scrollbar { width: 3px; }
-    .drawer-logs::-webkit-scrollbar-track { background: transparent; }
-    .drawer-logs::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
+    .drawer-logs::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .drawer-logs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .drawer-logs::-webkit-scrollbar-thumb {
+      background: #30363D;
+      border-radius: 3px;
+    }
 
     .log-entry {
       padding: 6px 16px;
       border-bottom: 1px solid #161B22;
     }
 
-    .log-entry:hover { background: #161B22; }
+    .log-entry:hover {
+      background: #161B22;
+    }
 
     .log-time {
       font-size: 10px;
@@ -1044,11 +1096,30 @@
       letter-spacing: .3px;
     }
 
-    .tag-info  { background: #0D419D; color: #58A6FF; }
-    .tag-ok    { background: #033A16; color: #3FB950; }
-    .tag-warn  { background: #4A2900; color: #E3B341; }
-    .tag-err   { background: #67060C; color: #F85149; }
-    .tag-visa  { background: #3D1A78; color: #BC8CFF; }
+    .tag-info {
+      background: #0D419D;
+      color: #58A6FF;
+    }
+
+    .tag-ok {
+      background: #033A16;
+      color: #3FB950;
+    }
+
+    .tag-warn {
+      background: #4A2900;
+      color: #E3B341;
+    }
+
+    .tag-err {
+      background: #67060C;
+      color: #F85149;
+    }
+
+    .tag-visa {
+      background: #3D1A78;
+      color: #BC8CFF;
+    }
 
     .log-msg {
       font-size: 11px;
@@ -1058,7 +1129,9 @@
       word-break: break-word;
     }
 
-    .log-msg b { color: #79C0FF; }
+    .log-msg b {
+      color: #79C0FF;
+    }
 
     .log-empty {
       display: flex;
@@ -1070,8 +1143,15 @@
       color: #484F58;
     }
 
-    .log-empty-icon { font-size: 28px; margin-bottom: 8px; }
-    .log-empty-txt  { font-size: 11px; line-height: 1.6; }
+    .log-empty-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .log-empty-txt {
+      font-size: 11px;
+      line-height: 1.6;
+    }
 
     .drawer-footer {
       padding: 10px 16px;
@@ -1079,7 +1159,11 @@
       flex-shrink: 0;
     }
 
-    .log-status-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .log-status-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
     .lsr-item {
       display: flex;
@@ -1089,7 +1173,11 @@
       color: #484F58;
     }
 
-    .lsr-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .lsr-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
 
     /* ── LOG FAB ── */
     .log-fab {
@@ -1112,7 +1200,9 @@
       font-size: 17px;
     }
 
-    .log-fab:active { transform: scale(.9); }
+    .log-fab:active {
+      transform: scale(.9);
+    }
 
     .log-fab-badge {
       position: absolute;
@@ -1276,7 +1366,8 @@
             <div class="ph">
               <div class="ph-lbl">Passkey Enrollment</div>
               <div class="ph-title">Register Device for Secure Transactions</div>
-              <div class="ph-sub">Establish a FIDO compliant passkey for secure, phishing-resistant Visa transactions</div>
+              <div class="ph-sub">Establish a FIDO compliant passkey for secure, phishing-resistant Visa transactions
+              </div>
             </div>
             <div class="bio-c">
               <div class="fp-out" id="fp-create">
@@ -1406,11 +1497,21 @@
         </div>
         <div class="drawer-footer">
           <div class="log-status-row">
-            <div class="lsr-item"><div class="lsr-dot" style="background:#58A6FF"></div>Info</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#3FB950"></div>OK</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#E3B341"></div>Warn</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#F85149"></div>Error</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#BC8CFF"></div>Visa</div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#58A6FF"></div>Info
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#3FB950"></div>OK
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#E3B341"></div>Warn
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#F85149"></div>Error
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#BC8CFF"></div>Visa
+            </div>
           </div>
         </div>
       </div>
@@ -1534,11 +1635,11 @@
       let m; try { m = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; }
       if (!m || !m.type) return;
       addLog('visa', `type=<b>${m.type}</b>${m.result?.command_type ? ' cmd=' + m.result.command_type : ''}${m.event?.type ? ' evt=' + m.event.type : ''}`);
-      if (m.type === "RESULT" && m.result?.command_type === "INITIALIZATION") { if (m.result.status === "SUCCESS") { sst = m?.result?.data?.tokens[0]?.token; addLog('ok', `SDK init ✓ — token=<b>${sst?.slice(0, 18)}…</b>`); if (flowStart === false && selCard && devDone) tryStart(); } else { addLog('err', `SDK init FAILED: ${m.result?.data?.error_details?.error || 'unknown'}`); } }
-      if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURED") { devDone = true; addLog('ok', 'Device profiling complete ✓'); if (sst && selCard && !flowStart) tryStart(); }
+      if (m.type === "RESULT" && m.result?.command_type === "INITIALIZATION") { if (m.result.status === "SUCCESS") { sst = m?.result?.data?.tokens[0]?.token; addLog('ok', `SDK init ✓ — token=<b>${sst?.slice(0, 18)}…</b>`);} else { addLog('err', `SDK init FAILED: ${m.result?.data?.error_details?.error || 'unknown'}`); } }
+      if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURED") { devDone = true; addLog('ok', 'Device profiling complete ✓'); }
       if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURE_FAILED") addLog('err', 'Device profiling FAILED');
       if (m.type === "EVENT" && m.event?.type === "POPUP_WINDOW_TERMINATED") addLog('warn', 'Visa popup closed by user');
-      if (m.type === "AUTHORIZATION_RESULT") { authZTok = m.data; addLog('ok', 'auth_z_token received — payment authorised ✓'); submitResp({ passkeyStatus: "PASSKEY_SUCCESS", passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS", payload: m.data });}
+      if (m.type === "AUTHORIZATION_RESULT") { authZTok = m.data; addLog('ok', 'auth_z_token received — payment authorised ✓'); submitResp({ passkeyStatus: "PASSKEY_SUCCESS", passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS", payload: m.data }); }
     });
 
     function handlePay() {
@@ -1635,4 +1736,5 @@
     addLog('visa', `iframe src → ${VISA_BASE}/oauth2/…`);
   </script>
 </body>
+
 </html>

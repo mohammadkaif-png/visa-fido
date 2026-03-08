@@ -138,8 +138,10 @@ function createEncryptedPayload(payload) {
         alg: 'RSA-OAEP-256',
         enc: 'A128GCM'
     };
-    const encryptionCert = process.env.VISA_PUBLIC_KEY.replace(/\\n/g, '\n');
+    // const encryptionCert = process.env.VISA_PUBLIC_KEY.replace(/\\n/g, '\n');
     // let encryptionCert = fs.readFileSync('./certs/public_key.pem');
+    const encryptionCert = Buffer.from(process.env.VISA_PUBLIC_KEY, 'base64').toString('utf8');
+
     return keystore.add(encryptionCert, 'pem', encProps)
         .then((key) => {
             return nodeJose.JWE.createEncrypt({
@@ -168,7 +170,9 @@ async function fetchDecryptedPayload(encryptedPayloadString) {
         enc: 'A128GCM'
     };
     // let decryptionKey = fs.readFileSync("./certs/private_key.key");
-    const decryptionKey = process.env.VISA_PRIVATE_KEY.replace(/\\n/g, '\n');
+    // const decryptionKey = process.env.VISA_PRIVATE_KEY.replace(/\\n/g, '\n');
+    const decryptionKey = Buffer.from(process.env.VISA_PRIVATE_KEY, 'base64').toString('utf8');
+
     return keystore.add(decryptionKey, 'pem', decProps)
         .then((key) => {
             return nodeJose.JWE.createDecrypt(key)

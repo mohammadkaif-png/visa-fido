@@ -1594,7 +1594,7 @@
     function updateClock() { const now = new Date(); const el = document.getElementById('clock'); if (el) el.textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }); }
     updateClock(); setInterval(updateClock, 15000);
 
-    const INIT_CMD = { type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(), command: { type: "INITIALIZATION", data: { response_mode: "form_post", redirect_uri: ORIGIN, session_context: { apn: "vdp-web", client_software: { top_origin: ORIGIN, integrator_origin: ORIGIN, uebas: [{ source: "VDI", ref: crypto.randomUUID() }], id: "VDPW", version: "24.07", oauth2_version: "1.0", tenancy: { product_code: "VDP" } } } }, response_type: "urn:ext:oauth:response-type:server_state" } };
+    const INIT_CMD = { type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(), command: { type: "INITIALIZATION", data: { response_mode: "com_visa_web_message", redirect_uri: ORIGIN, session_context: { apn: "vdp-web", client_software: { top_origin: ORIGIN, integrator_origin: ORIGIN, uebas: [{ source: "VDI", ref: crypto.randomUUID() }], id: "VDPW", version: "24.07", oauth2_version: "1.0", tenancy: { product_code: "VDP" } } } }, response_type: "urn:ext:oauth:response-type:server_state" } };
 
     function goTo(id) {
       if (id === curScreen) return;

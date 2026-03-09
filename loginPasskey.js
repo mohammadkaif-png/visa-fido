@@ -140,7 +140,7 @@ function createEncryptedPayload(payload) {
     };
     // const encryptionCert = process.env.VISA_PUBLIC_KEY.replace(/\\n/g, '\n');
     // let encryptionCert = fs.readFileSync('./certs/public_key.pem');
-    const encryptionCert = Buffer.from(process.env.VISA_PUBLIC_KEY, 'base64').toString('utf8');
+    const encryptionCert = Buffer.from(process.env.VISA_PUBLIC_KEY, 'base64').toString('utf8').replace(/\\n/g, '\n');
 
     return keystore.add(encryptionCert, 'pem', encProps)
         .then((key) => {
@@ -171,7 +171,11 @@ async function fetchDecryptedPayload(encryptedPayloadString) {
     };
     // let decryptionKey = fs.readFileSync("./certs/private_key.key");
     // const decryptionKey = process.env.VISA_PRIVATE_KEY.replace(/\\n/g, '\n');
-    const decryptionKey = Buffer.from(process.env.VISA_PRIVATE_KEY, 'base64').toString('utf8');
+    const decryptionKey = Buffer
+        .from(process.env.VISA_PRIVATE_KEY, 'base64')
+        .toString('utf8')
+        .replace(/\\n/g, '\n');
+    console.log("decryptionKey", decryptionKey)
 
     return keystore.add(decryptionKey, 'pem', decProps)
         .then((key) => {

@@ -24,7 +24,7 @@ router.post('/pay/response', async (req, res) => {
                             window.opener.postMessage(payload, window.location.origin);
                             window.close();
                         } else {
-                            document.body.innerHTML = "processsing.......";
+                            document.body.innerHTML = "payment processsing.......";
                         }
                     })();
                 </script>

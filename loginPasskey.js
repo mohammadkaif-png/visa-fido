@@ -22,8 +22,8 @@ router.post('/passkey/login', async (req, res) => {
                 error: " token or operation or operationType is missing"
             });
         }
-
-        let cardNumber = req.body?.cardNumber || 4761120010000492
+        // 4622943128888840
+        let cardNumber = req.body?.cardNumber || 4622943128888840
         const body = {
             response_type: "code",
             response_mode: "form_post",
@@ -32,6 +32,7 @@ router.post('/passkey/login', async (req, res) => {
             server_state: req.body?.token,
             // redirect_uri: "https://weak-tova-ungently.ngrok-free.dev/v2/pay/response/azharamin/eulko4VVut9oxbebNnQv", 
             redirect_uri: `${process.env.APPLICATION_URL}/v2/pay/response`,
+            // redirect_uri: `${process.env.APPLICATION_URL}/passkey/redirection`,
             client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
             // client_assertion: req.body?.token,
             prompt: "login",
@@ -175,7 +176,6 @@ async function fetchDecryptedPayload(encryptedPayloadString) {
         .from(process.env.VISA_PRIVATE_KEY, 'base64')
         .toString('utf8')
         .replace(/\\n/g, '\n');
-    console.log("decryptionKey", decryptionKey)
 
     return keystore.add(decryptionKey, 'pem', decProps)
         .then((key) => {

@@ -14,10 +14,10 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.3;
+            line-height: 1.35;
             color: #333;
             background: white;
-            padding: 14px 18px;
+            padding: 18px;
         }
 
         .container {
@@ -28,21 +28,21 @@
 
         .header {
             text-align: center;
-            margin-bottom: 6px;
-            padding-bottom: 7px;
+            margin-bottom: 8px;
+            padding-bottom: 9px;
             border-bottom: 2px solid #2c3e50;
         }
 
         .header h1 {
             font-size: 27px;
             color: #2c3e50;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
         .header .title {
             font-size: 13.5px;
-            color:  #333;
-            margin-bottom: 5px;
+            color: #555;
+            margin-bottom: 7px;
         }
 
         .contact-info {
@@ -51,16 +51,17 @@
             flex-wrap: wrap;
             gap: 13px;
             font-size: 10.5px;
-            color: #333;
+            color: #666;
         }
 
         .contact-info a {
             color: #2c3e50;
             text-decoration: none;
+            target: _blank;
         }
 
         .section {
-            margin-bottom: 7px;
+            margin-bottom: 11px;
         }
 
         .section-title {
@@ -69,23 +70,23 @@
             color: #2c3e50;
             text-transform: uppercase;
             border-bottom: 1.5px solid #2c3e50;
-            padding-bottom: 2px;
-            margin-bottom: 4px;
+            padding-bottom: 2.5px;
+            margin-bottom: 6px;
         }
 
         .summary {
             font-size: 10.5px;
-            line-height: 1.4;
-            color:  #333;
+            line-height: 1.45;
+            color: #555;
         }
 
         .skills-grid {
             font-size: 9.5px;
-            line-height: 1.45;
+            line-height: 1.5;
         }
 
         .skill-item {
-            margin-bottom: 1.5px;
+            margin-bottom: 2px;
         }
 
         .skill-label {
@@ -95,24 +96,24 @@
         }
 
         .skill-value {
-            color: #333;
+            color: #555;
             display: inline;
         }
 
         .experience-item,
         .project-item {
-            margin-bottom: 6px;
+            margin-bottom: 9px;
         }
 
         .experience-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 2px;
+            margin-bottom: 2.5px;
         }
 
         .company-role {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 600;
             color: #2c3e50;
         }
@@ -122,25 +123,26 @@
             color: #666;
             font-style: italic;
             font-weight: 500;
+
         }
 
         .experience-item ul,
         .project-item ul {
             margin-left: 18px;
-            font-size: 10.5px;
-            color: #333;
+            font-size: 10.2px;
+            color: #555;
         }
 
         .experience-item li,
         .project-item li {
-            margin-bottom: 1px;
+            margin-bottom: 1.5px;
         }
 
         .tech-stack {
-            font-size: 10px;
+            font-size: 9.5px;
             color: #000;
             font-style: normal;
-            margin-top: 2px;
+            margin-top: 3.5px;
             font-weight: 600;
         }
 
@@ -148,7 +150,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 10.5px;
-            margin-bottom: 2px;
+            margin-bottom: 2.5px;
         }
 
         .education-header .school {
@@ -158,29 +160,53 @@
 
         .education-details {
             font-size: 10px;
-            color:  #333;
+            color: #555;
         }
 
         .project-header {
             font-size: 10.5px;
             font-weight: 600;
             color: #000;
-            margin-bottom: 2px;
+            margin-bottom: 2.5px;
+        }
+
+        .project-links {
+            font-size: 9.5px;
+            color: #2c3e50;
+            margin-bottom: 2.5px;
+            display: inline;
+            margin-left: 5px;
+        }
+
+        .project-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            margin: 0 3px;
         }
 
         .achievements-list {
             font-size: 10px;
-            color: #333;
+            color: #555;
             margin-left: 18px;
         }
 
         .achievements-list li {
-            margin-bottom: 0.5px;
+            margin-bottom: 1.5px;
         }
 
         .languages {
             font-size: 10px;
-            color:  #333;
+            color: #555;
+        }
+
+        .two-column-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .column {
+            min-width: 0;
         }
 
         @media print {
@@ -199,7 +225,7 @@
     <div class="container">
         <div class="header">
             <h1>MOHAMMAD KAIF</h1>
-            <div class="title">Backend Engineer</div>
+            <div class="title">Software Engineer</div>
             <div class="contact-info">
                 <span>+91-9598772474</span>
                 <span>mohammadkaif0211@gmail.com</span>
@@ -213,30 +239,41 @@
         <div class="section">
             <div class="section-title">Professional Summary</div>
             <div class="summary">
-                Backend Engineer with 2 years of experience building high-throughput payment systems and LLM-based SaaS
-                platforms. Specialized in card payment and tokenization, push provisioning, and RESTful API design in fintech at
-                scale. Experienced in Haskell, Python, and TypeScript across microservices and multi-tenant
-                architectures.
+                Backend Software Engineer with 2 years of experience in fintech and LLM-based SaaS platforms.
+                Specialized in card payments, tokenization, push provisioning, and passkey payments. Built multi-tenant
+                SaaS platforms using LLMs to generate landing pages for businesses. Proficient in RESTful API
+                development and microservices architecture.
             </div>
         </div>
 
         <div class="section">
             <div class="section-title">Technical Skills</div>
             <div class="skills-grid">
-                <div class="skill-item"><span class="skill-label">Programming Languages:</span> <span
-                        class="skill-value">Haskell, Python, JavaScript, TypeScript, SQL</span></div>
-                <div class="skill-item"><span class="skill-label">Backend and Frameworks:</span> <span
-                        class="skill-value">Servant, Node.js, Express.js, Next.js</span></div>
-                <div class="skill-item"><span class="skill-label">Databases:</span> <span
-                        class="skill-value">PostgreSQL, Redis</span></div>
-                <div class="skill-item"><span class="skill-label">Cloud Platforms:</span> <span class="skill-value">AWS,
-                        Google Cloud Platform</span></div>
-                <div class="skill-item"><span class="skill-label">Tools & Platforms:</span> <span
-                        class="skill-value">Claude, Xyne, ChatGPT, VS Code, Kibana, OpenSearch, Git, VictoriaLogs
-                    </span></div>
-                <div class="skill-item"><span class="skill-label">Specialization:</span> <span class="skill-value">Card
-                        Payments and Tokenization, Push Provisioning, Passkey Payments, Payment Gateway, Microservices,
-                        RESTful APIs, System Design, Large Language Models (LLMs), OpenAI APIs, Cryptography, Unit Testing</span></div>
+                <div class="skill-item">
+                    <span class="skill-label">Programming Languages:</span>
+                    <span class="skill-value">Haskell, Python, JavaScript, TypeScript, SQL</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Backend and Frameworks:</span>
+                    <span class="skill-value">Servant, Node.js, Express.js, Next.js</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Databases:</span>
+                    <span class="skill-value">PostgreSQL, Redis</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Cloud Platforms:</span>
+                    <span class="skill-value">AWS, Google Cloud Platform</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Tools & Platforms:</span>
+                    <span class="skill-value">Claude, ChatGPT, Cline, VS Code, Kibana, OpenSearch, Git</span>
+                </div>
+                <div class="skill-item">
+                    <span class="skill-label">Specialization:</span>
+                    <span class="skill-value">Card Payments and Tokenization, Push Provisioning, Payment Gateway,
+                        Microservices, RESTful APIs, LLM, OpenAI APIs, Cryptography,Unit Testing</span>
+                </div>
             </div>
         </div>
 
@@ -249,18 +286,20 @@
                     <div class="date-location">August 2024 – Present | Bengaluru, India</div>
                 </div>
                 <ul>
-                    <li>Integrated push provisioning for RuPay, Mastercard card network and HDFC Issuer, onboarding
-                        100+ merchants while ensuring RBI-compliant and end-to-end transaction processing.</li>
+                    <li>Integrated push provisioning for RuPay, Mastercard payment network and HDFC Issuer, onboarding
+                        100+ merchants
+                        while ensuring RBI-compliant and end-to-end transaction processing.</li>
                     <li>Developed Python-based Bank Identification Number (BIN) synchronization system for all card
-                        networks, maintaining 99.9% data integrity across tenant environments.</li>
+                        networks, maintaining 99.9% data
+                        integrity across tenant environments.</li>
                     <li>Optimized merchant onboarding APIs for Card-on-File Tokenization (COFT) and ALT ID transactions,
-                        reducing issue resolution time by 90%.</li>
+                        reducing issue resolution
+                        time by 90%.</li>
                     <li>Implemented temporary token payment flow for tokenized cards, supporting 1+ million daily
                         transactions for high-volume merchants.</li>
                     <li>Integrated Secure Card on File (SCOF) solution, migrating merchants from legacy Mastercard M4M
-                        to SCOF platform with 0% downtime and enabling passkey payments.</li>
-                    <li>Utilized AI coding assistants (Claude, Xyne) to accelerate feature development, code reviews,
-                        and debugging in a Haskell/Python codebase.</li>
+                        to SCOF platform with
+                        0% downtime and enabling passkey payments.</li>
                 </ul>
                 <div class="tech-stack">Tech Stack: Haskell, Servant, Nix, Python, SQL, PostgreSQL, Redis, Jenkins,
                     Kibana, OpenSearch</div>
@@ -282,7 +321,8 @@
                     <li>Implemented semantic search using embeddings with 95% accuracy and ~400ms query response times.
                     </li>
                     <li>Reduced AI content generation latency by 40% (5s → 3s) by refactoring synchronous API pipelines
-                        to async execution, improving user-perceived performance at scale.</li>
+                        to async execution, improving user-perceived performance at scale.
+                        </li>
                 </ul>
                 <div class="tech-stack">Tech Stack: Next.js, TypeScript, OpenAI, LangChain, SQL, PostgreSQL, Prisma,
                     Google Cloud Platform</div>
@@ -310,6 +350,7 @@
             <div class="education-header">
                 <span class="school">Shri Shankaracharya Institute of Professional Management and Technology</span>
                 <div class="date-location">August 2020 – July 2024</div>
+
             </div>
             <div class="education-details">B.Tech in Computer Science and Engineering | CGPA: 9.2/10 | Raipur, India
             </div>
@@ -317,18 +358,25 @@
 
         <div class="section">
             <div class="section-title">Academic Projects</div>
+
             <div class="project-item">
-                <div class="project-header">DiabPredict | Python, Django, Bootstrap, scikit-learn, Joblib</div>
+                <div class="project-header">
+                    DiabPredict | Python, Django, Bootstrap, scikit-learn, Joblib
+                    <!-- <span class="project-links"><a href="#">Code</a></span> -->
+                </div>
                 <ul>
                     <li>Built web app to predict diabetes risk using Random Forest model, achieving 77.9% accuracy</li>
                 </ul>
             </div>
+
             <div class="project-item">
-                <div class="project-header">LanguageFriend | Next.js, Node.js, PostgreSQL, OpenAI API</div>
+                <div class="project-header">
+                    LanguageFriend | Next.js, Node.js, PostgreSQL, OpenAI API
+                    <!-- <span class="project-links"><a href="#">Code</a> · <a href="#">Demo</a></span> -->
+                </div>
                 <ul>
-                    <li>Built LLM-powered language learning chatbot using OpenAI API and Next.js; implemented
-                        conversation memory, session management, and PostgreSQL-backed user progress tracking.
-                    </li>
+                    <li>Developed LLM-powered chatbot to help users learn and practice languages through interactive
+                        conversations</li>
                 </ul>
             </div>
         </div>

@@ -483,6 +483,183 @@
     .log-fab { position: absolute; bottom: 28px; right: 14px; width: 42px; height: 42px; background: var(--dark); border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 150; transition: transform .2s; color: #fff; font-size: 17px; }
     .log-fab:active { transform: scale(.9); }
     .log-fab-badge { position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; background: var(--blue); border-radius: 9px; font-size: 9px; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; padding: 0 3px; }
+
+    /* ── CARD INPUT SCREEN ── */
+    .card-preview {
+      width: 100%;
+      height: 180px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #1A1F6E, #2548D4);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 12px 36px rgba(20,52,203,0.3);
+      transition: all 0.4s ease;
+    }
+    .card-preview::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .card-preview::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -20px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .card-preview.mastercard-theme {
+      background: linear-gradient(135deg, #1A1A1A, #3D3D3D);
+    }
+    .card-preview.amex-theme {
+      background: linear-gradient(135deg, #007B5E, #00A86B);
+    }
+    .card-preview.rupay-theme {
+      background: linear-gradient(135deg, #8B1A1A, #C0392B);
+    }
+
+    .cp-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+    .cp-bank { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; }
+    .cp-network { height: 32px; display: flex; align-items: center; }
+    .cp-number { font-size: 17px; font-weight: 700; color: rgba(255,255,255,0.9); letter-spacing: 2.5px; font-family: 'Courier New', monospace; position: relative; z-index: 1; }
+    .cp-bottom { display: flex; align-items: flex-end; justify-content: space-between; position: relative; z-index: 1; }
+    .cp-field-group { display: flex; flex-direction: column; gap: 2px; }
+    .cp-field-lbl { font-size: 8px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+    .cp-field-val { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); font-family: 'Courier New', monospace; letter-spacing: 1px; }
+
+    /* Visa SVG inline logo for card preview */
+    .visa-logo-svg { fill: #fff; }
+
+    /* Network badge shown on card selector */
+    .network-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 6px; padding: 3px 7px;
+      font-size: 10px; font-weight: 700; color: #fff;
+    }
+
+    /* Form fields */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    .field-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dark);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .field-row { display: flex; gap: 10px; }
+    .field-row .field-group { flex: 1; margin-bottom: 0; }
+
+    .fi {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      background: var(--bg);
+      outline: none;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+      letter-spacing: 1px;
+    }
+    .fi:focus {
+      border-color: var(--blue);
+      background: var(--blue-l);
+      box-shadow: 0 0 0 3px rgba(20,52,203,0.08);
+    }
+    .fi.valid { border-color: var(--green); background: #ECFDF5; }
+    .fi.invalid { border-color: var(--red); background: #FEF2F2; }
+    .fi::placeholder { color: #C4C9D4; font-weight: 500; letter-spacing: 0; }
+
+    .field-hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .field-hint.err { color: var(--red); }
+
+    /* Card number input wrapper with Visa badge */
+    .fi-wrapper {
+      position: relative;
+    }
+    .fi-visa-badge {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      background: #1434CB;
+      border-radius: 5px;
+      padding: 3px 7px;
+      line-height: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .fi-visa-badge.visible {
+      opacity: 1;
+    }
+    .fi-wrapper .fi.has-logo {
+      padding-right: 68px;
+    }
+
+    /* Network indicator row */
+    .network-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg);
+      border-radius: 10px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      min-height: 40px;
+    }
+    .network-row.visa-detected {
+      background: #EEF2FF;
+      border-color: #C7D2FE;
+    }
+    .network-row.mc-detected {
+      background: #FFF7ED;
+      border-color: #FED7AA;
+    }
+    .network-row.amex-detected {
+      background: #ECFDF5;
+      border-color: #A7F3D0;
+    }
+    .nr-label { font-size: 11px; font-weight: 600; color: var(--muted); flex: 1; }
+    .nr-label.detected { color: var(--dark); }
+    .nr-logo { height: 20px; display: flex; align-items: center; }
+
+    /* Visa SVG logo */
+    .visa-svg-logo { width: 44px; height: 14px; }
+    .mc-circles { display: flex; align-items: center; }
+    .mc-c1 { width: 20px; height: 20px; background: #EB001B; border-radius: 50%; }
+    .mc-c2 { width: 20px; height: 20px; background: #F79E1B; border-radius: 50%; margin-left: -8px; }
+    .amex-text { font-size: 12px; font-weight: 800; color: #007B5E; letter-spacing: -0.5px; }
+
+    /* Visa logo for card preview - white version */
+    .visa-preview-logo { width: 52px; }
+    .mc-preview { display: flex; align-items: center; }
+    .mc-preview .mc-c1 { width: 26px; height: 26px; opacity: 0.9; }
+    .mc-preview .mc-c2 { width: 26px; height: 26px; opacity: 0.9; margin-left: -10px; }
   </style>
 </head>
 
@@ -498,10 +675,8 @@
 
         <div class="screen-host">
 
-          <!-- ▌S1: SELECT CARD ▌
-               CHANGES: Removed Visa logo + divider from topbar (text-only header);
-                        Removed "Secured by Visa" footer row -->
-          <div class="screen active" id="s-select">
+          <!-- ▌S0: CARD INPUT ▌ NEW SCREEN -->
+          <div class="screen active" id="s-card-input">
             <div class="topbar">
               <div class="brand">JUSPAY</div>
               <div class="tb-right">
@@ -510,36 +685,59 @@
             </div>
             <div class="ph">
               <div class="ph-lbl">QuickMart · ₹1.00</div>
-              <div class="ph-title">Choose Card</div>
-              <div class="ph-sub">Select your card to continue</div>
+              <div class="ph-title">Add Card</div>
+              <div class="ph-sub">Enter your card details to pay</div>
             </div>
             <div class="scr-body">
-              <div class="card-list" id="card-grid"></div>
-              <div class="order-card">
-                <div class="or">
-                  <div class="ol">
-                    <div class="o-ico">🧃</div>
-                    <div>
-                      <div class="o-nm">Mango Juice</div>
-                      <div class="o-qty">Qty: 1</div>
-                    </div>
+              <!-- Card Number -->
+              <div class="field-group">
+                <div class="field-label">Card Number</div>
+                <div class="fi-wrapper">
+                  <input class="fi" id="fi-number" type="tel" inputmode="numeric" maxlength="19"
+                    placeholder="0000 0000 0000 0000"
+                    oninput="onCardNumber(this)"
+                    autocomplete="cc-number" />
+                  <div class="fi-visa-badge" id="visa-badge">
+                    <svg width="38" height="12" viewBox="0 0 216 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M84.096 67.2L96.512 1.6H116.064L103.648 67.2H84.096Z" fill="white"/>
+                      <path d="M163.584 3.136C159.616 1.536 153.408 0 145.792 0C126.464 0 112.832 10.112 112.704 24.576C112.576 35.2 122.432 41.088 129.792 44.608C137.344 48.192 139.84 50.432 139.84 53.504C139.776 58.24 134.08 60.416 128.832 60.416C121.408 60.416 117.44 59.328 111.424 56.672L108.992 55.552L106.368 71.68C111.04 73.792 119.808 75.648 128.896 75.712C149.44 75.712 162.816 65.728 162.944 50.304C163.008 41.984 157.76 35.584 146.304 30.336C139.52 27.008 135.296 24.768 135.36 21.504C135.36 18.624 138.688 15.552 145.92 15.552C151.936 15.424 156.288 16.832 159.616 18.432L161.28 19.264L163.584 3.136Z" fill="white"/>
+                      <path d="M193.408 43.392C195.072 38.912 201.664 20.928 201.664 20.928C201.536 21.12 203.328 16.384 204.288 13.504L205.632 20.224C205.632 20.224 209.344 38.08 210.176 43.392H193.408ZM215.36 1.6H199.808C195.136 1.6 191.616 2.944 189.632 7.808L160.832 67.2H181.376C181.376 67.2 184.768 58.048 185.6 55.808C187.776 55.808 207.808 55.808 210.624 55.808C211.2 58.688 213.056 67.2 213.056 67.2H231.296L215.36 1.6Z" fill="white"/>
+                      <path d="M67.2 1.6L48.128 46.272L46.08 36.16C42.496 24.064 31.296 10.944 18.752 4.352L36.352 67.136L57.024 67.072L84.928 1.6H67.2Z" fill="white"/>
+                      <path d="M29.184 1.6H0.192L0 3.008C22.528 8.576 37.376 22.016 43.52 38.4L37.248 7.936C36.096 3.136 32.64 1.728 29.184 1.6Z" fill="white"/>
+                    </svg>
                   </div>
-                  <div class="o-pr">₹1.00</div>
                 </div>
-                <div class="or">
-                  <div class="o-tl">Total</div>
-                  <div class="o-tot">₹1.00</div>
+                <div class="field-hint" id="fh-number"></div>
+              </div>
+
+              <!-- Expiry + CVV -->
+              <div class="field-row">
+                <div class="field-group">
+                  <div class="field-label">Expiry Date</div>
+                  <input class="fi" id="fi-expiry" type="tel" inputmode="numeric" maxlength="7"
+                    placeholder="MM / YY"
+                    oninput="onExpiry(this)"
+                    onkeydown="onExpiryKeydown(event, this)"
+                    autocomplete="cc-exp" />
+                  <div class="field-hint" id="fh-expiry"></div>
+                </div>
+                <div class="field-group">
+                  <div class="field-label">CVV</div>
+                  <input class="fi" id="fi-cvv" type="password" inputmode="numeric" maxlength="4"
+                    placeholder="•••"
+                    oninput="onCVV(this)"
+                    autocomplete="cc-csc" />
+                  <div class="field-hint" id="fh-cvv"></div>
                 </div>
               </div>
+
             </div>
             <div class="foot">
-              <button class="btn btn-blue" id="pay-btn" onclick="handlePay()">Pay ₹1.00</button>
+              <button class="btn btn-blue" id="add-card-btn" onclick="submitCardInput()" disabled>Continue</button>
             </div>
           </div>
 
-          <!-- ▌S2: LOADING ▌
-               CHANGES: Removed Visa logo + divider from topbar (text-only header);
-                        Removed "Visa Secure Processing" badge entirely -->
+                    <!-- ▌S2: LOADING ▌ -->
           <div class="screen" id="s-loading">
             <div class="topbar">
               <div class="brand">JUSPAY</div>
@@ -551,10 +749,7 @@
             </div>
           </div>
 
-          <!-- ▌S3: OTP ▌
-               CHANGES: Removed Visa logo + divider from topbar (text-only header);
-                        Fixed typo "Compelete" → "Complete" and "3ds" → "3DS";
-                        Removed "Verified by Visa" footer row -->
+          <!-- ▌S3: OTP ▌ -->
           <div class="screen" id="s-otp">
             <div class="topbar">
               <div class="brand">JUSPAY</div>
@@ -592,11 +787,7 @@
             </div>
           </div>
 
-          <!-- ▌S4: BIO CREATE ▌
-               CHANGES: Removed Visa logo + divider from topbar (text-only header);
-                        Fixed "phising-resistant" → "phishing-resistant";
-                        Removed "Visa" brand reference from the description text;
-                        Removed "Secured by Visa" footer row -->
+          <!-- ▌S4: BIO CREATE ▌ -->
           <div class="screen" id="s-bio-create">
             <div class="topbar">
               <div class="brand">JUSPAY</div>
@@ -620,9 +811,7 @@
             </div>
           </div>
 
-          <!-- ▌S5: BIO AUTH ▌
-               CHANGES: Removed Visa logo + divider from topbar (text-only header);
-                        Removed "Secured by Visa" footer row -->
+          <!-- ▌S5: BIO AUTH ▌ -->
           <div class="screen" id="s-bio-auth">
             <div class="topbar">
               <div class="brand">JUSPAY</div>
@@ -646,10 +835,7 @@
             </div>
           </div>
 
-          <!-- ▌S6: SUCCESS ▌
-               CHANGES: Removed Visa logo + divider from topbar (text-only header);
-                        Removed Visa logo from pk-pill endorsement badge;
-                        Removed "Secured by Visa" footer row -->
+          <!-- ▌S6: SUCCESS ▌ -->
           <div class="screen" id="s-success">
             <div class="topbar">
               <div class="brand">JUSPAY</div>
@@ -668,7 +854,7 @@
               </div>
             </div>
             <div class="foot">
-              <button class="btn btn-ghost" onclick="window.location.href='https://visa-fido.onrender.com/'">↩ Pay Again</button>
+              <button class="btn btn-ghost" onclick="resetAll()">↩ Pay Again</button>
             </div>
           </div>
 
@@ -746,16 +932,213 @@
     const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
 
     const CARDS = [
-      { id:'c1', last4:'0492', name:'TestCard 1', cardNumber:'4761120010000492', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)' },
-      { id:'c2', last4:'4228', name:'TestCard 2', cardNumber:'4761262260004228', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)' },
-      { id:'c3', last4:'1439', name:'TestCard 3', cardNumber:'4761209980011439', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)' },
-      { id:'c4', last4:'0121', name:'TestCard 4', cardNumber:'4051069302200121', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)' },
-      { id:'c5', last4:'8840', name:'TestCard 5', cardNumber:'4622943128888840', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)' },
+      { id:'c1', last4:'0492', name:'TestCard 1', cardNumber:'4761120010000492', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
+      { id:'c2', last4:'4228', name:'TestCard 2', cardNumber:'4761262260004228', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
+      { id:'c3', last4:'1439', name:'TestCard 3', cardNumber:'4761209980011439', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
+      { id:'c4', last4:'0121', name:'TestCard 4', cardNumber:'4051069302200121', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
+      { id:'c5', last4:'8840', name:'TestCard 5', cardNumber:'4622943128888840', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
     ];
 
     let selCard=null, sst=null, devDone=false, flowStart=false, createData=null, loginData=null;
-    let flow=null, otpVal='', scanning=false, popup=null, authZTok=null, curScreen='s-select';
+    let flow=null, otpVal='', scanning=false, popup=null, authZTok=null, curScreen='s-card-input';
     let allLogs=[], curFilter='all';
+
+    /* ═══════════ CARD INPUT LOGIC ═══════════ */
+
+    function detectNetwork(num) {
+      const n = num.replace(/\s/g, '');
+      if (/^4/.test(n)) return 'visa';
+      if (/^5[1-5]/.test(n) || /^2[2-7]/.test(n)) return 'mastercard';
+      if (/^3[47]/.test(n)) return 'amex';
+      if (/^6[0-9]/.test(n)) return 'rupay';
+      return 'unknown';
+    }
+
+    function visaLogoWhiteHTML(size) {
+      return `<svg width="${size||52}" height="${Math.round((size||52)*0.32)}" viewBox="0 0 216 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M84.096 67.2L96.512 1.6H116.064L103.648 67.2H84.096Z" fill="white"/>
+        <path d="M163.584 3.136C159.616 1.536 153.408 0 145.792 0C126.464 0 112.832 10.112 112.704 24.576C112.576 35.2 122.432 41.088 129.792 44.608C137.344 48.192 139.84 50.432 139.84 53.504C139.776 58.24 134.08 60.416 128.832 60.416C121.408 60.416 117.44 59.328 111.424 56.672L108.992 55.552L106.368 71.68C111.04 73.792 119.808 75.648 128.896 75.712C149.44 75.712 162.816 65.728 162.944 50.304C163.008 41.984 157.76 35.584 146.304 30.336C139.52 27.008 135.296 24.768 135.36 21.504C135.36 18.624 138.688 15.552 145.92 15.552C151.936 15.424 156.288 16.832 159.616 18.432L161.28 19.264L163.584 3.136Z" fill="white"/>
+        <path d="M193.408 43.392C195.072 38.912 201.664 20.928 201.664 20.928C201.536 21.12 203.328 16.384 204.288 13.504L205.632 20.224C205.632 20.224 209.344 38.08 210.176 43.392H193.408ZM215.36 1.6H199.808C195.136 1.6 191.616 2.944 189.632 7.808L160.832 67.2H181.376C181.376 67.2 184.768 58.048 185.6 55.808C187.776 55.808 207.808 55.808 210.624 55.808C211.2 58.688 213.056 67.2 213.056 67.2H231.296L215.36 1.6Z" fill="white"/>
+        <path d="M67.2 1.6L48.128 46.272L46.08 36.16C42.496 24.064 31.296 10.944 18.752 4.352L36.352 67.136L57.024 67.072L84.928 1.6H67.2Z" fill="white"/>
+        <path d="M29.184 1.6H0.192L0 3.008C22.528 8.576 37.376 22.016 43.52 38.4L37.248 7.936C36.096 3.136 32.64 1.728 29.184 1.6Z" fill="white"/>
+      </svg>`;
+    }
+
+    function mcLogoHTML() {
+      return `<div class="mc-preview"><div class="mc-c1"></div><div class="mc-c2"></div></div>`;
+    }
+
+    function updateCardPreview() {
+      const rawExp = document.getElementById('fi-expiry').value;
+      const el = document.getElementById('cp-expiry');
+      if (el) el.textContent = rawExp || 'MM / YY';
+    }
+
+    function formatCardNumber(val) {
+      const digits = val.replace(/\D/g,'').slice(0,16);
+      return digits.replace(/(.{4})/g,'$1 ').trim();
+    }
+
+    function onCardNumber(el) {
+      el.value = el.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim();
+      const digits = el.value.replace(/\s/g,'');
+      const badge = document.getElementById('visa-badge');
+      if (digits.length === 16) {
+        badge.classList.add('visible');
+        el.classList.add('has-logo');
+      } else {
+        badge.classList.remove('visible');
+        el.classList.remove('has-logo');
+      }
+      updateCardPreview();
+      validateCardForm();
+    }
+
+    /* ── EXPIRY: robust formatter that survives backspace ── */
+    function onExpiryKeydown(e, el) {
+      // When user presses backspace and caret is right after the separator,
+      // step back past " / " so it feels natural.
+      if (e.key === 'Backspace') {
+        const v = el.value;
+        const pos = el.selectionStart;
+        if (pos === 4 && v.slice(0,4) === v.slice(0,2) + ' / '.slice(0, pos - 2)) {
+          // cursor is sitting after "MM /" – let default handle, no special action needed
+        }
+      }
+    }
+
+    function onExpiry(el) {
+      // Strip everything non-digit
+      const digits = el.value.replace(/\D/g, '').slice(0, 4);
+      let formatted = '';
+      if (digits.length <= 2) {
+        formatted = digits;
+      } else {
+        formatted = digits.slice(0, 2) + ' / ' + digits.slice(2);
+      }
+      // Only rewrite if value actually changed to avoid cursor-jump on browsers
+      // that don't move caret on programmatic set when value is identical
+      if (el.value !== formatted) {
+        // Save intended caret end position
+        const atEnd = el.selectionStart >= el.value.length;
+        el.value = formatted;
+        // Put caret at end of new value
+        if (atEnd) {
+          const len = formatted.length;
+          try { el.setSelectionRange(len, len); } catch(_) {}
+        }
+      }
+      updateCardPreview();
+      validateCardForm();
+    }
+
+    function onCVV(el) {
+      el.value = el.value.replace(/\D/g,'').slice(0,4);
+      validateCardForm();
+    }
+
+    function validateCardForm() {
+      const num = document.getElementById('fi-number').value.replace(/\s/g,'');
+      const exp = document.getElementById('fi-expiry').value.replace(/\D/g,'');
+      const cvv = document.getElementById('fi-cvv').value;
+      const network = detectNetwork(num);
+
+      const numOk = num.length === 16;
+      const expOk = exp.length === 4 && parseInt(exp.slice(0,2)) >= 1 && parseInt(exp.slice(0,2)) <= 12;
+      const cvvOk = cvv.length >= 3;
+
+      document.getElementById('fi-number').className = 'fi' + (num.length === 0 ? '' : numOk ? ' valid' : ' invalid');
+      document.getElementById('fi-expiry').className = 'fi' + (exp.length === 0 ? '' : expOk ? ' valid' : ' invalid');
+      document.getElementById('fi-cvv').className = 'fi' + (cvv.length === 0 ? '' : cvvOk ? ' valid' : ' invalid');
+
+      document.getElementById('fh-number').textContent = num.length > 0 && !numOk ? 'Enter a valid 16-digit card number' : '';
+      document.getElementById('fh-number').className = 'field-hint' + (!numOk && num.length > 0 ? ' err' : '');
+
+      document.getElementById('fh-expiry').textContent = exp.length > 0 && !expOk ? 'Enter valid expiry (MM/YY)' : '';
+      document.getElementById('fh-expiry').className = 'field-hint' + (!expOk && exp.length > 0 ? ' err' : '');
+
+      document.getElementById('add-card-btn').disabled = !(numOk && expOk && cvvOk);
+    }
+
+    function submitCardInput() {
+      const rawNum = document.getElementById('fi-number').value.replace(/\s/g,'');
+      const network = detectNetwork(rawNum);
+      const last4 = rawNum.slice(-4);
+
+      addLog('info', `Card entered: network=<b>${network}</b> last4=<b>${last4}</b>`);
+
+      selCard = {
+        id: 'c-custom',
+        last4,
+        name: network === 'visa' ? 'Visa Card' : network === 'mastercard' ? 'Mastercard' : network === 'amex' ? 'Amex' : 'Card',
+        cardNumber: rawNum,
+        grad: network === 'visa' ? 'linear-gradient(135deg,#1A1F6E,#2548D4)' :
+              network === 'mastercard' ? 'linear-gradient(135deg,#1A1A1A,#3D3D3D)' :
+              network === 'amex' ? 'linear-gradient(135deg,#007B5E,#00A86B)' :
+              'linear-gradient(135deg,#374151,#6B7280)',
+        network
+      };
+
+      goTo('s-loading');
+      document.getElementById('ld-t').textContent = 'Initialising...';
+      document.getElementById('ld-s').textContent = 'Please do not close this window';
+      addLog('info', 'Waiting for SDK ready…');
+      waitAndPay();
+    }
+
+    function waitAndPay() {
+      if (sst && devDone) {
+        if (!flowStart) tryStart();
+        return;
+      }
+      let tries = 0;
+      const poll = setInterval(() => {
+        tries++;
+        if (sst && devDone) {
+          clearInterval(poll);
+          if (!flowStart) tryStart();
+        } else if (tries > 40) {
+          clearInterval(poll);
+          addLog('err', 'SDK init timeout — please retry');
+        }
+      }, 250);
+    }
+
+    /* ═══════════ CARD LIST RENDER ═══════════ */
+
+    function networkLogoForCard(network) {
+      if (network === 'visa') {
+        return `<svg width="34" height="11" viewBox="0 0 216 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M84.096 67.2L96.512 1.6H116.064L103.648 67.2H84.096Z" fill="white"/>
+          <path d="M163.584 3.136C159.616 1.536 153.408 0 145.792 0C126.464 0 112.832 10.112 112.704 24.576C112.576 35.2 122.432 41.088 129.792 44.608C137.344 48.192 139.84 50.432 139.84 53.504C139.776 58.24 134.08 60.416 128.832 60.416C121.408 60.416 117.44 59.328 111.424 56.672L108.992 55.552L106.368 71.68C111.04 73.792 119.808 75.648 128.896 75.712C149.44 75.712 162.816 65.728 162.944 50.304C163.008 41.984 157.76 35.584 146.304 30.336C139.52 27.008 135.296 24.768 135.36 21.504C135.36 18.624 138.688 15.552 145.92 15.552C151.936 15.424 156.288 16.832 159.616 18.432L161.28 19.264L163.584 3.136Z" fill="white"/>
+          <path d="M193.408 43.392C195.072 38.912 201.664 20.928 201.664 20.928C201.536 21.12 203.328 16.384 204.288 13.504L205.632 20.224C205.632 20.224 209.344 38.08 210.176 43.392H193.408ZM215.36 1.6H199.808C195.136 1.6 191.616 2.944 189.632 7.808L160.832 67.2H181.376C181.376 67.2 184.768 58.048 185.6 55.808C187.776 55.808 207.808 55.808 210.624 55.808C211.2 58.688 213.056 67.2 213.056 67.2H231.296L215.36 1.6Z" fill="white"/>
+          <path d="M67.2 1.6L48.128 46.272L46.08 36.16C42.496 24.064 31.296 10.944 18.752 4.352L36.352 67.136L57.024 67.072L84.928 1.6H67.2Z" fill="white"/>
+          <path d="M29.184 1.6H0.192L0 3.008C22.528 8.576 37.376 22.016 43.52 38.4L37.248 7.936C36.096 3.136 32.64 1.728 29.184 1.6Z" fill="white"/>
+        </svg>`;
+      } else if (network === 'mastercard') {
+        return `<div style="display:flex;align-items:center;"><div style="width:18px;height:18px;background:#EB001B;border-radius:50%;"></div><div style="width:18px;height:18px;background:#F79E1B;border-radius:50%;margin-left:-7px;opacity:0.95;"></div></div>`;
+      } else if (network === 'amex') {
+        return `<span style="font-size:9px;font-weight:800;color:rgba(255,255,255,0.9);">AMEX</span>`;
+      }
+      return '';
+    }
+
+    function renderCards() {
+      const cg = document.getElementById('card-grid'); if (!cg) return;
+      cg.innerHTML = CARDS.map(c => `
+        <div class="card-opt ${c.id===selCard?.id?'sel':''}" onclick="pickCard('${c.id}')">
+          <div class="card-vis" style="background:${c.grad}">
+            ${networkLogoForCard(c.network||'visa')}
+          </div>
+          <div class="ci">
+            <div class="cn">${c.name}</div>
+            <div class="cn2">•••• •••• •••• ${c.last4}</div>
+          </div>
+          <div class="rr"></div>
+        </div>`).join('');
+    }
+
+    /* ═══════════ ORIGINAL FLOW LOGIC ═══════════ */
 
     function addLog(type, msg) {
       const now=new Date();
@@ -804,22 +1187,11 @@
       prev.style.cssText='';prev.classList.add('active');curScreen=id;
     }
 
-    function renderCards() {
-      document.getElementById('card-grid').innerHTML=CARDS.map(c=>`
-        <div class="card-opt ${c.id===selCard?.id?'sel':''}" onclick="pickCard('${c.id}')">
-          <div class="card-vis" style="background:${c.grad}">
-            <img class="card-vis-logo-png" src="/LOGO_WHITE.png" alt="Card" />
-          </div>
-          <div class="ci"><div class="cn">${c.name}</div><div class="cn2">•••• •••• •••• ${c.last4}</div></div>
-          <div class="rr"></div>
-        </div>`).join('');
-    }
-
     function pickCard(id){selCard=CARDS.find(c=>c.id===id);renderCards();addLog('info',`Card selected: <b>•••• ${selCard.last4}</b> (${selCard.name})`);}
 
     window.addEventListener("message",async(ev)=>{
       let m;try{m=typeof ev.data==="string"?JSON.parse(ev.data):ev.data;}catch{return;}
-      console.log ("visa",m)
+      console.log("visa",m);
       if(!m||!m.type)return;
       addLog('visa',`type=<b>${m.type}</b>${m.result?.command_type?' cmd='+m.result.command_type:''}${m.event?.type?' evt='+m.event.type:''}`);
       if(m.type==="RESULT"&&m.result?.command_type==="INITIALIZATION"){if(m.result.status==="SUCCESS"){sst=m?.result?.data?.tokens[0]?.token;addLog('ok',`SDK init ✓ — token=<b>${sst?.slice(0,18)}…</b>`);}else{addLog('err',`SDK init FAILED: ${m.result?.data?.error_details?.error||'unknown'}`);}}
@@ -907,14 +1279,20 @@
     function resetAll() {
       sst=null;devDone=false;flowStart=false;authZTok=null;createData=null;loginData=null;flow=null;otpVal='';scanning=false;selCard=null;
       if(popup&&!popup.closed)popup.close();
-      const payBtn=document.getElementById('pay-btn');if(payBtn){payBtn.disabled=false;payBtn.textContent='Pay ₹1.00';}
       updateOTP();
       ['auth','create'].forEach(t=>{const r=document.getElementById(`fp-${t}`);if(r)r.className='fp-out';const b=document.getElementById(`fb-${t}`);if(b)b.style.width='0%';const l=document.getElementById(`fl-${t}`);if(l)l.textContent='Place your finger';});
+      document.getElementById('fi-number').value='';
+      document.getElementById('fi-expiry').value='';
+      document.getElementById('fi-cvv').value='';
+      document.getElementById('fi-number').className='fi';
+      document.getElementById('fi-expiry').className='fi';
+      document.getElementById('fi-cvv').className='fi';
+      document.getElementById('add-card-btn').disabled=true;
       const newCmd={...INIT_CMD,ref:crypto.randomUUID(),ts:Date.now()};
       document.getElementById("vpp-iframe").src=`${INIT_URL}${encodeURIComponent(JSON.stringify(newCmd))}`;
       addLog('info','── Session reset ──');renderCards();
       document.querySelectorAll('.screen').forEach(s=>{s.className='screen';s.removeAttribute('style');});
-      document.getElementById('s-select').classList.add('active');curScreen='s-select';
+      document.getElementById('s-card-input').classList.add('active');curScreen='s-card-input';
     }
 
     renderCards();

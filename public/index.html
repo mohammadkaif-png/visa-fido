@@ -503,7 +503,7 @@
                         Removed "Secured by Visa" footer row -->
           <div class="screen active" id="s-select">
             <div class="topbar">
-              <div class="brand">PAYMENT PASSKEY</div>
+              <div class="brand">JUSPAY</div>
               <div class="tb-right">
                 <div class="badge-green"><div class="sdot"></div>Secure</div>
               </div>
@@ -542,7 +542,7 @@
                         Removed "Visa Secure Processing" badge entirely -->
           <div class="screen" id="s-loading">
             <div class="topbar">
-              <div class="brand">PAYMENT PASSKEY</div>
+              <div class="brand">JUSPAY</div>
             </div>
             <div class="fill-c">
               <div class="spinner"></div>
@@ -557,7 +557,7 @@
                         Removed "Verified by Visa" footer row -->
           <div class="screen" id="s-otp">
             <div class="topbar">
-              <div class="brand">PAYMENT PASSKEY</div>
+              <div class="brand">JUSPAY</div>
             </div>
             <div class="ph">
               <div class="ph-lbl">Bank Verification</div>
@@ -599,7 +599,7 @@
                         Removed "Secured by Visa" footer row -->
           <div class="screen" id="s-bio-create">
             <div class="topbar">
-              <div class="brand">PAYMENT PASSKEY</div>
+              <div class="brand">JUSPAY</div>
             </div>
             <div class="ph">
               <div class="ph-lbl">Passkey Enrollment</div>
@@ -625,7 +625,7 @@
                         Removed "Secured by Visa" footer row -->
           <div class="screen" id="s-bio-auth">
             <div class="topbar">
-              <div class="brand">PAYMENT PASSKEY</div>
+              <div class="brand">JUSPAY</div>
             </div>
             <div class="ph">
               <div class="ph-lbl">Passkey Detected ✓</div>
@@ -652,7 +652,7 @@
                         Removed "Secured by Visa" footer row -->
           <div class="screen" id="s-success">
             <div class="topbar">
-              <div class="brand">PAYMENT PASSKEY</div>
+              <div class="brand">JUSPAY</div>
             </div>
             <div class="succ-c">
               <div class="succ-ring">✓</div>
@@ -741,7 +741,7 @@
     let _rzTimer;
     window.addEventListener('resize', () => { clearTimeout(_rzTimer); _rzTimer = setTimeout(scaleShell, 120); });
 
-    const ORIGIN = "https://weak-tova-ungently.ngrok-free.dev";
+    const ORIGIN = "https://visa-fido.onrender.com";
     const VISA_BASE = "https://sandbox.auth.visa.com";
     const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
 
@@ -819,6 +819,7 @@
 
     window.addEventListener("message",async(ev)=>{
       let m;try{m=typeof ev.data==="string"?JSON.parse(ev.data):ev.data;}catch{return;}
+      console.log ("visa",m)
       if(!m||!m.type)return;
       addLog('visa',`type=<b>${m.type}</b>${m.result?.command_type?' cmd='+m.result.command_type:''}${m.event?.type?' evt='+m.event.type:''}`);
       if(m.type==="RESULT"&&m.result?.command_type==="INITIALIZATION"){if(m.result.status==="SUCCESS"){sst=m?.result?.data?.tokens[0]?.token;addLog('ok',`SDK init ✓ — token=<b>${sst?.slice(0,18)}…</b>`);}else{addLog('err',`SDK init FAILED: ${m.result?.data?.error_details?.error||'unknown'}`);}}

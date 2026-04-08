@@ -28,7 +28,8 @@
       --log-bg: #0D1117;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -60,13 +61,17 @@
     }
 
     @media (min-width: 600px) {
-      body { background: linear-gradient(145deg, #BEC3D8 0%, #A8AEBE 100%); }
+      body {
+        background: linear-gradient(145deg, #BEC3D8 0%, #A8AEBE 100%);
+      }
+
       #shell {
         border-radius: 52px;
         box-shadow: 0 0 0 10px #141420, 0 0 0 13px #24243A,
-          0 44px 120px rgba(0,0,0,0.6),
-          inset 0 1px 0 rgba(255,255,255,0.1);
+          0 44px 120px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
+
       #shell::before {
         content: '';
         position: absolute;
@@ -80,6 +85,7 @@
         z-index: 500;
         pointer-events: none;
       }
+
       #shell::after {
         content: '';
         position: absolute;
@@ -92,9 +98,18 @@
         box-shadow: 0 84px 0 #141420, 0 154px 0 #141420;
         pointer-events: none;
       }
-      #app { padding-top: 48px; }
-      .status-bar { display: none !important; }
-      .drawer { border-radius: 0 52px 52px 0; }
+
+      #app {
+        padding-top: 48px;
+      }
+
+      .status-bar {
+        display: none !important;
+      }
+
+      .drawer {
+        border-radius: 0 52px 52px 0;
+      }
     }
 
     #app {
@@ -120,10 +135,22 @@
       color: var(--dark);
     }
 
-    #clock { font-size: 15px; font-weight: 800; }
-    .sb-icons { display: flex; gap: 5px; font-size: 14px; }
+    #clock {
+      font-size: 15px;
+      font-weight: 800;
+    }
 
-    .screen-host { position: relative; flex: 1; overflow: hidden; }
+    .sb-icons {
+      display: flex;
+      gap: 5px;
+      font-size: 14px;
+    }
+
+    .screen-host {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
 
     .screen {
       position: absolute;
@@ -136,16 +163,18 @@
       transform: translateX(100%);
       will-change: transform, opacity;
     }
+
     .screen.active {
       opacity: 1;
       pointer-events: all;
       transform: translateX(0);
-      transition: transform .32s cubic-bezier(.4,0,.2,1), opacity .28s ease;
+      transition: transform .32s cubic-bezier(.4, 0, .2, 1), opacity .28s ease;
     }
+
     .screen.leaving {
       opacity: 0;
       transform: translateX(-26%);
-      transition: transform .32s cubic-bezier(.4,0,.2,1), opacity .28s ease;
+      transition: transform .32s cubic-bezier(.4, 0, .2, 1), opacity .28s ease;
       pointer-events: none;
     }
 
@@ -157,13 +186,15 @@
       justify-content: space-between;
       padding: 12px 20px;
       border-bottom: 1px solid var(--border);
+
     }
 
     .brand {
-      font-size: 13px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--dark);
       letter-spacing: -.3px;
+      line-height: 1;
     }
 
     .card-vis-logo-png {
@@ -174,7 +205,11 @@
       display: block;
     }
 
-    .tb-right { display: flex; align-items: center; gap: 8px; }
+    .tb-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
     .badge-green {
       display: flex;
@@ -188,10 +223,20 @@
       font-weight: 700;
       color: var(--green);
     }
-    .sdot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+
+    .sdot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+    }
 
     /* ── PAGE HEADER ── */
-    .ph { flex-shrink: 0; padding: 16px 20px 0; }
+    .ph {
+      flex-shrink: 0;
+      padding: 16px 20px 0;
+    }
+
     .ph-lbl {
       font-size: 11px;
       font-weight: 700;
@@ -200,6 +245,7 @@
       color: var(--blue);
       margin-bottom: 3px;
     }
+
     .ph-title {
       font-size: clamp(20px, 6vw, 28px);
       font-weight: 800;
@@ -207,7 +253,12 @@
       line-height: 1.15;
       letter-spacing: -.5px;
     }
-    .ph-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    .ph-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
 
     /* ── SCROLL BODY ── */
     .scr-body {
@@ -217,7 +268,10 @@
       padding: 14px 20px;
       -webkit-overflow-scrolling: touch;
     }
-    .scr-body::-webkit-scrollbar { display: none; }
+
+    .scr-body::-webkit-scrollbar {
+      display: none;
+    }
 
     /* ── FOOTER ── */
     .foot {
@@ -243,14 +297,41 @@
       gap: 8px;
       transition: all .18s;
     }
-    .btn:active { transform: scale(.97); filter: brightness(.93); }
-    .btn:disabled { opacity: .38; cursor: not-allowed; transform: none !important; }
-    .btn-blue { background: var(--blue); color: #fff; }
-    .btn-gold { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; }
-    .btn-ghost { background: var(--bg); color: var(--dark); border: 1.5px solid var(--border); }
+
+    .btn:active {
+      transform: scale(.97);
+      filter: brightness(.93);
+    }
+
+    .btn:disabled {
+      opacity: .38;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: var(--bg);
+      color: var(--dark);
+      border: 1.5px solid var(--border);
+    }
 
     /* ── CARD LIST ── */
-    .card-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 14px; }
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
 
     .card-opt {
       display: flex;
@@ -263,8 +344,15 @@
       background: #fff;
       transition: all .18s;
     }
-    .card-opt:active { background: var(--bg); }
-    .card-opt.sel { border-color: var(--blue); background: var(--blue-l); }
+
+    .card-opt:active {
+      background: var(--bg);
+    }
+
+    .card-opt.sel {
+      border-color: var(--blue);
+      background: var(--blue-l);
+    }
 
     .card-vis {
       width: 58px;
@@ -279,9 +367,21 @@
       padding: 4px 5px;
     }
 
-    .ci { flex: 1; }
-    .cn { font-size: 13px; font-weight: 700; color: var(--dark); }
-    .cn2 { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .ci {
+      flex: 1;
+    }
+
+    .cn {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .cn2 {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
 
     .rr {
       width: 20px;
@@ -294,24 +394,83 @@
       justify-content: center;
       transition: all .15s;
     }
-    .card-opt.sel .rr { background: var(--blue); border-color: var(--blue); }
-    .card-opt.sel .rr::after { content: ''; width: 8px; height: 8px; background: #fff; border-radius: 50%; }
+
+    .card-opt.sel .rr {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .card-opt.sel .rr::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
 
     /* ── ORDER CARD ── */
-    .order-card { border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; }
-    .or { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; }
-    .or+.or { border-top: 1px solid var(--border); }
-    .ol { display: flex; align-items: center; gap: 10px; }
-    .o-ico {
-      width: 38px; height: 38px; border-radius: 11px;
-      background: linear-gradient(135deg,#818CF8,#6366F1);
-      display: flex; align-items: center; justify-content: center; font-size: 17px;
+    .order-card {
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
     }
-    .o-nm { font-size: 13px; font-weight: 700; color: var(--dark); }
-    .o-qty { font-size: 11px; color: var(--muted); }
-    .o-pr { font-size: 14px; font-weight: 700; color: var(--dark); }
-    .o-tot { font-size: 17px; font-weight: 800; color: var(--blue); }
-    .o-tl { font-size: 13px; font-weight: 600; color: var(--dark); }
+
+    .or {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+    }
+
+    .or+.or {
+      border-top: 1px solid var(--border);
+    }
+
+    .ol {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .o-ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #818CF8, #6366F1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .o-nm {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .o-qty {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .o-pr {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .o-tot {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .o-tl {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+    }
 
     /* ── LOADING ── */
     .fill-c {
@@ -323,166 +482,638 @@
       padding: 24px;
       text-align: center;
     }
+
     .spinner {
-      width: 50px; height: 50px;
+      width: 50px;
+      height: 50px;
       border: 3px solid var(--border);
       border-top-color: var(--blue);
       border-radius: 50%;
       animation: spin .9s linear infinite;
       margin-bottom: 18px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .ld-t { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
-    .ld-s { font-size: 13px; color: var(--muted); }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .ld-t {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .ld-s {
+      font-size: 13px;
+      color: var(--muted);
+    }
 
     /* ── OTP ── */
-    .otp-row { display: flex; gap: 9px; margin: 16px 0 10px; }
+    .otp-row {
+      display: flex;
+      gap: 9px;
+      margin: 16px 0 10px;
+    }
+
     .obox {
-      flex: 1; height: 64px;
+      flex: 1;
+      height: 64px;
       border: 2px solid var(--border);
       border-radius: 14px;
       background: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 25px; font-weight: 800; color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: 800;
+      color: var(--dark);
       transition: border-color .14s, background .14s;
     }
-    .obox.on { border-color: var(--blue); background: var(--blue-l); color: var(--blue); animation: bop .18s; }
-    .obox.err { border-color: var(--red); background: #FEF2F2; color: var(--red); animation: shake .35s; }
 
-    @keyframes bop { 0%{transform:scale(.8)} 60%{transform:scale(1.08)} 100%{transform:scale(1)} }
-    @keyframes shake {
-      0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)}
-      40%{transform:translateX(4px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)}
+    .obox.on {
+      border-color: var(--blue);
+      background: var(--blue-l);
+      color: var(--blue);
+      animation: bop .18s;
     }
 
-    .otp-hint { font-size: 12px; color: var(--muted); margin-bottom: 16px; text-align: center; }
-    .otp-hint b { color: var(--blue); }
+    .obox.err {
+      border-color: var(--red);
+      background: #FEF2F2;
+      color: var(--red);
+      animation: shake .35s;
+    }
 
-    .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    @keyframes bop {
+      0% {
+        transform: scale(.8)
+      }
+
+      60% {
+        transform: scale(1.08)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      20% {
+        transform: translateX(-4px)
+      }
+
+      40% {
+        transform: translateX(4px)
+      }
+
+      60% {
+        transform: translateX(-3px)
+      }
+
+      80% {
+        transform: translateX(3px)
+      }
+    }
+
+    .otp-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .otp-hint b {
+      color: var(--blue);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
     .kb {
       height: 56px;
       background: var(--bg);
       border: 1.5px solid var(--border);
       border-radius: 14px;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 20px; font-weight: 600; color: var(--dark);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark);
       cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: all .12s;
     }
-    .kb:active { background: var(--border); transform: scale(.93); }
-    .kb.ghost { background: transparent; border-color: transparent; pointer-events: none; }
-    .kb.del { font-size: 16px; }
+
+    .kb:active {
+      background: var(--border);
+      transform: scale(.93);
+    }
+
+    .kb.ghost {
+      background: transparent;
+      border-color: transparent;
+      pointer-events: none;
+    }
+
+    .kb.del {
+      font-size: 16px;
+    }
 
     /* ── BIOMETRIC ── */
     .bio-c {
       flex: 1;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 24px; text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
     }
+
     .fp-out {
-      width: 110px; height: 110px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       border: 2.5px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 20px;
       transition: border-color .3s;
     }
-    .fp-out.scanning { border-color: var(--blue); animation: fpulse 1.1s ease infinite; }
-    .fp-out.done { border-color: var(--green); }
-    @keyframes fpulse {
-      0%{box-shadow:0 0 0 0 rgba(20,52,203,.3)}
-      70%{box-shadow:0 0 0 16px rgba(20,52,203,0)}
-      100%{box-shadow:0 0 0 0 rgba(20,52,203,0)}
+
+    .fp-out.scanning {
+      border-color: var(--blue);
+      animation: fpulse 1.1s ease infinite;
     }
-    .fp-icon { font-size: 46px; }
-    .fp-lbl { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
-    .fp-track { width: 150px; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
-    .fp-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--gold)); transition: width 2s ease; }
+
+    .fp-out.done {
+      border-color: var(--green);
+    }
+
+    @keyframes fpulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(20, 52, 203, .3)
+      }
+
+      70% {
+        box-shadow: 0 0 0 16px rgba(20, 52, 203, 0)
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(20, 52, 203, 0)
+      }
+    }
+
+    .fp-icon {
+      font-size: 46px;
+    }
+
+    .fp-lbl {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+
+    .fp-track {
+      width: 150px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .fp-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--gold));
+      transition: width 2s ease;
+    }
 
     /* ── SUCCESS ── */
     .succ-c {
       flex: 1;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px; text-align: center; overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      overflow-y: auto;
     }
+
     .succ-ring {
-      width: 84px; height: 84px;
+      width: 84px;
+      height: 84px;
       border-radius: 50%;
       background: linear-gradient(135deg, #10B981, #059669);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 34px; margin-bottom: 14px;
-      box-shadow: 0 8px 32px rgba(16,185,129,.3);
-      animation: popIn .5s cubic-bezier(.175,.885,.32,1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 32px rgba(16, 185, 129, .3);
+      animation: popIn .5s cubic-bezier(.175, .885, .32, 1.275);
     }
-    @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
-    .s-ttl { font-size: 22px; font-weight: 800; color: var(--dark); letter-spacing: -.4px; }
-    .s-amt { font-size: 38px; font-weight: 800; color: var(--green); letter-spacing: -1px; margin: 3px 0; }
-    .s-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .s-ttl {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -.4px;
+    }
+
+    .s-amt {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -1px;
+      margin: 3px 0;
+    }
+
+    .s-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
     .pk-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--blue-l); border: 1px solid #C7D2FE;
-      border-radius: 20px; padding: 6px 14px;
-      font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-l);
+      border: 1px solid #C7D2FE;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 16px;
     }
-    .txn-blk { width: 100%; border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 8px; }
-    .txr { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
-    .txr+.txr { border-top: 1px solid var(--border); }
-    .tl { font-size: 12px; color: var(--muted); }
-    .tv { font-size: 12px; font-weight: 700; color: var(--dark); max-width: 55%; text-align: right; word-break: break-all; }
+
+    .txn-blk {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .txr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+    }
+
+    .txr+.txr {
+      border-top: 1px solid var(--border);
+    }
+
+    .tl {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .tv {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+      max-width: 55%;
+      text-align: right;
+      word-break: break-all;
+    }
 
     /* ── DRAWER ── */
-    .drawer-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); z-index: 200; pointer-events: none; transition: background .3s; }
-    .drawer-overlay.open { background: rgba(0,0,0,.5); pointer-events: all; }
+    .drawer-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      z-index: 200;
+      pointer-events: none;
+      transition: background .3s;
+    }
+
+    .drawer-overlay.open {
+      background: rgba(0, 0, 0, .5);
+      pointer-events: all;
+    }
+
     .drawer {
-      position: absolute; top: 0; right: 0; bottom: 0;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
       width: min(290px, 87%);
-      background: var(--log-bg); z-index: 201;
-      display: flex; flex-direction: column;
+      background: var(--log-bg);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
       transform: translateX(100%);
-      transition: transform .32s cubic-bezier(.4,0,.2,1);
+      transition: transform .32s cubic-bezier(.4, 0, .2, 1);
       border-left: 1px solid #21262D;
     }
-    .drawer.open { transform: translateX(0); }
-    .drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #21262D; flex-shrink: 0; }
-    @media (min-width:600px) { .drawer-head { padding-top: 56px; } }
-    .drawer-title { font-size: 13px; font-weight: 700; color: #E6EDF3; letter-spacing: .3px; }
-    .drawer-close { width: 28px; height: 28px; border-radius: 7px; background: #21262D; border: none; color: #8B949E; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; }
-    .drawer-close:hover { background: #30363D; }
-    .drawer-toolbar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 8px 16px; border-bottom: 1px solid #21262D; flex-shrink: 0; }
-    .dt-chip { padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all .15s; border: 1px solid #30363D; color: #8B949E; background: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .dt-chip.active { background: #161B22; color: #58A6FF; border-color: #1F6FEB; }
-    .dt-spacer { flex: 1; }
-    .dt-clear { padding: 3px 9px; border-radius: 8px; font-size: 10px; font-weight: 600; background: transparent; border: 1px solid #30363D; color: #8B949E; cursor: pointer; transition: all .15s; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .dt-clear:hover { background: #21262D; color: #E6EDF3; }
-    .drawer-logs { flex: 1; overflow-y: auto; padding: 8px 0; }
-    .drawer-logs::-webkit-scrollbar { width: 3px; }
-    .drawer-logs::-webkit-scrollbar-track { background: transparent; }
-    .drawer-logs::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
-    .log-entry { padding: 6px 16px; border-bottom: 1px solid #161B22; }
-    .log-entry:hover { background: #161B22; }
-    .log-time { font-size: 10px; color: #484F58; font-family: 'Courier New', monospace; margin-bottom: 1px; }
-    .log-row { display: flex; align-items: flex-start; gap: 7px; }
-    .log-tag { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; font-family: 'Courier New', monospace; letter-spacing: .3px; }
-    .tag-info { background: #0D419D; color: #58A6FF; }
-    .tag-ok { background: #033A16; color: #3FB950; }
-    .tag-warn { background: #4A2900; color: #E3B341; }
-    .tag-err { background: #67060C; color: #F85149; }
-    .tag-visa { background: #3D1A78; color: #BC8CFF; }
-    .log-msg { font-size: 11px; color: #C9D1D9; font-family: 'Courier New', monospace; line-height: 1.5; word-break: break-word; }
-    .log-msg b { color: #79C0FF; }
-    .log-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; color: #484F58; }
-    .log-empty-icon { font-size: 28px; margin-bottom: 8px; }
-    .log-empty-txt { font-size: 11px; line-height: 1.6; }
-    .drawer-footer { padding: 10px 16px; border-top: 1px solid #21262D; flex-shrink: 0; }
-    .log-status-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .lsr-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #484F58; }
-    .lsr-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid #21262D;
+      flex-shrink: 0;
+    }
+
+    @media (min-width:600px) {
+      .drawer-head {
+        padding-top: 56px;
+      }
+    }
+
+    .drawer-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #E6EDF3;
+      letter-spacing: .3px;
+    }
+
+    .drawer-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: #21262D;
+      border: none;
+      color: #8B949E;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+
+    .drawer-close:hover {
+      background: #30363D;
+    }
+
+    .drawer-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 8px 16px;
+      border-bottom: 1px solid #21262D;
+      flex-shrink: 0;
+    }
+
+    .dt-chip {
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      border: 1px solid #30363D;
+      color: #8B949E;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .dt-chip.active {
+      background: #161B22;
+      color: #58A6FF;
+      border-color: #1F6FEB;
+    }
+
+    .dt-spacer {
+      flex: 1;
+    }
+
+    .dt-clear {
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      background: transparent;
+      border: 1px solid #30363D;
+      color: #8B949E;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .dt-clear:hover {
+      background: #21262D;
+      color: #E6EDF3;
+    }
+
+    .drawer-logs {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .drawer-logs::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .drawer-logs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .drawer-logs::-webkit-scrollbar-thumb {
+      background: #30363D;
+      border-radius: 3px;
+    }
+
+    .log-entry {
+      padding: 6px 16px;
+      border-bottom: 1px solid #161B22;
+    }
+
+    .log-entry:hover {
+      background: #161B22;
+    }
+
+    .log-time {
+      font-size: 10px;
+      color: #484F58;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 1px;
+    }
+
+    .log-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+
+    .log-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: .3px;
+    }
+
+    .tag-info {
+      background: #0D419D;
+      color: #58A6FF;
+    }
+
+    .tag-ok {
+      background: #033A16;
+      color: #3FB950;
+    }
+
+    .tag-warn {
+      background: #4A2900;
+      color: #E3B341;
+    }
+
+    .tag-err {
+      background: #67060C;
+      color: #F85149;
+    }
+
+    .tag-visa {
+      background: #3D1A78;
+      color: #BC8CFF;
+    }
+
+    .log-msg {
+      font-size: 11px;
+      color: #C9D1D9;
+      font-family: 'Courier New', monospace;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .log-msg b {
+      color: #79C0FF;
+    }
+
+    .log-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      color: #484F58;
+    }
+
+    .log-empty-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .log-empty-txt {
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .drawer-footer {
+      padding: 10px 16px;
+      border-top: 1px solid #21262D;
+      flex-shrink: 0;
+    }
+
+    .log-status-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .lsr-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: #484F58;
+    }
+
+    .lsr-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
 
     /* ── LOG FAB ── */
-    .log-fab { position: absolute; bottom: 28px; right: 14px; width: 42px; height: 42px; background: var(--dark); border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 150; transition: transform .2s; color: #fff; font-size: 17px; }
-    .log-fab:active { transform: scale(.9); }
-    .log-fab-badge { position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; background: var(--blue); border-radius: 9px; font-size: 9px; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; padding: 0 3px; }
+    .log-fab {
+      position: absolute;
+      bottom: 28px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      background: var(--dark);
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .35);
+      z-index: 150;
+      transition: transform .2s;
+      color: #fff;
+      font-size: 17px;
+    }
+
+    .log-fab:active {
+      transform: scale(.9);
+    }
+
+    .log-fab-badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      min-width: 18px;
+      height: 18px;
+      background: var(--blue);
+      border-radius: 9px;
+      font-size: 9px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+      padding: 0 3px;
+    }
 
     /* ── CARD INPUT SCREEN ── */
     .card-preview {
@@ -497,53 +1128,121 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: 0 12px 36px rgba(20,52,203,0.3);
+      box-shadow: 0 12px 36px rgba(20, 52, 203, 0.3);
       transition: all 0.4s ease;
     }
+
     .card-preview::before {
       content: '';
       position: absolute;
-      top: -40px; right: -40px;
-      width: 200px; height: 200px;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
     }
+
     .card-preview::after {
       content: '';
       position: absolute;
-      bottom: -60px; left: -20px;
-      width: 180px; height: 180px;
+      bottom: -60px;
+      left: -20px;
+      width: 180px;
+      height: 180px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
     }
+
     .card-preview.mastercard-theme {
       background: linear-gradient(135deg, #1A1A1A, #3D3D3D);
     }
+
     .card-preview.amex-theme {
       background: linear-gradient(135deg, #007B5E, #00A86B);
     }
+
     .card-preview.rupay-theme {
       background: linear-gradient(135deg, #8B1A1A, #C0392B);
     }
 
-    .cp-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
-    .cp-bank { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; }
-    .cp-network { height: 32px; display: flex; align-items: center; }
-    .cp-number { font-size: 17px; font-weight: 700; color: rgba(255,255,255,0.9); letter-spacing: 2.5px; font-family: 'Courier New', monospace; position: relative; z-index: 1; }
-    .cp-bottom { display: flex; align-items: flex-end; justify-content: space-between; position: relative; z-index: 1; }
-    .cp-field-group { display: flex; flex-direction: column; gap: 2px; }
-    .cp-field-lbl { font-size: 8px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
-    .cp-field-val { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); font-family: 'Courier New', monospace; letter-spacing: 1px; }
+    .cp-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-bank {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .cp-network {
+      height: 32px;
+      display: flex;
+      align-items: center;
+    }
+
+    .cp-number {
+      font-size: 17px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 2.5px;
+      font-family: 'Courier New', monospace;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cp-field-lbl {
+      font-size: 8px;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cp-field-val {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
+    }
 
     /* Visa SVG inline logo for card preview */
-    .visa-logo-svg { fill: #fff; }
+    .visa-logo-svg {
+      fill: #fff;
+    }
 
     /* Network badge shown on card selector */
     .network-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 6px; padding: 3px 7px;
-      font-size: 10px; font-weight: 700; color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 3px 7px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
     }
 
     /* Form fields */
@@ -553,6 +1252,7 @@
       gap: 5px;
       margin-bottom: 14px;
     }
+
     .field-label {
       font-size: 11px;
       font-weight: 700;
@@ -560,8 +1260,16 @@
       text-transform: uppercase;
       letter-spacing: 0.8px;
     }
-    .field-row { display: flex; gap: 10px; }
-    .field-row .field-group { flex: 1; margin-bottom: 0; }
+
+    .field-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .field-row .field-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
 
     .fi {
       width: 100%;
@@ -577,26 +1285,44 @@
       transition: border-color .2s, background .2s, box-shadow .2s;
       letter-spacing: 1px;
     }
+
     .fi:focus {
       border-color: var(--blue);
       background: var(--blue-l);
-      box-shadow: 0 0 0 3px rgba(20,52,203,0.08);
+      box-shadow: 0 0 0 3px rgba(20, 52, 203, 0.08);
     }
-    .fi.valid { border-color: var(--green); background: #ECFDF5; }
-    .fi.invalid { border-color: var(--red); background: #FEF2F2; }
-    .fi::placeholder { color: #C4C9D4; font-weight: 500; letter-spacing: 0; }
+
+    .fi.valid {
+      border-color: var(--green);
+      background: #ECFDF5;
+    }
+
+    .fi.invalid {
+      border-color: var(--red);
+      background: #FEF2F2;
+    }
+
+    .fi::placeholder {
+      color: #C4C9D4;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
 
     .field-hint {
       font-size: 10px;
       color: var(--muted);
       margin-top: 2px;
     }
-    .field-hint.err { color: var(--red); }
+
+    .field-hint.err {
+      color: var(--red);
+    }
 
     /* Card number input wrapper with Visa badge */
     .fi-wrapper {
       position: relative;
     }
+
     .fi-visa-badge {
       position: absolute;
       right: 10px;
@@ -612,9 +1338,11 @@
       opacity: 0;
       transition: opacity 0.25s ease;
     }
+
     .fi-visa-badge.visible {
       opacity: 1;
     }
+
     .fi-wrapper .fi.has-logo {
       padding-right: 68px;
     }
@@ -632,34 +1360,110 @@
       transition: all 0.3s ease;
       min-height: 40px;
     }
+
     .network-row.visa-detected {
       background: #EEF2FF;
       border-color: #C7D2FE;
     }
+
     .network-row.mc-detected {
       background: #FFF7ED;
       border-color: #FED7AA;
     }
+
     .network-row.amex-detected {
       background: #ECFDF5;
       border-color: #A7F3D0;
     }
-    .nr-label { font-size: 11px; font-weight: 600; color: var(--muted); flex: 1; }
-    .nr-label.detected { color: var(--dark); }
-    .nr-logo { height: 20px; display: flex; align-items: center; }
+
+    .nr-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .nr-label.detected {
+      color: var(--dark);
+    }
+
+    .nr-logo {
+      height: 20px;
+      display: flex;
+      align-items: center;
+    }
 
     /* Visa SVG logo */
-    .visa-svg-logo { width: 44px; height: 14px; }
-    .mc-circles { display: flex; align-items: center; }
-    .mc-c1 { width: 20px; height: 20px; background: #EB001B; border-radius: 50%; }
-    .mc-c2 { width: 20px; height: 20px; background: #F79E1B; border-radius: 50%; margin-left: -8px; }
-    .amex-text { font-size: 12px; font-weight: 800; color: #007B5E; letter-spacing: -0.5px; }
+    .visa-svg-logo {
+      width: 44px;
+      height: 14px;
+    }
+
+    .mc-circles {
+      display: flex;
+      align-items: center;
+    }
+
+    .mc-c1 {
+      width: 20px;
+      height: 20px;
+      background: #EB001B;
+      border-radius: 50%;
+    }
+
+    .mc-c2 {
+      width: 20px;
+      height: 20px;
+      background: #F79E1B;
+      border-radius: 50%;
+      margin-left: -8px;
+    }
+
+    .amex-text {
+      font-size: 12px;
+      font-weight: 800;
+      color: #007B5E;
+      letter-spacing: -0.5px;
+    }
+
+    .logo img {
+      height: 20px;
+      /* control logo size */
+    }
 
     /* Visa logo for card preview - white version */
-    .visa-preview-logo { width: 52px; }
-    .mc-preview { display: flex; align-items: center; }
-    .mc-preview .mc-c1 { width: 26px; height: 26px; opacity: 0.9; }
-    .mc-preview .mc-c2 { width: 26px; height: 26px; opacity: 0.9; margin-left: -10px; }
+    .visa-preview-logo {
+      width: 52px;
+    }
+
+    .mc-preview {
+      display: flex;
+      align-items: center;
+    }
+
+    .mc-preview .mc-c1 {
+      width: 26px;
+      height: 26px;
+      opacity: 0.9;
+    }
+
+    .mc-preview .mc-c2 {
+      width: 26px;
+      height: 26px;
+      opacity: 0.9;
+      margin-left: -10px;
+    }
+
+    .card-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-logo {
+      height: 14px;
+      width: auto;
+    }
   </style>
 </head>
 
@@ -680,7 +1484,9 @@
             <div class="topbar">
               <div class="brand">JUSPAY</div>
               <div class="tb-right">
-                <div class="badge-green"><div class="sdot"></div>Secure</div>
+                <div class="badge-green">
+                  <div class="sdot"></div>Secure
+                </div>
               </div>
             </div>
             <div class="ph">
@@ -694,9 +1500,7 @@
                 <div class="field-label">Card Number</div>
                 <div class="fi-wrapper">
                   <input class="fi" id="fi-number" type="tel" inputmode="numeric" maxlength="19"
-                    placeholder="0000 0000 0000 0000"
-                    oninput="onCardNumber(this)"
-                    autocomplete="cc-number" />
+                    placeholder="0000 0000 0000 0000" oninput="onCardNumber(this)" autocomplete="cc-number" />
                 </div>
                 <div class="field-hint" id="fh-number"></div>
               </div>
@@ -705,19 +1509,14 @@
               <div class="field-row">
                 <div class="field-group">
                   <div class="field-label">Expiry Date</div>
-                  <input class="fi" id="fi-expiry" type="tel" inputmode="numeric" maxlength="7"
-                    placeholder="MM / YY"
-                    oninput="onExpiry(this)"
-                    onkeydown="onExpiryKeydown(event, this)"
-                    autocomplete="cc-exp" />
+                  <input class="fi" id="fi-expiry" type="tel" inputmode="numeric" maxlength="7" placeholder="MM / YY"
+                    oninput="onExpiry(this)" onkeydown="onExpiryKeydown(event, this)" autocomplete="cc-exp" />
                   <div class="field-hint" id="fh-expiry"></div>
                 </div>
                 <div class="field-group">
                   <div class="field-label">CVV</div>
-                  <input class="fi" id="fi-cvv" type="password" inputmode="numeric" maxlength="4"
-                    placeholder="•••"
-                    oninput="onCVV(this)"
-                    autocomplete="cc-csc" />
+                  <input class="fi" id="fi-cvv" type="password" inputmode="numeric" maxlength="4" placeholder="•••"
+                    oninput="onCVV(this)" autocomplete="cc-csc" />
                   <div class="field-hint" id="fh-cvv"></div>
                 </div>
               </div>
@@ -728,7 +1527,7 @@
             </div>
           </div>
 
-                    <!-- ▌S2: LOADING ▌ -->
+          <!-- ▌S2: LOADING ▌ -->
           <div class="screen" id="s-loading">
             <div class="topbar">
               <div class="brand">JUSPAY</div>
@@ -743,6 +1542,9 @@
           <!-- ▌S3: OTP ▌ -->
           <div class="screen" id="s-otp">
             <div class="topbar">
+              <div class="logo">
+                <img src="LOGO_BLUE.png" alt="Logo" />
+              </div>
               <div class="brand">JUSPAY</div>
             </div>
             <div class="ph">
@@ -838,10 +1640,22 @@
               <div class="s-desc" id="s-desc">Paid to QuickMart</div>
               <div class="pk-pill">🔑 Secured by Passkey</div>
               <div class="txn-blk">
-                <div class="txr"><div class="tl">Transaction ID</div><div class="tv" id="t-id">—</div></div>
-                <div class="txr"><div class="tl">Card</div><div class="tv" id="t-card">—</div></div>
-                <div class="txr"><div class="tl">Date &amp; Time</div><div class="tv" id="t-time">—</div></div>
-                <div class="txr"><div class="tl">Auth Method</div><div class="tv" id="t-auth">—</div></div>
+                <div class="txr">
+                  <div class="tl">Transaction ID</div>
+                  <div class="tv" id="t-id">—</div>
+                </div>
+                <div class="txr">
+                  <div class="tl">Card</div>
+                  <div class="tv" id="t-card">—</div>
+                </div>
+                <div class="txr">
+                  <div class="tl">Date &amp; Time</div>
+                  <div class="tv" id="t-time">—</div>
+                </div>
+                <div class="txr">
+                  <div class="tl">Auth Method</div>
+                  <div class="tv" id="t-auth">—</div>
+                </div>
               </div>
             </div>
             <div class="foot">
@@ -880,11 +1694,21 @@
         </div>
         <div class="drawer-footer">
           <div class="log-status-row">
-            <div class="lsr-item"><div class="lsr-dot" style="background:#58A6FF"></div>Info</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#3FB950"></div>OK</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#E3B341"></div>Warn</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#F85149"></div>Error</div>
-            <div class="lsr-item"><div class="lsr-dot" style="background:#BC8CFF"></div>Visa</div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#58A6FF"></div>Info
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#3FB950"></div>OK
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#E3B341"></div>Warn
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#F85149"></div>Error
+            </div>
+            <div class="lsr-item">
+              <div class="lsr-dot" style="background:#BC8CFF"></div>Visa
+            </div>
           </div>
         </div>
       </div>
@@ -910,7 +1734,7 @@
         shell.style.width = SHELL_W + 'px'; shell.style.height = SHELL_H + 'px';
         shell.style.borderRadius = ''; shell.style.boxShadow = '';
         const PADDING = 40;
-        const scale = Math.min((vw - PADDING*2)/SHELL_OUTER_W, (vh - PADDING*2)/SHELL_H, 1);
+        const scale = Math.min((vw - PADDING * 2) / SHELL_OUTER_W, (vh - PADDING * 2) / SHELL_H, 1);
         shell.style.transform = `scale(${scale})`; shell.style.transformOrigin = 'center center';
       }
     }
@@ -923,16 +1747,16 @@
     const INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
 
     const CARDS = [
-      { id:'c1', last4:'0492', name:'TestCard 1', cardNumber:'4761120010000492', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
-      { id:'c2', last4:'4228', name:'TestCard 2', cardNumber:'4761262260004228', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
-      { id:'c3', last4:'1439', name:'TestCard 3', cardNumber:'4761209980011439', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
-      { id:'c4', last4:'0121', name:'TestCard 4', cardNumber:'4051069302200121', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
-      { id:'c5', last4:'8840', name:'TestCard 5', cardNumber:'4622943128888840', grad:'linear-gradient(135deg,#1A1F6E,#2548D4)', network:'visa' },
+      { id: 'c1', last4: '0492', name: 'TestCard 1', cardNumber: '4761120010000492', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)', network: 'visa' },
+      { id: 'c2', last4: '4228', name: 'TestCard 2', cardNumber: '4761262260004228', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)', network: 'visa' },
+      { id: 'c3', last4: '1439', name: 'TestCard 3', cardNumber: '4761209980011439', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)', network: 'visa' },
+      { id: 'c4', last4: '0121', name: 'TestCard 4', cardNumber: '4051069302200121', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)', network: 'visa' },
+      { id: 'c5', last4: '8840', name: 'TestCard 5', cardNumber: '4622943128888840', grad: 'linear-gradient(135deg,#1A1F6E,#2548D4)', network: 'visa' },
     ];
 
-    let selCard=null, sst=null, devDone=false, flowStart=false, createData=null, loginData=null;
-    let flow=null, otpVal='', scanning=false, popup=null, authZTok=null, curScreen='s-card-input';
-    let allLogs=[], curFilter='all';
+    let selCard = null, sst = null, devDone = false, flowStart = false, createData = null, loginData = null;
+    let flow = null, otpVal = '', scanning = false, popup = null, authZTok = null, curScreen = 's-card-input';
+    let allLogs = [], curFilter = 'all';
 
     /* ═══════════ CARD INPUT LOGIC ═══════════ */
 
@@ -946,7 +1770,7 @@
     }
 
     function visaLogoWhiteHTML(size) {
-      return `<svg width="${size||52}" height="${Math.round((size||52)*0.32)}" viewBox="0 0 216 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+      return `<svg width="${size || 52}" height="${Math.round((size || 52) * 0.32)}" viewBox="0 0 216 68" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M84.096 67.2L96.512 1.6H116.064L103.648 67.2H84.096Z" fill="white"/>
         <path d="M163.584 3.136C159.616 1.536 153.408 0 145.792 0C126.464 0 112.832 10.112 112.704 24.576C112.576 35.2 122.432 41.088 129.792 44.608C137.344 48.192 139.84 50.432 139.84 53.504C139.776 58.24 134.08 60.416 128.832 60.416C121.408 60.416 117.44 59.328 111.424 56.672L108.992 55.552L106.368 71.68C111.04 73.792 119.808 75.648 128.896 75.712C149.44 75.712 162.816 65.728 162.944 50.304C163.008 41.984 157.76 35.584 146.304 30.336C139.52 27.008 135.296 24.768 135.36 21.504C135.36 18.624 138.688 15.552 145.92 15.552C151.936 15.424 156.288 16.832 159.616 18.432L161.28 19.264L163.584 3.136Z" fill="white"/>
         <path d="M193.408 43.392C195.072 38.912 201.664 20.928 201.664 20.928C201.536 21.12 203.328 16.384 204.288 13.504L205.632 20.224C205.632 20.224 209.344 38.08 210.176 43.392H193.408ZM215.36 1.6H199.808C195.136 1.6 191.616 2.944 189.632 7.808L160.832 67.2H181.376C181.376 67.2 184.768 58.048 185.6 55.808C187.776 55.808 207.808 55.808 210.624 55.808C211.2 58.688 213.056 67.2 213.056 67.2H231.296L215.36 1.6Z" fill="white"/>
@@ -966,13 +1790,13 @@
     }
 
     function formatCardNumber(val) {
-      const digits = val.replace(/\D/g,'').slice(0,16);
-      return digits.replace(/(.{4})/g,'$1 ').trim();
+      const digits = val.replace(/\D/g, '').slice(0, 16);
+      return digits.replace(/(.{4})/g, '$1 ').trim();
     }
 
     function onCardNumber(el) {
-      el.value = el.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim();
-      const digits = el.value.replace(/\s/g,'');
+      el.value = el.value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+      const digits = el.value.replace(/\s/g, '');
       const badge = document.getElementById('visa-badge');
       if (digits.length === 16) {
         badge.classList.add('visible');
@@ -992,7 +1816,7 @@
       if (e.key === 'Backspace') {
         const v = el.value;
         const pos = el.selectionStart;
-        if (pos === 4 && v.slice(0,4) === v.slice(0,2) + ' / '.slice(0, pos - 2)) {
+        if (pos === 4 && v.slice(0, 4) === v.slice(0, 2) + ' / '.slice(0, pos - 2)) {
           // cursor is sitting after "MM /" – let default handle, no special action needed
         }
       }
@@ -1016,7 +1840,7 @@
         // Put caret at end of new value
         if (atEnd) {
           const len = formatted.length;
-          try { el.setSelectionRange(len, len); } catch(_) {}
+          try { el.setSelectionRange(len, len); } catch (_) { }
         }
       }
       updateCardPreview();
@@ -1024,18 +1848,18 @@
     }
 
     function onCVV(el) {
-      el.value = el.value.replace(/\D/g,'').slice(0,4);
+      el.value = el.value.replace(/\D/g, '').slice(0, 4);
       validateCardForm();
     }
 
     function validateCardForm() {
-      const num = document.getElementById('fi-number').value.replace(/\s/g,'');
-      const exp = document.getElementById('fi-expiry').value.replace(/\D/g,'');
+      const num = document.getElementById('fi-number').value.replace(/\s/g, '');
+      const exp = document.getElementById('fi-expiry').value.replace(/\D/g, '');
       const cvv = document.getElementById('fi-cvv').value;
       const network = detectNetwork(num);
 
       const numOk = num.length === 16;
-      const expOk = exp.length === 4 && parseInt(exp.slice(0,2)) >= 1 && parseInt(exp.slice(0,2)) <= 12;
+      const expOk = exp.length === 4 && parseInt(exp.slice(0, 2)) >= 1 && parseInt(exp.slice(0, 2)) <= 12;
       const cvvOk = cvv.length >= 3;
 
       document.getElementById('fi-number').className = 'fi' + (num.length === 0 ? '' : numOk ? ' valid' : ' invalid');
@@ -1052,7 +1876,7 @@
     }
 
     function submitCardInput() {
-      const rawNum = document.getElementById('fi-number').value.replace(/\s/g,'');
+      const rawNum = document.getElementById('fi-number').value.replace(/\s/g, '');
       const network = detectNetwork(rawNum);
       const last4 = rawNum.slice(-4);
 
@@ -1064,8 +1888,8 @@
         name: network === 'visa' ? 'Visa Card' : network === 'mastercard' ? 'Mastercard' : network === 'amex' ? 'Amex' : 'Card',
         cardNumber: rawNum,
         grad: network === 'visa' ? 'linear-gradient(135deg,#1A1F6E,#2548D4)' :
-              network === 'mastercard' ? 'linear-gradient(135deg,#1A1A1A,#3D3D3D)' :
-              network === 'amex' ? 'linear-gradient(135deg,#007B5E,#00A86B)' :
+          network === 'mastercard' ? 'linear-gradient(135deg,#1A1A1A,#3D3D3D)' :
+            network === 'amex' ? 'linear-gradient(135deg,#007B5E,#00A86B)' :
               'linear-gradient(135deg,#374151,#6B7280)',
         network
       };
@@ -1117,9 +1941,9 @@
     function renderCards() {
       const cg = document.getElementById('card-grid'); if (!cg) return;
       cg.innerHTML = CARDS.map(c => `
-        <div class="card-opt ${c.id===selCard?.id?'sel':''}" onclick="pickCard('${c.id}')">
+        <div class="card-opt ${c.id === selCard?.id ? 'sel' : ''}" onclick="pickCard('${c.id}')">
           <div class="card-vis" style="background:${c.grad}">
-            ${networkLogoForCard(c.network||'visa')}
+            ${networkLogoForCard(c.network || 'visa')}
           </div>
           <div class="ci">
             <div class="cn">${c.name}</div>
@@ -1132,164 +1956,171 @@
     /* ═══════════ ORIGINAL FLOW LOGIC ═══════════ */
 
     function addLog(type, msg) {
-      const now=new Date();
-      const ts=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+'.'+String(now.getMilliseconds()).padStart(3,'0');
-      allLogs.push({type,msg,ts});
-      const badge=document.getElementById('log-count');
-      badge.textContent=allLogs.length>99?'99+':String(allLogs.length);
+      const now = new Date();
+      const ts = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
+      allLogs.push({ type, msg, ts });
+      const badge = document.getElementById('log-count');
+      badge.textContent = allLogs.length > 99 ? '99+' : String(allLogs.length);
       renderLogs();
     }
 
     function renderLogs() {
-      const list=document.getElementById('log-list');
-      const shown=curFilter==='all'?allLogs:allLogs.filter(l=>l.type===curFilter);
-      if(!shown.length){list.innerHTML=`<div class="log-empty"><div class="log-empty-icon">🔍</div><div class="log-empty-txt">${allLogs.length?'No entries match filter.':'No logs yet.<br>Tap Pay to start.'}</div></div>`;return;}
-      list.innerHTML=[...shown].reverse().map(l=>`<div class="log-entry"><div class="log-time">${l.ts}</div><div class="log-row"><span class="log-tag tag-${l.type}">${l.type.toUpperCase()}</span><span class="log-msg">${l.msg}</span></div></div>`).join('');
+      const list = document.getElementById('log-list');
+      const shown = curFilter === 'all' ? allLogs : allLogs.filter(l => l.type === curFilter);
+      if (!shown.length) { list.innerHTML = `<div class="log-empty"><div class="log-empty-icon">🔍</div><div class="log-empty-txt">${allLogs.length ? 'No entries match filter.' : 'No logs yet.<br>Tap Pay to start.'}</div></div>`; return; }
+      list.innerHTML = [...shown].reverse().map(l => `<div class="log-entry"><div class="log-time">${l.ts}</div><div class="log-row"><span class="log-tag tag-${l.type}">${l.type.toUpperCase()}</span><span class="log-msg">${l.msg}</span></div></div>`).join('');
     }
 
-    function setFilter(f,el){curFilter=f;document.querySelectorAll('.dt-chip').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderLogs();}
-    function clearLogs(){allLogs=[];document.getElementById('log-count').textContent='0';renderLogs();}
-    function openDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open');}
-    function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open');}
+    function setFilter(f, el) { curFilter = f; document.querySelectorAll('.dt-chip').forEach(b => b.classList.remove('active')); el.classList.add('active'); renderLogs(); }
+    function clearLogs() { allLogs = []; document.getElementById('log-count').textContent = '0'; renderLogs(); }
+    function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-overlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer-overlay').classList.remove('open'); }
 
-    function updateClock(){const now=new Date();const el=document.getElementById('clock');if(el)el.textContent=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:false});}
-    updateClock(); setInterval(updateClock,15000);
+    function updateClock() { const now = new Date(); const el = document.getElementById('clock'); if (el) el.textContent = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }); }
+    updateClock(); setInterval(updateClock, 15000);
 
-    const INIT_CMD={type:"COMMAND",ref:crypto.randomUUID(),ts:Date.now(),command:{type:"INITIALIZATION",data:{response_mode:"com_visa_web_message",redirect_uri:ORIGIN,session_context:{apn:"vdp-web",client_software:{top_origin:ORIGIN,integrator_origin:ORIGIN,uebas:[{source:"VDI",ref:crypto.randomUUID()}],id:"VDPW",version:"24.07",oauth2_version:"1.0",tenancy:{product_code:"VDP"}}}},response_type:"urn:ext:oauth:response-type:server_state"}};
+    const INIT_CMD = { type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(), command: { type: "INITIALIZATION", data: { response_mode: "com_visa_web_message", redirect_uri: ORIGIN, session_context: { apn: "vdp-web", client_software: { top_origin: ORIGIN, integrator_origin: ORIGIN, uebas: [{ source: "VDI", ref: crypto.randomUUID() }], id: "VDPW", version: "24.07", oauth2_version: "1.0", tenancy: { product_code: "VDP" } } } }, response_type: "urn:ext:oauth:response-type:server_state" } };
 
     function goTo(id) {
-      if(id===curScreen)return;
-      const prev=document.getElementById(curScreen),next=document.getElementById(id);
-      if(!prev||!next)return;
+      if (id === curScreen) return;
+      const prev = document.getElementById(curScreen), next = document.getElementById(id);
+      if (!prev || !next) return;
       prev.classList.add('leaving');
-      setTimeout(()=>{prev.classList.remove('leaving','active');},340);
-      next.style.transition='none';next.style.transform='translateX(100%)';next.style.opacity='0';next.classList.add('active');
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{next.style.transition='';next.style.transform='';next.style.opacity='';}));
-      curScreen=id;
+      setTimeout(() => { prev.classList.remove('leaving', 'active'); }, 340);
+      next.style.transition = 'none'; next.style.transform = 'translateX(100%)'; next.style.opacity = '0'; next.classList.add('active');
+      requestAnimationFrame(() => requestAnimationFrame(() => { next.style.transition = ''; next.style.transform = ''; next.style.opacity = ''; }));
+      curScreen = id;
     }
 
     function doBack(id) {
-      if(id===curScreen)return;
-      const cur=document.getElementById(curScreen),prev=document.getElementById(id);
-      if(!cur||!prev)return;
-      cur.style.transition='transform .28s cubic-bezier(.4,0,.2,1), opacity .25s ease';
-      cur.style.transform='translateX(100%)';cur.style.opacity='0';
-      setTimeout(()=>{cur.classList.remove('active');cur.style.cssText='';},290);
-      prev.style.cssText='';prev.classList.add('active');curScreen=id;
+      if (id === curScreen) return;
+      const cur = document.getElementById(curScreen), prev = document.getElementById(id);
+      if (!cur || !prev) return;
+      cur.style.transition = 'transform .28s cubic-bezier(.4,0,.2,1), opacity .25s ease';
+      cur.style.transform = 'translateX(100%)'; cur.style.opacity = '0';
+      setTimeout(() => { cur.classList.remove('active'); cur.style.cssText = ''; }, 290);
+      prev.style.cssText = ''; prev.classList.add('active'); curScreen = id;
     }
 
-    function pickCard(id){selCard=CARDS.find(c=>c.id===id);renderCards();addLog('info',`Card selected: <b>•••• ${selCard.last4}</b> (${selCard.name})`);}
+    function pickCard(id) { selCard = CARDS.find(c => c.id === id); renderCards(); addLog('info', `Card selected: <b>•••• ${selCard.last4}</b> (${selCard.name})`); }
 
-    window.addEventListener("message",async(ev)=>{
-      let m;try{m=typeof ev.data==="string"?JSON.parse(ev.data):ev.data;}catch{return;}
-      console.log("visa",m);
-      if(!m||!m.type)return;
-      addLog('visa',`type=<b>${m.type}</b>${m.result?.command_type?' cmd='+m.result.command_type:''}${m.event?.type?' evt='+m.event.type:''}`);
-      if(m.type==="RESULT"&&m.result?.command_type==="INITIALIZATION"){if(m.result.status==="SUCCESS"){sst=m?.result?.data?.tokens[0]?.token;addLog('ok',`SDK init ✓ — token=<b>${sst?.slice(0,18)}…</b>`);}else{addLog('err',`SDK init FAILED: ${m.result?.data?.error_details?.error||'unknown'}`);}}
-      if(m.type==="EVENT"&&m.event?.type==="DEVICE_DATA_CAPTURED"){devDone=true;addLog('ok','Device profiling complete ✓');}
-      if(m.type==="EVENT"&&m.event?.type==="DEVICE_DATA_CAPTURE_FAILED")addLog('err','Device profiling FAILED');
-      if(m.type==="EVENT"&&m.event?.type==="POPUP_WINDOW_TERMINATED")addLog('warn','Popup closed by user');
-      if(m.type==="AUTHORIZATION_RESULT"){authZTok=m.data;addLog('ok','auth_z_token received — payment authorised ✓');goSuccess();}
+    window.addEventListener("message", async (ev) => {
+      let m; try { m = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; }
+      console.log("visa", m);
+      if (!m || !m.type) return;
+      addLog('visa', `type=<b>${m.type}</b>${m.result?.command_type ? ' cmd=' + m.result.command_type : ''}${m.event?.type ? ' evt=' + m.event.type : ''}`);
+      if (m.type === "RESULT" && m.result?.command_type === "INITIALIZATION") { if (m.result.status === "SUCCESS") { sst = m?.result?.data?.tokens[0]?.token; addLog('ok', `SDK init ✓ — token=<b>${sst?.slice(0, 18)}…</b>`); } else { addLog('err', `SDK init FAILED: ${m.result?.data?.error_details?.error || 'unknown'}`); } }
+      if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURED") { devDone = true; addLog('ok', 'Device profiling complete ✓'); }
+      if (m.type === "EVENT" && m.event?.type === "DEVICE_DATA_CAPTURE_FAILED") addLog('err', 'Device profiling FAILED');
+      if (m.type === "EVENT" && m.event?.type === "POPUP_WINDOW_TERMINATED") addLog('warn', 'Popup closed by user');
+      if (m.type === "AUTHORIZATION_RESULT") { authZTok = m.data; addLog('ok', 'auth_z_token received — payment authorised ✓'); goSuccess(); }
     });
 
     function handlePay() {
-      if(!selCard||!sst||!devDone){addLog('err',`selCard:${selCard}, sst:${sst}, devDone:${devDone} — cannot be null`);return;}
-      const btn=document.getElementById('pay-btn');btn.disabled=true;btn.textContent='Connecting…';
-      addLog('info',`Pay initiated — card <b>•••• ${selCard.last4}</b>`);
+      if (!selCard || !sst || !devDone) { addLog('err', `selCard:${selCard}, sst:${sst}, devDone:${devDone} — cannot be null`); return; }
+      const btn = document.getElementById('pay-btn'); btn.disabled = true; btn.textContent = 'Connecting…';
+      addLog('info', `Pay initiated — card <b>•••• ${selCard.last4}</b>`);
       goTo('s-loading');
-      if(sst&&devDone&&!flowStart)tryStart();
+      if (sst && devDone && !flowStart) tryStart();
     }
 
     async function tryStart() {
-      if(!selCard||!sst||!devDone||flowStart)return;
-      flowStart=true;
-      document.getElementById('ld-t').textContent='Processing transaction...';
-      document.getElementById('ld-s').textContent='Please do not close this window';
-      addLog('info','SDK + device ready → calling <b>Login API</b>');
+      if (!selCard || !sst || !devDone || flowStart) return;
+      flowStart = true;
+      document.getElementById('ld-t').textContent = 'Processing transaction...';
+      document.getElementById('ld-s').textContent = 'Please do not close this window';
+      addLog('info', 'SDK + device ready → calling <b>Login API</b>');
       await callLogin();
     }
 
     async function callLogin() {
-      addLog('info',`POST /api/passkey/login — last4=<b>${selCard.last4}</b>`);
+      addLog('info', `POST /api/passkey/login — last4=<b>${selCard.last4}</b>`);
       try {
-        const r=await fetch("/api/passkey/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:sst,cardNumber:selCard.cardNumber})});
-        const d=await r.json();
-        addLog('visa',`Login response: ${JSON.stringify(d).slice(0,80)}…`);
-        if(d?.error==="notfound_amr_values"){addLog('warn','No passkey → <b>CREATE flow</b> — showing OTP');flow='create';document.getElementById('otp-sub').textContent='Complete 3DS Transaction';goTo('s-otp');await callCreate();}
-        else if(d?.data?.request){addLog('ok','Passkey found → <b>AUTH flow</b>');loginData=d.data;flow='auth';goTo('s-bio-auth');}
-        else{addLog('warn','Unexpected login response → fallback to create');flow='create';goTo('s-otp');await callCreate();}
-      } catch(e){addLog('err',`Login API error: ${e.message} → fallback create`);flow='create';goTo('s-otp');await callCreate();}
+        const r = await fetch("/api/passkey/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: sst, cardNumber: selCard.cardNumber }) });
+        const d = await r.json();
+        addLog('visa', `Login response: ${JSON.stringify(d).slice(0, 80)}…`);
+        if (d?.error === "notfound_amr_values") { addLog('warn', 'No passkey → <b>CREATE flow</b> — showing OTP'); flow = 'create'; document.getElementById('otp-sub').textContent = 'Complete 3DS Transaction'; goTo('s-otp'); await callCreate(); }
+        else if (d?.data?.request) { addLog('ok', 'Passkey found → <b>AUTH flow</b>'); loginData = d.data; flow = 'auth'; goTo('s-bio-auth'); }
+        else { addLog('warn', 'Unexpected login response → fallback to create'); flow = 'create'; goTo('s-otp'); await callCreate(); }
+      } catch (e) { addLog('err', `Login API error: ${e.message} → fallback create`); flow = 'create'; goTo('s-otp'); await callCreate(); }
     }
 
     async function callCreate() {
-      addLog('info',`POST /api/passkey/create — last4=<b>${selCard.last4}</b>`);
+      addLog('info', `POST /api/passkey/create — last4=<b>${selCard.last4}</b>`);
       try {
-        const r=await fetch("/api/passkey/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:sst,cardNumber:selCard.cardNumber})});
-        const d=await r.json();
-        if(d?.data?.request){createData=d.data;addLog('ok','Create API ready — waiting for OTP');}
-        else addLog('err',`Create API failed: ${JSON.stringify(d).slice(0,60)}`);
-      } catch(e){addLog('err',`Create API error: ${e.message}`);}
+        const r = await fetch("/api/passkey/create", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: sst, cardNumber: selCard.cardNumber }) });
+        const d = await r.json();
+        if (d?.data?.request) { createData = d.data; addLog('ok', 'Create API ready — waiting for OTP'); }
+        else addLog('err', `Create API failed: ${JSON.stringify(d).slice(0, 60)}`);
+      } catch (e) { addLog('err', `Create API error: ${e.message}`); }
     }
 
-    function otpKey(k){if(otpVal.length>=4)return;otpVal+=String(k);updateOTP();}
-    function otpDel(){otpVal=otpVal.slice(0,-1);updateOTP();}
+    function otpKey(k) { if (otpVal.length >= 4) return; otpVal += String(k); updateOTP(); }
+    function otpDel() { otpVal = otpVal.slice(0, -1); updateOTP(); }
     function updateOTP() {
-      for(let i=0;i<4;i++){const b=document.getElementById('ob'+i);b.textContent=i<otpVal.length?otpVal[i]:'';b.className='obox'+(i<otpVal.length?' on':'');}
-      document.getElementById('otp-btn').disabled=otpVal.length!==4;
+      for (let i = 0; i < 4; i++) { const b = document.getElementById('ob' + i); b.textContent = i < otpVal.length ? otpVal[i] : ''; b.className = 'obox' + (i < otpVal.length ? ' on' : ''); }
+      document.getElementById('otp-btn').disabled = otpVal.length !== 4;
     }
     function verifyOTP() {
-      if(otpVal!=='1234'){addLog('err',`OTP wrong: <b>${otpVal}</b> — expected 1234`);document.querySelectorAll('.obox').forEach(b=>{b.className='obox err';});setTimeout(()=>{otpVal='';updateOTP();},500);return;}
-      addLog('ok','OTP verified ✓ → biometric registration');goTo('s-bio-create');
+      if (otpVal !== '1234') { addLog('err', `OTP wrong: <b>${otpVal}</b> — expected 1234`); document.querySelectorAll('.obox').forEach(b => { b.className = 'obox err'; }); setTimeout(() => { otpVal = ''; updateOTP(); }, 500); return; }
+      addLog('ok', 'OTP verified ✓ → biometric registration'); goTo('s-bio-create');
     }
 
-    function openPopup(w,h){const left=Math.round((screen.width-w)/2);popup=window.open('about:blank','vpp',`width=${w},height=${h},top=80,left=${left},scrollbars=yes`);if(!popup)addLog('warn','Popup blocked — allow popups for this site');return!!popup;}
-    function navPopup(data){const msg={type:"COMMAND",ref:crypto.randomUUID(),ts:Date.now(),command:{type:"AUTHORIZATION_REQUEST",data:{request:data.request,authorization_endpoint:data.authorization_endpoint}}};const url=`${VISA_BASE}${data.authorization_endpoint}#msg=${encodeURIComponent(JSON.stringify(msg))}`;if(popup&&!popup.closed)popup.location.href=url;else popup=window.open(url,'vpp');addLog('info',`Popup → <b>${data.authorization_endpoint}</b>`);}
+    function openPopup(w, h) { const left = Math.round((screen.width - w) / 2); popup = window.open('about:blank', 'vpp', `width=${w},height=${h},top=80,left=${left},scrollbars=yes`); if (!popup) addLog('warn', 'Popup blocked — allow popups for this site'); return !!popup; }
+    function navPopup(data) { const msg = { type: "COMMAND", ref: crypto.randomUUID(), ts: Date.now(), command: { type: "AUTHORIZATION_REQUEST", data: { request: data.request, authorization_endpoint: data.authorization_endpoint } } }; const url = `${VISA_BASE}${data.authorization_endpoint}#msg=${encodeURIComponent(JSON.stringify(msg))}`; if (popup && !popup.closed) popup.location.href = url; else popup = window.open(url, 'vpp'); addLog('info', `Popup → <b>${data.authorization_endpoint}</b>`); }
 
     function startBio(type) {
-      if(scanning)return;scanning=true;
-      const ring=document.getElementById(`fp-${type}`),bar=document.getElementById(`fb-${type}`),lbl=document.getElementById(`fl-${type}`);
-      addLog('info',`Biometric started — <b>${type}</b>`);
-      if(type==='auth'&&loginData){if(openPopup(400,480))navPopup(loginData);}
-      if(type==='create'&&createData){if(openPopup(500,600))navPopup(createData);}
-      ring.classList.add('scanning');bar.style.width='100%';lbl.textContent='Scanning…';
+      if (scanning) return; scanning = true;
+      const ring = document.getElementById(`fp-${type}`), bar = document.getElementById(`fb-${type}`), lbl = document.getElementById(`fl-${type}`);
+      addLog('info', `Biometric started — <b>${type}</b>`);
+      if (type === 'auth' && loginData) { if (openPopup(400, 480)) navPopup(loginData); }
+      if (type === 'create' && createData) { if (openPopup(500, 600)) navPopup(createData); }
+      ring.classList.add('scanning'); bar.style.width = '100%'; lbl.textContent = 'Scanning…';
     }
 
     function goSuccess() {
-      scanning=false;const n=new Date();const txnId='TXN#'+Math.floor(1e5+Math.random()*9e5);
-      document.getElementById('t-id').textContent=txnId;
-      document.getElementById('t-card').textContent=`Card •••• ${selCard.last4}`;
-      document.getElementById('t-time').textContent=n.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+'  '+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:false});
-      document.getElementById('t-auth').textContent=flow==='auth'?'Passkey (Biometric)':'Passkey (Created)';
-      document.getElementById('s-desc').textContent=flow==='auth'?'Paid to QuickMart · via passkey ⚡':'Paid to QuickMart · passkey created 🎉';
-      addLog('ok',`Payment SUCCESS — ${txnId}`);addLog('info',`submitResponse → POST ${ORIGIN}/v2/pay/response`);
+      scanning = false; const n = new Date(); const txnId = 'TXN#' + Math.floor(1e5 + Math.random() * 9e5);
+      document.getElementById('t-id').textContent = txnId;
+      // document.getElementById('t-card').textContent = `Card •••• ${selCard.last4}`;
+      document.getElementById('t-card').innerHTML = `
+            <div class="card-info">
+              <img src="LOGO_BLUE.png" class="card-logo" />
+              <span>•••• ${selCard.last4}</span>
+            </div>
+          `;
+
+      document.getElementById('t-time').textContent = n.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + '  ' + n.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+      document.getElementById('t-auth').textContent = flow === 'auth' ? 'Passkey (Biometric)' : 'Passkey (Created)';
+      document.getElementById('s-desc').textContent = flow === 'auth' ? 'Paid to QuickMart · via passkey ⚡' : 'Paid to QuickMart · passkey created 🎉';
+      addLog('ok', `Payment SUCCESS — ${txnId}`); addLog('info', `submitResponse → POST ${ORIGIN}/v2/pay/response`);
       goTo('s-success');
     }
 
-    function submitResp(payload){try{const f=document.createElement('form');f.method='POST';f.action=`${ORIGIN}/v2/pay/response`;const i=document.createElement('input');i.type='hidden';i.name='data';i.value=JSON.stringify(payload);f.appendChild(i);document.body.appendChild(f);f.submit();}catch(e){addLog('err',`submitResp failed: ${e.message}`);}}
+    function submitResp(payload) { try { const f = document.createElement('form'); f.method = 'POST'; f.action = `${ORIGIN}/v2/pay/response`; const i = document.createElement('input'); i.type = 'hidden'; i.name = 'data'; i.value = JSON.stringify(payload); f.appendChild(i); document.body.appendChild(f); f.submit(); } catch (e) { addLog('err', `submitResp failed: ${e.message}`); } }
 
     function resetAll() {
-      sst=null;devDone=false;flowStart=false;authZTok=null;createData=null;loginData=null;flow=null;otpVal='';scanning=false;selCard=null;
-      if(popup&&!popup.closed)popup.close();
+      sst = null; devDone = false; flowStart = false; authZTok = null; createData = null; loginData = null; flow = null; otpVal = ''; scanning = false; selCard = null;
+      if (popup && !popup.closed) popup.close();
       updateOTP();
-      ['auth','create'].forEach(t=>{const r=document.getElementById(`fp-${t}`);if(r)r.className='fp-out';const b=document.getElementById(`fb-${t}`);if(b)b.style.width='0%';const l=document.getElementById(`fl-${t}`);if(l)l.textContent='Place your finger';});
-      document.getElementById('fi-number').value='';
-      document.getElementById('fi-expiry').value='';
-      document.getElementById('fi-cvv').value='';
-      document.getElementById('fi-number').className='fi';
-      document.getElementById('fi-expiry').className='fi';
-      document.getElementById('fi-cvv').className='fi';
-      document.getElementById('add-card-btn').disabled=true;
-      const newCmd={...INIT_CMD,ref:crypto.randomUUID(),ts:Date.now()};
-      document.getElementById("vpp-iframe").src=`${INIT_URL}${encodeURIComponent(JSON.stringify(newCmd))}`;
-      addLog('info','── Session reset ──');renderCards();
-      document.querySelectorAll('.screen').forEach(s=>{s.className='screen';s.removeAttribute('style');});
-      document.getElementById('s-card-input').classList.add('active');curScreen='s-card-input';
+      ['auth', 'create'].forEach(t => { const r = document.getElementById(`fp-${t}`); if (r) r.className = 'fp-out'; const b = document.getElementById(`fb-${t}`); if (b) b.style.width = '0%'; const l = document.getElementById(`fl-${t}`); if (l) l.textContent = 'Place your finger'; });
+      document.getElementById('fi-number').value = '';
+      document.getElementById('fi-expiry').value = '';
+      document.getElementById('fi-cvv').value = '';
+      document.getElementById('fi-number').className = 'fi';
+      document.getElementById('fi-expiry').className = 'fi';
+      document.getElementById('fi-cvv').className = 'fi';
+      document.getElementById('add-card-btn').disabled = true;
+      const newCmd = { ...INIT_CMD, ref: crypto.randomUUID(), ts: Date.now() };
+      document.getElementById("vpp-iframe").src = `${INIT_URL}${encodeURIComponent(JSON.stringify(newCmd))}`;
+      addLog('info', '── Session reset ──'); renderCards();
+      document.querySelectorAll('.screen').forEach(s => { s.className = 'screen'; s.removeAttribute('style'); });
+      document.getElementById('s-card-input').classList.add('active'); curScreen = 's-card-input';
     }
 
     renderCards();
-    addLog('info','App loaded — injecting SDK iframe');
-    document.getElementById("vpp-iframe").src=`${INIT_URL}${encodeURIComponent(JSON.stringify(INIT_CMD))}`;
-    addLog('visa',`iframe src → ${VISA_BASE}/oauth2/…`);
+    addLog('info', 'App loaded — injecting SDK iframe');
+    document.getElementById("vpp-iframe").src = `${INIT_URL}${encodeURIComponent(JSON.stringify(INIT_CMD))}`;
+    addLog('visa', `iframe src → ${VISA_BASE}/oauth2/…`);
   </script>
 </body>
 

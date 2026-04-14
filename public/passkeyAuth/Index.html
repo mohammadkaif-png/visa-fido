@@ -133,6 +133,7 @@
                 transform: scale(0.5);
                 opacity: 1;
             }
+
             100% {
                 transform: scale(1.2);
                 opacity: 0;
@@ -196,13 +197,18 @@
         <!-- Visa Logo -->
         <svg class="visa-logo" viewBox="0 0 141.732 141.732" xmlns="http://www.w3.org/2000/svg">
             <g fill="#1434CB">
-                <path d="M62.935 89.571h-9.733l6.083-37.384h9.734z"/>
-                <path d="M45.014 52.187L35.735 77.9l-1.098-5.537.001.002-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s4.691.976 10.181 4.273l8.456 32.479h10.141l15.485-37.385H45.014z"/>
-                <path d="M121.569 89.571h8.937l-7.792-37.385h-7.824c-3.613 0-4.493 2.786-4.493 2.786L95.881 89.571h10.146l2.029-5.553h12.373l1.14 5.553zm-10.71-13.224l5.114-13.99 2.877 13.99h-7.991z"/>
-                <path d="M96.642 61.177l1.389-8.028s-4.286-1.63-8.754-1.63c-4.83 0-16.3 2.111-16.3 12.376 0 9.658 13.462 9.778 13.462 14.851s-12.075 4.164-16.06.965l-1.447 8.394s4.346 2.111 10.986 2.111c6.642 0 16.662-3.439 16.662-12.799 0-9.72-13.583-10.625-13.583-14.851.001-4.227 9.48-3.684 13.645-1.389z"/>
+                <path d="M62.935 89.571h-9.733l6.083-37.384h9.734z" />
+                <path
+                    d="M45.014 52.187L35.735 77.9l-1.098-5.537.001.002-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s4.691.976 10.181 4.273l8.456 32.479h10.141l15.485-37.385H45.014z" />
+                <path
+                    d="M121.569 89.571h8.937l-7.792-37.385h-7.824c-3.613 0-4.493 2.786-4.493 2.786L95.881 89.571h10.146l2.029-5.553h12.373l1.14 5.553zm-10.71-13.224l5.114-13.99 2.877 13.99h-7.991z" />
+                <path
+                    d="M96.642 61.177l1.389-8.028s-4.286-1.63-8.754-1.63c-4.83 0-16.3 2.111-16.3 12.376 0 9.658 13.462 9.778 13.462 14.851s-12.075 4.164-16.06.965l-1.447 8.394s4.346 2.111 10.986 2.111c6.642 0 16.662-3.439 16.662-12.799 0-9.72-13.583-10.625-13.583-14.851.001-4.227 9.48-3.684 13.645-1.389z" />
             </g>
-            <path d="M34.638 72.364l-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s7.373 1.528 14.445 7.253c6.762 5.472 8.967 12.292 8.967 12.292z" fill="#F9B50B"/>
-            <path fill="none" d="M0 0h141.732v141.732H0z"/>
+            <path
+                d="M34.638 72.364l-3.275-16.812s-.396-3.366-4.617-3.366h-15.34l-.18.633s7.373 1.528 14.445 7.253c6.762 5.472 8.967 12.292 8.967 12.292z"
+                fill="#F9B50B" />
+            <path fill="none" d="M0 0h141.732v141.732H0z" />
         </svg>
 
         <div id="loaderContainer">
@@ -221,7 +227,8 @@
 
         <div class="security-badge">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                <path
+                    d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
             </svg>
             <span>Secured by Visa</span>
         </div>
@@ -231,10 +238,19 @@
         const API_TOKEN_HOST = "http://localhost:3000";
         const VISA_BASE = "https://sandbox.auth.visa.com";
         const VISA_INIT_URL = `${VISA_BASE}/oauth2/authorization/request/hub#msg=`;
-
-        const RETURN_URL = "https://weak-tova-ungently.ngrok-free.dev/v2/pay/response";
+        const FORM_POST_URL = "https://weak-tova-ungently.ngrok-free.dev/v2/pay/response";
+        const RETURN_URL = "https://weak-tova-ungently.ngrok-free.dev/passkey/redirection";
         const RETURN_URL_HOST = "https://weak-tova-ungently.ngrok-free.dev";
-        const AUTH_TIMEOUT = 600000;
+        const AUTH_TIMEOUT = 120000;    // 2 mintues
+        const COMMAND = "AUTHENTICATE"  // CREATE | AUTHENTICATE
+        const acsTransactionId = ""         // acsTransId
+        const merchantId = ""
+
+        const CREATE_POPUP_W = 500
+        const CREATE_POPUP_H = 600
+
+        const AUTH_POPUP_W = 400
+        const AUTH_POPUP_H = 480
 
         let popupRef = null;
         let popupWatcher = null;
@@ -250,13 +266,11 @@
         function startPopupWatchers() {
             popupWatcher = setInterval(() => {
                 if (popupRef && popupRef.closed && !hasSubmitted) {
-                    cleanup();
                     submitError("USER_OPTED_OUT", "User closed the webview", "User closed the webview");
                 }
             }, 500);
 
             timeoutRef = setTimeout(() => {
-                cleanup();
                 submitError("PASSKEY_USER_TIMED_OUT", "User timed out", "User timed out");
             }, AUTH_TIMEOUT);
         }
@@ -279,12 +293,17 @@
                 }
             };
             const popupUrl = `${VISA_BASE}${data.authorization_endpoint}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
+
+            const width = COMMAND === "CREATE" ? CREATE_POPUP_W : AUTH_POPUP_W;
+            const height = COMMAND === "CREATE" ? CREATE_POPUP_H : AUTH_POPUP_H;
+
+            // Center the popup on screen
+            const left = (window.screen.width / 2) - (width / 2);
+            const top  = (window.screen.height / 2) - (height / 2);
             
-            popupRef = window.open(
-                popupUrl,
-                "visa_passkey",
-                "width=400,height=480,top=120,left=200,resizable=no"
-            );
+            const features = ` width=${width}, height=${height}, top=${top}, left=${left}, resizable=no,scrollbars=yes`;
+
+            popupRef = window.open(popupUrl, "visa_passkey", features);
 
             if (!popupRef || popupRef.closed) {
                 popupAttemptInProgress = false;
@@ -298,42 +317,68 @@
         }
 
         async function startVisaPopup() {
-            if (!serverStateToken || !deviceProfilingDone || flowStarted) {
-                return;
-            }
-            
-            flowStarted = true;
-
+            if (flowStarted) return;
+            if (!serverStateToken || !deviceProfilingDone) return;
+            flowStarted = true
             try {
-                const res = await fetch(`${RETURN_URL_HOST}/api/passkey/login`, {
+                const loginRes = await fetch(`${API_TOKEN_HOST}/api/passkey/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ token: serverStateToken })
+                    body: JSON.stringify({ token: serverStateToken, command: "AUTHENTICATE", merchantId: merchantId })
                 });
-                
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
+
+                if (!loginRes.ok) {
+                    throw new Error("PASSKEY_VERIFICATION_FAILURE");
+                }
+                const loginData = await loginRes.json();
+                if (loginData?.errorCode === "notfound_amr_values") {
+                    if (COMMAND == "AUTHENTICATE") {
+                        submitError(
+                            "PASSKEY_NOT_REGISTERED_VALID_OTP",
+                            loginData?.errorCode || "Passkey not found.",
+                            loginData?.errorMessage || "Passkey not found."
+                        );
+                    } else {
+                        const createResponse = await fetch(`${API_TOKEN_HOST}/api/passkey/create`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ token: serverStateToken, command: "CREATE", acsTransactionId: acsTransactionId, merchantId: merchantId })
+                        });
+
+                        if (!createResponse.ok) {
+                            throw new Error("PASSKEY_REGISTRATION_FAILURE");
+                        }
+
+                        const createData = await createResponse.json();
+                        if (createData?.payload) {
+                            apiResponseData = createData.payload;
+                            openVisaPopup(createData.payload);
+                        } else {
+                            submitError(
+                                "PASSKEY_REGISTRATION_FAILURE",
+                                loginData?.errorCode || "Passkey create api failed.",
+                                loginData?.errorMessage || "Passkey create api failed."
+                            );
+                        }
+
+                    }
                 }
 
-                const loginData = await res.json();
-                
-                if (loginData.data) {
-                    apiResponseData = loginData.data;
-                    openVisaPopup(loginData.data);
+                if (loginData?.payload) {
+                    apiResponseData = loginData.payload;
+                    openVisaPopup(loginData.payload);
                 } else {
-                    cleanup();
                     submitError(
                         "PASSKEY_VERIFICATION_FAILURE",
-                        loginData?.error || "Passkey login api failed.",
+                        loginData?.errorCode || "Passkey login api failed.",
                         loginData?.errorMessage || "Passkey login api failed."
                     );
                 }
             } catch (error) {
-                cleanup();
                 submitError(
-                    "PASSKEY_VERIFICATION_FAILURE",
-                    "Passkey login api failed.",
-                    error.message || "Passkey login api failed."
+                    error.message,
+                    "Passkey api call failed.",
+                    "Passkey api call failed."
                 );
             }
         }
@@ -342,29 +387,22 @@
             document.getElementById("loaderContainer").classList.add("hidden");
             document.getElementById("statusText").textContent = "Please allow popups and click below to continue";
             document.getElementById("statusText").classList.remove("hidden");
-            
             const btn = document.getElementById("fallbackBtn");
             btn.style.display = "block";
             btn.disabled = false;
-            
             btn.onclick = null;
-            
             btn.onclick = () => {
                 if (!apiResponseData) {
                     console.error("No API response data available");
                     return;
                 }
-                
                 btn.disabled = true;
                 btn.textContent = "Opening...";
-                
                 if (popupRef && !popupRef.closed) {
                     popupRef.close();
                 }
                 cleanup();
-                
                 openVisaPopup(apiResponseData);
-                
                 setTimeout(() => {
                     if (!hasSubmitted && (!popupRef || popupRef.closed)) {
                         btn.disabled = false;
@@ -375,8 +413,6 @@
         }
 
         window.addEventListener("message", (event) => {
-            if (!event.origin.includes("visa.com")) return;
-            
             let msg;
             try {
                 msg = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
@@ -389,9 +425,9 @@
                     serverStateToken = msg.result.data.tokens[0].token;
                     startVisaPopup();
                 } else {
-                    let error = msg.result?.data?.error_details?.error || msg.result?.data?.error || "Internal server error";
-                    let errorDescription = msg.result?.data?.error_details?.error_description || msg.result?.data?.error_description || "Error while passkey initialization";
-                    submitError("PASSKEY_INITIALIZATION_FAILED", error, errorDescription);
+                    let errorCode = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
+                    let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "Error while passkey initialization";
+                    submitError("PASSKEY_INITIALIZATION_FAILED", errorCode, errorDescription);
                 }
             }
 
@@ -401,38 +437,41 @@
             }
 
             if (msg.type === "EVENT" && msg.event?.type === "DEVICE_DATA_CAPTURE_FAILED") {
-                cleanup();
-                let error = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
+                let errorCode = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
                 let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "Error while device capturing.";
-                submitError("PASSKEY_DEVICE_DATA_CAPTURE_FAILED", error, errorDescription);
+                submitError("PASSKEY_DEVICE_DATA_CAPTURE_FAILED", errorCode, errorDescription);
             }
 
             if (msg.type === "EVENT" && msg.event?.type === "POPUP_WINDOW_TERMINATED" && isOpenPopup) {
-                cleanup();
-                let error = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
+                let errorCode = msg?.result?.data?.error_details?.error || msg?.result?.data?.error || "Internal server error";
                 let errorDescription = msg?.result?.data?.error_details?.error_description || msg?.result?.data?.error_description || "User closed the window or popup.";
-                submitError("USER_OPTED_OUT", error, errorDescription);
+                submitError("USER_OPTED_OUT", errorCode, errorDescription);
             }
 
-            if (msg.type === "RESULT" && msg.result?.command_type === "AUTHORIZATION_REQUEST") {
-                cleanup();
-                if (msg.result.status === "SUCCESS") {
-                    submit({
-                        passkeyStatus: "PASSKEY_SUCCESS",
-                        passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS",
-                        authZToken: msg.result.data.tokens[0].token,
-                        error: null,
-                        errorMessage: null
-                    });
-                } else {
-                    let error = msg.result?.data?.error_details?.error || msg.result?.data?.error || "Internal server error";
-                    let errorDescription = msg.result?.data?.error_details?.error_description || msg.result?.data?.error_description || "User closed the window or popup.";
-                    
-                    if (error === "USER_ABORTED") {
-                        submitError("USER_OPTED_OUT", error, errorDescription);
+            if (msg.type === "PASSKEY_RESULT") {
+                if (msg.error) {
+                    if (COMMAND == "CREATE") {
+                        submitError("PASSKEY_REGISTRATION_FAILURE", msg.error, msg.error)
+
                     } else {
-                        submitError("PASSKEY_VERIFICATION_FAILURE", error, errorDescription);
+                        submitError("PASSKEY_VERIFICATION_FAILURE", msg.error, msg.error)
                     }
+
+                } else {
+                    if (COMMAND == "CREATE") {
+                        submit({
+                            passkeyStatus: "PASSKEY_SUCCESS",
+                            passkeyResult: "PASSKEY_REGISTERED",
+                            authZToken: msg.data
+                        });
+                    } else {
+                        submit({
+                            passkeyStatus: "PASSKEY_SUCCESS",
+                            passkeyResult: "PASSKEY_AUTHENTICATION_SUCCESS",
+                            authZToken: msg.data
+                        });
+                    }
+
                 }
             }
         });
@@ -442,11 +481,9 @@
             clearTimeout(timeoutRef);
             popupWatcher = null;
             timeoutRef = null;
-            
             if (popupRef && !popupRef.closed) {
                 popupRef.close();
             }
-            
             isOpenPopup = false;
             popupAttemptInProgress = false;
         }
@@ -463,18 +500,16 @@
         }
 
         function submit(payload) {
+            cleanup();
             if (hasSubmitted) return;
             hasSubmitted = true;
-            
             const form = document.createElement("form");
             form.method = "POST";
-            form.action = RETURN_URL;
-
+            form.action = FORM_POST_URL;
             const input = document.createElement("input");
             input.type = "hidden";
             input.name = "data";
             input.value = JSON.stringify(payload);
-
             form.appendChild(input);
             document.body.appendChild(form);
             form.submit();
@@ -487,7 +522,7 @@
             command: {
                 type: "INITIALIZATION",
                 data: {
-                    response_mode: "form_post",
+                    response_mode: "com_visa_web_message",
                     redirect_uri: RETURN_URL,
                     session_context: {
                         apn: "vdp-web",
@@ -512,8 +547,9 @@
                 response_type: "urn:ext:oauth:response-type:server_state"
             }
         };
-        
+
         document.getElementById("vpp-iframe").src = `${VISA_INIT_URL}${encodeURIComponent(JSON.stringify(INIT_COMMAND))}`;
     </script>
 </body>
+
 </html>

@@ -93,18 +93,17 @@ router.post('/passkey/login', async (req, res) => {
         let decryptResponse = await fetchDecryptedPayload(response?.data)
 
         res.json({
-            data: decryptResponse,
-            error: null,
-            error_description: null
+            payload: decryptResponse,
+            data:decryptResponse
         });
 
     } catch (err) {
         let decrypt = await fetchDecryptedPayload(err.response?.data)
         let { error, error_description } = extractError(decrypt)
         res.status(200).json({
-            data: null,
-            error: error,
-            errorMessage: error_description
+            errorCode: error,
+            errorMessage: error_description,
+            error:error
         });
 
     }

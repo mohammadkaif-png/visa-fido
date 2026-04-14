@@ -332,12 +332,13 @@
                 }
                 const loginData = await loginRes.json();
                 if (loginData?.errorCode === "notfound_amr_values") {
-                    if (COMMAND == "AUTHENTICATE") {
+                    if (COMMAND === "AUTHENTICATE") {
                         submitError(
                             "PASSKEY_NOT_REGISTERED_VALID_OTP",
                             loginData?.errorCode || "Passkey not found.",
                             loginData?.errorMessage || "Passkey not found."
                         );
+                        return;
                     } else {
                         const createResponse = await fetch(`${API_TOKEN_HOST}/api/passkey/create`, {
                             method: "POST",
@@ -353,26 +354,27 @@
                         if (createData?.payload) {
                             apiResponseData = createData.payload;
                             openVisaPopup(createData.payload);
+                            return;
                         } else {
                             submitError(
                                 "PASSKEY_REGISTRATION_FAILURE",
                                 loginData?.errorCode || "Passkey create api failed.",
                                 loginData?.errorMessage || "Passkey create api failed."
                             );
+                            return;
                         }
-
                     }
-                }
-
-                if (loginData?.payload) {
+                } else if (loginData?.payload) {
                     apiResponseData = loginData.payload;
                     openVisaPopup(loginData.payload);
+                    return;
                 } else {
                     submitError(
                         "PASSKEY_VERIFICATION_FAILURE",
                         loginData?.errorCode || "Passkey login api failed.",
                         loginData?.errorMessage || "Passkey login api failed."
                     );
+                    return;
                 }
             } catch (error) {
                 submitError(
@@ -450,15 +452,13 @@
 
             if (msg.type === "PASSKEY_RESULT") {
                 if (msg.error) {
-                    if (COMMAND == "CREATE") {
-                        submitError("PASSKEY_REGISTRATION_FAILURE", msg.error, msg.error)
-
+                    if (COMMAND === "CREATE") {
+                        submitError("PASSKEY_REGISTRATION_FAILURE", msg.error, msg.error);
                     } else {
-                        submitError("PASSKEY_VERIFICATION_FAILURE", msg.error, msg.error)
+                        submitError("PASSKEY_VERIFICATION_FAILURE", msg.error, msg.error);
                     }
-
                 } else {
-                    if (COMMAND == "CREATE") {
+                    if (COMMAND === "CREATE") {
                         submit({
                             passkeyStatus: "PASSKEY_SUCCESS",
                             passkeyResult: "PASSKEY_REGISTERED",
@@ -471,7 +471,6 @@
                             authZToken: msg.data
                         });
                     }
-
                 }
             }
         });

@@ -243,8 +243,9 @@
         const RETURN_URL_HOST = "https://weak-tova-ungently.ngrok-free.dev";
         const AUTH_TIMEOUT = 120000;    // 2 mintues
         const COMMAND = "AUTHENTICATE"  // CREATE | AUTHENTICATE
-        const acsTransactionId = ""         // acsTransId
+        const acsTransactionId = ""     // acsTransId
         const merchantId = ""
+        const testMode = true
 
         const CREATE_POPUP_W = 500
         const CREATE_POPUP_H = 600
@@ -299,8 +300,8 @@
 
             // Center the popup on screen
             const left = (window.screen.width / 2) - (width / 2);
-            const top  = (window.screen.height / 2) - (height / 2);
-            
+            const top = (window.screen.height / 2) - (height / 2);
+
             const features = ` width=${width}, height=${height}, top=${top}, left=${left}, resizable=no,scrollbars=yes`;
 
             popupRef = window.open(popupUrl, "visa_passkey", features);
@@ -324,7 +325,7 @@
                 const loginRes = await fetch(`${API_TOKEN_HOST}/api/passkey/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ token: serverStateToken, command: "AUTHENTICATE", merchantId: merchantId })
+                    body: JSON.stringify({ token: serverStateToken, command: "AUTHENTICATE", merchantId: merchantId, testMode: testMode })
                 });
 
                 if (!loginRes.ok) {
@@ -343,7 +344,7 @@
                         const createResponse = await fetch(`${API_TOKEN_HOST}/api/passkey/create`, {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ token: serverStateToken, command: "CREATE", acsTransactionId: acsTransactionId, merchantId: merchantId })
+                            body: JSON.stringify({ token: serverStateToken, command: "CREATE", acsTransactionId: acsTransactionId, merchantId: merchantId, testMode: testMode })
                         });
 
                         if (!createResponse.ok) {

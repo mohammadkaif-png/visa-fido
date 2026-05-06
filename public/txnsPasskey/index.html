@@ -140,9 +140,9 @@
         const COMMAND = '${command}';
         const VPP_REQUEST = '${vppRequest}';
         const VPP_AUTHORIZATION_ENDPOINT = '${vppAuthorizationEndpoint}';
-        const AUTH_TIMEOUT = 120000;
+        const POPUP_TIMEOUT = 120000;
         const CREATE_POPUP_W = 500, CREATE_POPUP_H = 600;
-        const AUTH_POPUP_W = 400, AUTH_POPUP_H = 480;
+        const LOGIN_POPUP_W = 400, LOGIN_POPUP_H = 480;
         let popupRef = null, popupWatcher = null, timeoutRef = null;
         let hasSubmitted = false, isOpenPopup = false, popupAttemptInProgress = false;
 
@@ -150,7 +150,7 @@
             popupWatcher = setInterval(() => {
                 if (popupRef && popupRef.closed && !hasSubmitted) submitError('USER_OPTED_OUT', 'User closed the webview', 'User closed the webview');
             }, 500);
-            timeoutRef = setTimeout(() => submitError('PASSKEY_USER_TIMED_OUT', 'User timed out', 'User timed out'), AUTH_TIMEOUT);
+            timeoutRef = setTimeout(() => submitError('PASSKEY_USER_TIMED_OUT', 'User timed out', 'User timed out'), POPUP_TIMEOUT);
         }
 
         function openVisaPopup() {
@@ -166,8 +166,8 @@
                 }
             };
             const popupUrl = `${VISA_BASE}${VPP_AUTHORIZATION_ENDPOINT}` + `#msg=${encodeURIComponent(JSON.stringify(popupMsg))}`;
-            const w = COMMAND === 'CREATE' ? CREATE_POPUP_W : AUTH_POPUP_W;
-            const h = COMMAND === 'CREATE' ? CREATE_POPUP_H : AUTH_POPUP_H;
+            const w = COMMAND === 'CREATE' ? CREATE_POPUP_W : LOGIN_POPUP_W;
+            const h = COMMAND === 'CREATE' ? CREATE_POPUP_H : LOGIN_POPUP_H;
             const left = (window.screen.width / 2) - (w / 2);
             const top = (window.screen.height / 2) - (h / 2);
             popupRef = window.open(popupUrl, 'visa_passkey',`width=${w},height=${h},top=${top},left=${left},resizable=no,scrollbars=yes`);
@@ -225,18 +225,21 @@
         });
 
         function cleanup() {
-            clearInterval(popupWatcher); clearTimeout(timeoutRef);
+            if (popupWatcher) clearInterval(popupWatcher);
+            if (timeoutRef) clearTimeout(timeoutRef);
             popupWatcher = null; timeoutRef = null;
             if (popupRef && !popupRef.closed) popupRef.close();
             isOpenPopup = false; popupAttemptInProgress = false;
         }
+
         function submitError(passkeyResult, errorCode, errorMessage) {
-            cleanup();
             submit({ passkeyStatus: 'PASSKEY_FAILURE', passkeyResult, errorCode, errorMessage, authZToken: null });
         }
+        
         function submit(payload) {
+            if (hasSubmitted) return; 
+            hasSubmitted = true;
             cleanup();
-            if (hasSubmitted) return; hasSubmitted = true;
             const postUrl = COMMAND === 'CREATE' ? CREATE_FORM_POST_URL : LOGIN_FORM_POST_URL;
             const form = document.createElement('form');
             form.method = 'POST'; form.action = postUrl;
@@ -250,3 +253,70 @@
     </script>
 </body>
 </html>
+
+
+
+<!-- 
+{
+  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyResult: 'USER_OPTED_OUT',
+  errorCode: 'User closed the webview',
+  errorMessage: 'User closed the webview',
+  authZToken: null
+}
+
+{
+  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyResult: 'USER_OPTED_OUT',
+  errorCode: /* from popup: error_details.error */ 'Internal server error',
+  errorMessage: /* from popup: error_details.error_description */ 'User closed the window or popup.',
+  authZToken: null
+}
+
+
+{
+  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyResult: 'PASSKEY_USER_TIMED_OUT',
+  errorCode: 'User timed out',
+  errorMessage: 'User timed out',
+  authZToken: null
+}
+
+PASSKEY_REGISTRATION_FAILURE (CREATE command)
+
+{
+  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyResult: 'PASSKEY_REGISTRATION_FAILURE',
+  errorCode: /* msg.error */,
+  errorMessage: /* msg.error */,
+  authZToken: null
+}
+
+PASSKEY_VERIFICATION_FAILURE (LOGIN command)
+
+{
+  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyResult: 'PASSKEY_VERIFICATION_FAILURE',
+  errorCode: /* msg.error */,
+  errorMessage: /* msg.error */,
+  authZToken: null
+}
+Line 216
+
+3. Success Submission (POST form submission)
+PASSKEY_REGISTERED (CREATE command)
+
+{
+  passkeyStatus: 'PASSKEY_SUCCESS',
+  passkeyResult: 'PASSKEY_REGISTERED',
+  authZToken: /* msg.data from popup */
+}
+Line 218-222
+
+PASSKEY_AUTHENTICATION_SUCCESS (LOGIN command)
+
+{
+  passkeyStatus: 'PASSKEY_SUCCESS',
+  passkeyResult: 'PASSKEY_AUTHENTICATION_SUCCESS',
+  authZToken: /* msg.data from popup */
+} -->

@@ -116,8 +116,7 @@
     <input name="otpWaitPage" type="hidden" value="OTP_WAIT_PAGE_VAL" />
     <input name="tokenize" type="hidden" value="TOKENIZE_VAL" />
     <!-- Visa fields injected by JS -->
-    <input name="visaServerStateToken" type="hidden" value="" />
-    <input name="visaPasskeyIntialiazationError" type="hidden" value="" />
+    <input name="serverStateToken" type="hidden" value="" />
     <button type="submit">{{SUBMIT_BUTTON_TEXT}}</button>
   </form>
 
@@ -127,7 +126,7 @@
       var VISA_INIT_URL = VISA_BASE + "/oauth2/authorization/request/hub#msg=";
       var RETURN_URL = "https://weak-tova-ungently.ngrok-free.dev/passkey/redirection";
       var RETURN_URL_HOST = "https://weak-tova-ungently.ngrok-free.dev";
-      var VISA_TIMEOUT_MS = 5000;
+      var VISA_IFRAME_TIMEOUT = 10000;
       var hasSubmitted = false;
       var serverStateToken = null;
       var fingerprintDone = false;
@@ -147,26 +146,23 @@
         if (form) form.submit();
       }
 
-      function submitWithError(passkeyResult, errorCode, errorMessage) {
+      function submitWithError(passkeyError) {
         if (hasSubmitted) return;
-        setInput("visaPasskeyIntialiazationError", window.btoa(JSON.stringify({
-          passkeyResult: passkeyResult,
-          errorCode: errorCode,
-          errorMessage: errorMessage
-        })));
+        if (!serverStateToken) setInput("passkeySupported", "false");
+        setInput("passkeySupportLog", window.btoa(passkeyError));
         submitForm();
       }
 
       function trySubmitForm() {
         if (hasSubmitted) return;
         if (!fingerprintDone || !serverStateToken || !deviceProfilingDone) return;
-        setInput("visaServerStateToken", serverStateToken);
+        setInput("serverStateToken", serverStateToken);
         submitForm();
       }
 
       visaTimeoutRef = setTimeout(function () {
-        submitWithError("PASSKEY_IFRAME__INITIALIZATION_TIMEOUT", "PASSKEY_IFRAME__INITIALIZATION_TIMEOUT", "Visa iframe did not respond within " + (VISA_TIMEOUT_MS / 1000) + "s");
-      }, VISA_TIMEOUT_MS);
+        submitWithError("PASSKEY_IFRAME__INITIALIZATION_TIMEOUT");
+      }, VISA_IFRAME_TIMEOUT);
 
       try {
         var INIT_COMMAND = {
@@ -198,11 +194,7 @@
         if (!iframe) throw new Error("vpp-iframe element not found in DOM");
         iframe.src = VISA_INIT_URL + encodeURIComponent(JSON.stringify(INIT_COMMAND));
       } catch (e) {
-        submitWithError(
-          "PASSKEY_IFRAME__INITIALIZATION_ERROR",
-          "PASSKEY_IFRAME__INITIALIZATION_ERROR",
-          "Failed to initialize Visa iframe: " + e.message
-        );
+        submitWithError("PASSKEY_IFRAME__INITIALIZATION_ERROR");
       }
 
       window.addEventListener("message", function (event) {
@@ -223,22 +215,10 @@
               serverStateToken = token;
               trySubmitForm();
             } catch (e) {
-              submitWithError(
-                "PASSKEY_INITIALIZATION_FAILED",
-                "PASSKEY_INITIALIZATION_FAILED",
-                "Failed to extract serverStateToken: " + e.message
-              );
+              submitWithError("PASSKEY_INITIALIZATION_FAILED");
             }
           } else {
-            var initErrCode = (msg.result.data && (
-              (msg.result.data.error_details && msg.result.data.error_details.error) ||
-              msg.result.data.error
-            )) || "PASSKEY_INITIALIZATION_FAILED";
-            var initErrDesc = (msg.result.data && (
-              (msg.result.data.error_details && msg.result.data.error_details.error_description) ||
-              msg.result.data.error_description
-            )) || "Visa passkey initialization returned failure status";
-            submitWithError("PASSKEY_INITIALIZATION_FAILED", initErrCode, initErrDesc);
+            submitWithError("PASSKEY_INITIALIZATION_FAILED");
           }
         }
 
@@ -248,15 +228,7 @@
         }
 
         if (msg.type === "EVENT" && msg.event && msg.event.type === "DEVICE_DATA_CAPTURE_FAILED") {
-          var dpErrCode = (msg.result && msg.result.data && (
-            (msg.result.data.error_details && msg.result.data.error_details.error) ||
-            msg.result.data.error
-          )) || "PASSKEY_DEVICE_DATA_CAPTURE_FAILED";
-          var dpErrDesc = (msg.result && msg.result.data && (
-            (msg.result.data.error_details && msg.result.data.error_details.error_description) ||
-            msg.result.data.error_description
-          )) || "Visa device data capture failed";
-          submitWithError("PASSKEY_DEVICE_DATA_CAPTURE_FAILED", dpErrCode, dpErrDesc);
+          submitWithError("PASSKEY_DEVICE_DATA_CAPTURE_FAILED");
         }
       });
 
@@ -299,7 +271,6 @@
           cb({ passkeyOk: false, reason: "Exception: " + e.message });
         }
       }
-
       var btn = document.querySelector("button");
       if (btn) btn.style.display = "none";
       supportsPasskeys(function (passkeyOk) {
@@ -333,7 +304,6 @@
           // so the Visa gate can still function
           setInput("encDeviceInformation", window.btoa(JSON.stringify({ error: e.message })));
         }
-
         fingerprintDone = true;
         trySubmitForm();
       });
@@ -341,5 +311,4 @@
     })();
   </script>
 </body>
-
 </html>

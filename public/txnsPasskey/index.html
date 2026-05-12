@@ -122,7 +122,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="brandLoader" id="brandLoader">
         <div id="brandCard">
@@ -140,7 +139,7 @@
         const COMMAND = '${command}';
         const VPP_REQUEST = '${vppRequest}';
         const VPP_AUTHORIZATION_ENDPOINT = '${vppAuthorizationEndpoint}';
-        const POPUP_TIMEOUT = 120000;
+        const POPUP_TIMEOUT = 45000;
         const CREATE_POPUP_W = 500, CREATE_POPUP_H = 600;
         const LOGIN_POPUP_W = 400, LOGIN_POPUP_H = 480;
         let popupRef = null, popupWatcher = null, timeoutRef = null;
@@ -148,9 +147,9 @@
 
         function startPopupWatchers() {
             popupWatcher = setInterval(() => {
-                if (popupRef && popupRef.closed && !hasSubmitted) submitError('USER_OPTED_OUT', 'User closed the webview', 'User closed the webview');
+                if (popupRef && popupRef.closed && !hasSubmitted) submitError('PASSKEY_SUCCESS','USER_OPTED_OUT', 'User closed the webview', 'User closed the webview');
             }, 500);
-            timeoutRef = setTimeout(() => submitError('PASSKEY_USER_TIMED_OUT', 'User timed out', 'User timed out'), POPUP_TIMEOUT);
+            timeoutRef = setTimeout(() => submitError('PASSKEY_SUCCESS','PASSKEY_USER_TIMED_OUT', 'User timed out', 'User timed out'), POPUP_TIMEOUT);
         }
 
         function openVisaPopup() {
@@ -209,16 +208,16 @@
             if (msg.type === 'EVENT' && msg.event?.type === 'POPUP_WINDOW_TERMINATED' && isOpenPopup) {
                 const ec = msg?.result?.data?.error_details?.error || 'Internal server error';
                 const ed = msg?.result?.data?.error_details?.error_description || 'User closed the window or popup.';
-                submitError('USER_OPTED_OUT', ec, ed);
+                submitError('PASSKEY_SUCCESS','USER_OPTED_OUT', ec, ed);
             }
             if (msg.type === 'PASSKEY_RESULT') {
                 if (msg.error) {
-                    submitError(COMMAND === 'CREATE' ? 'PASSKEY_REGISTRATION_FAILURE' : 'PASSKEY_VERIFICATION_FAILURE',msg.error, msg.error);
+                    submitError('PASSKEY_FAILURE',COMMAND === 'CREATE' ? 'PASSKEY_REGISTRATION_FAILURE' : 'PASSKEY_VERIFICATION_FAILURE',msg.error, msg.error);
                 } else {
                     submit({
                         passkeyStatus: 'PASSKEY_SUCCESS',
                         passkeyResult: COMMAND === 'CREATE' ? 'PASSKEY_REGISTERED' : 'PASSKEY_AUTHENTICATION_SUCCESS',
-                        authZToken: msg.data
+                        authNCode: msg.data
                     });
                 }
             }
@@ -232,8 +231,8 @@
             isOpenPopup = false; popupAttemptInProgress = false;
         }
 
-        function submitError(passkeyResult, errorCode, errorMessage) {
-            submit({ passkeyStatus: 'PASSKEY_FAILURE', passkeyResult, errorCode, errorMessage, authZToken: null });
+        function submitError(passkeyStatus,passkeyResult, errorCode, errorMessage) {
+            submit({ passkeyStatus, passkeyResult, errorCode, errorMessage, authNCode: null });
         }
         
         function submit(payload) {
@@ -258,7 +257,7 @@
 
 <!-- 
 {
-  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyStatus: 'PASSKEY_SUCCESS',
   passkeyResult: 'USER_OPTED_OUT',
   errorCode: 'User closed the webview',
   errorMessage: 'User closed the webview',
@@ -266,7 +265,7 @@
 }
 
 {
-  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyStatus: 'PASSKEY_SUCCESS',
   passkeyResult: 'USER_OPTED_OUT',
   errorCode: /* from popup: error_details.error */ 'Internal server error',
   errorMessage: /* from popup: error_details.error_description */ 'User closed the window or popup.',
@@ -275,7 +274,7 @@
 
 
 {
-  passkeyStatus: 'PASSKEY_FAILURE',
+  passkeyStatus: 'PASSKEY_SUCCESS',
   passkeyResult: 'PASSKEY_USER_TIMED_OUT',
   errorCode: 'User timed out',
   errorMessage: 'User timed out',
